@@ -1,7 +1,14 @@
+import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+
+const geist = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const geistSans = Plus_Jakarta_Sans({
   variable: "--font-geist-sans",
@@ -19,10 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.className} h-full antialiased`}>
+    <html
+      lang="en"
+      className={cn(
+        "h-full",
+        "antialiased",
+        geistSans.className,
+        "font-sans",
+        geist.variable,
+      )}
+    >
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
