@@ -1,89 +1,97 @@
-import { Landmark, MapPin, Trees } from "lucide-react";
+import { Landmark, Compass, ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function DiscoverVillageSection() {
   return (
-    <section className="bg-[#8a7a5a] py-24 text-white">
-      <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-2 lg:items-center">
-        {/* Image */}
-        <div className="relative overflow-hidden rounded-[2rem]">
-          <div className="relative h-[550px]">
+    <section className="bg-[#8a7a5a] py-24 text-white overflow-hidden">
+      {/* Passage en 2 colonnes égales (50/50) avec alignement étiré (items-stretch) */}
+      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:items-stretch">
+        {/* 🖼️ Colonne Image - Parfaitement alignée sur la hauteur du texte */}
+        <div className="relative min-h-[450px] lg:min-h-full">
+          {/* Cadre décoratif arrière */}
+          <div className="absolute -inset-3 rounded-[2.5rem] border border-white/10 bg-white/5 transform -rotate-1 lg:block hidden" />
+
+          <div className="relative h-full w-full overflow-hidden rounded-[2.5rem] shadow-xl border border-white/10">
             <Image
               src="/images/village-discover.jpg"
               alt="La Bastide-d'Engras"
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700 hover:scale-105"
+              priority
             />
+            {/* Dégradé sur le bas */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-            <div className="absolute inset-0 bg-black/15" />
+            {/* Badge Localisation */}
+            <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/10 border border-white/20 p-4 backdrop-blur-md flex items-center gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#8a7a5a]">
+                <Compass className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-white/70 uppercase tracking-wider">
+                  Localisation
+                </p>
+                <p className="text-sm font-medium text-white">
+                  Gard • Pays d’Uzès • Occitanie
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Content */}
-        <div>
-          <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
-            Découvrir le village
-          </span>
+        {/* ✍️ Colonne Contenu - Ajustée pour étirer l'ensemble */}
+        <div className="flex flex-col justify-center py-2">
+          <div>
+            <span className="mb-4 inline-flex rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-sm">
+              Histoire & Patrimoine
+            </span>
 
-          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
-            Une bastide de caractère
-            <br />
-            au cœur du Gard
-          </h2>
+            {/* Titre large sur une seule ligne sur grand écran */}
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
+              Une bastide de caractère{" "}
+              <span className="text-white/80 font-normal italic block sm:inline">
+                au cœur du Gard
+              </span>
+            </h2>
 
-          <p className="mt-6 text-lg leading-8 text-white/85">
-            Niché entre nature et patrimoine, La Bastide d&apos;Engras est l’une
-            des plus anciennes bastides de France. Son authenticité, ses
-            paysages préservés et son histoire en font un lieu de vie paisible
-            et chaleureux, au cœur de l’Occitanie.
-          </p>
+            <p className="mt-6 text-base md:text-lg leading-relaxed text-white/90 font-light">
+              Niché entre nature sauvage et pierres chargées d&apos;histoire, La
+              Bastide d&apos;Engras est l’une des plus anciennes bastides de
+              France. Son authenticité préservée en fait un havre de paix
+              chaleureux, témoin vivant du temps qui passe.
+            </p>
 
-          <p className="mt-5 text-base leading-7 text-white/70">
-            Entre patrimoine local, environnement naturel remarquable et vie de
-            village, découvrez un territoire à taille humaine où traditions et
-            convivialité continuent de vivre au quotidien.
-          </p>
-
-          {/* Highlights */}
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <Landmark className="mb-3 h-6 w-6" />
-
-              <p className="font-semibold">Patrimoine</p>
-
-              <p className="mt-1 text-sm text-white/70">
-                Bastide médiévale & histoire locale
-              </p>
-            </div>
-
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <Trees className="mb-3 h-6 w-6" />
-
-              <p className="font-semibold">Nature</p>
-
-              <p className="mt-1 text-sm text-white/70">
-                Environnement préservé
-              </p>
-            </div>
-
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <MapPin className="mb-3 h-6 w-6" />
-
-              <p className="font-semibold">Occitanie</p>
-
-              <p className="mt-1 text-sm text-white/70">Gard • Pays d’Uzès</p>
-            </div>
+            <p className="mt-4 text-sm md:text-base leading-relaxed text-white/70">
+              Entre ruelles pittoresques, patrimoine architectural remarquable
+              et paysages vallonnés, découvrez un village à taille humaine où
+              l&apos;art de vivre occitan se transmet avec convivialité au
+              quotidien.
+            </p>
           </div>
 
-          {/* CTA */}
-          <div className="mt-10">
-            <Link
-              href="/decouvrir-le-village"
-              className="inline-flex items-center rounded-full bg-white px-7 py-4 font-medium text-[#8a7a5a] transition hover:scale-[1.02]"
-            >
-              Découvrir le village
-            </Link>
+          {/* 🌟 Grille de Highlights */}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="group rounded-[1.5rem] border border-white/10 bg-white/5 p-5 transition duration-300 hover:bg-white/10">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white group-hover:bg-white group-hover:text-[#8a7a5a] transition duration-300">
+                <Landmark className="h-4 w-4" />
+              </div>
+              <p className="font-bold text-base">Authenticité médiévale</p>
+              <p className="mt-1 text-xs text-white/70 leading-relaxed">
+                Un village fortifié historique ayant conservé son âme et ses
+                vestiges architecturaux.
+              </p>
+            </div>
+
+            <div className="group rounded-[1.5rem] border border-white/10 bg-white/5 p-5 transition duration-300 hover:bg-white/10">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white group-hover:bg-white group-hover:text-[#8a7a5a] transition duration-300">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <p className="font-bold text-base">Cadre de vie préservé</p>
+              <p className="mt-1 text-xs text-white/70 leading-relaxed">
+                Une nature environnante intacte, entourée de vignobles, de
+                garrigue et de calme.
+              </p>
+            </div>
           </div>
         </div>
       </div>

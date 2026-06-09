@@ -14,76 +14,89 @@ export default function Footer() {
 
       {/* Contenu principal */}
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-8 pb-16 md:grid-cols-3">
-        {/* Colonne 1 — Mairie */}
+        {/* Colonne 1 — Mairie & Coordonnées */}
         <div>
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Mairie
           </h3>
           <ul className="space-y-3 text-sm">
-            <li>
-              Place de la Mairie
+            <li className="leading-relaxed">
+              9 rue des Mouchards
               <br />
-              30330 La Bastide d&apos;Engras
+              30330 La Bastide-d&apos;Engras
+              <br />
+              France
             </li>
-            <li>
+            <li className="pt-2">
               <a
-                href="tel:+33466000000"
+                href="tel:0466728145"
                 className="transition-colors hover:text-white"
               >
-                04 66 00 00 00
+                04 66 72 81 45
               </a>
             </li>
             <li>
               <a
-                href="mailto:mairie@labastidedengras.fr"
-                className="transition-colors hover:text-white"
+                href="mailto:la-bastide-dengras@wanadoo.fr"
+                className="transition-colors hover:text-white break-all"
               >
-                mairie@labastidedengras.fr
+                la-bastide-dengras@wanadoo.fr
               </a>
             </li>
           </ul>
         </div>
 
-        {/* Colonne 2 — Horaires */}
+        {/* Colonne 2 — Horaires Réels */}
         <div>
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Horaires d&apos;ouverture
           </h3>
-          <ul className="space-y-2 text-sm">
-            <li className="flex justify-between gap-8">
-              <span>Lundi – Vendredi</span>
-              <span className="text-white/50">9h – 12h</span>
+          <ul className="space-y-2.5 text-sm">
+            <li className="flex justify-between gap-4 border-b border-white/5 pb-2">
+              <span>Lundi</span>
+              <span className="text-white/50">14h00 – 16h00</span>
             </li>
-            <li className="flex justify-between gap-8">
+            <li className="flex justify-between gap-4 border-b border-white/5 pb-2">
               <span>Mercredi</span>
-              <span className="text-white/50">9h – 12h · 14h – 17h</span>
+              <span className="text-white/50">09h00 – 11h00</span>
             </li>
-            <li className="flex justify-between gap-8">
-              <span>Samedi – Dimanche</span>
-              <span className="text-white/50">Fermé</span>
+            <li className="flex justify-between gap-4 border-b border-white/5 pb-2">
+              <span>Vendredi</span>
+              <span className="text-white/50">09h00 – 11h00</span>
+            </li>
+            <li className="flex justify-between gap-4 text-white/30 italic">
+              <span>Mardi / Jeudi</span>
+              <span>Fermé</span>
+            </li>
+            <li className="flex justify-between gap-4 text-white/30 italic">
+              <span>Week-end</span>
+              <span>Fermé</span>
             </li>
           </ul>
         </div>
 
-        {/* Colonne 3 — Navigation */}
+        {/* Colonne 3 — Liens utiles */}
         <div>
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Navigation
           </h3>
           <ul className="space-y-3 text-sm">
-            {["Actualités", "Événements", "Documents & Formulaires"].map(
-              (item) => (
-                <li key={item}>
-                  <a
-                    href="#"
-                    className="flex items-center gap-2 transition-colors hover:text-white"
-                  >
-                    <span className="h-px w-4 bg-[#8a7a5a]" />
-                    {item}
-                  </a>
-                </li>
-              ),
-            )}
+            {[
+              { label: "Accueil", href: "/" },
+              { label: "Actualités & Infos", href: "/actualites" },
+              { label: "Associations", href: "/associations" },
+              { label: "Contact", href: "/contact" },
+            ].map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  className="flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <span className="h-px w-3 bg-[#8a7a5a]" />
+                  {item.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -91,7 +104,15 @@ export default function Footer() {
       {/* Bas de page */}
       <div className="border-t border-white/5">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-8 py-6 text-xs text-white/25 sm:flex-row">
-          <span>© {new Date().getFullYear()} La Bastide d&apos;Engras</span>
+          <span>
+            © {new Date().getFullYear()}{" "}
+            <a
+              href="https://labastide-dengras.fr/"
+              className="hover:underline hover:text-white/40 transition-colors"
+            >
+              Mairie de La Bastide-d&apos;Engras
+            </a>
+          </span>
           <div className="flex items-center gap-6">
             <a href="#" className="transition-colors hover:text-white/50">
               Mentions légales

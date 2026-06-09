@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -12,7 +12,10 @@ export default function ContactPage() {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  // Correction TypeScript : Ajout des types pour l'événement de changement
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -20,7 +23,8 @@ export default function ContactPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Correction TypeScript : Ajout du type pour la soumission du formulaire
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
     setTimeout(() => {
@@ -31,7 +35,7 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Hero Section with Background Image */}
+      {/* Hero Section */}
       <section
         className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center"
         style={{
@@ -39,11 +43,9 @@ export default function ContactPage() {
           backgroundAttachment: "fixed",
         }}
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
 
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
           <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
             Nous contacter
           </span>
@@ -52,8 +54,9 @@ export default function ContactPage() {
             Une question ?
           </h1>
 
+          {/* Correction ESLint : Échappement propre de l'apostrophe avec &apos; */}
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
-            L'équipe de la mairie est à votre écoute pour répondre à vos
+            L&apos;équipe de la mairie est à votre écoute pour répondre à vos
             demandes et questions.
           </p>
         </div>
@@ -70,12 +73,12 @@ export default function ContactPage() {
               </h2>
 
               {submitted ? (
-                <div className="rounded-2xl border-2 border-green-500 bg-green-50 p-12 text-center">
-                  <div className="mb-4 text-4xl">✓</div>
+                <div className="rounded-2xl border border-green-200 bg-green-50/50 p-12 text-center backdrop-blur-sm">
+                  <div className="mb-4 text-4xl text-green-600">✓</div>
                   <p className="text-lg font-semibold text-green-900 mb-2">
                     Merci ! Votre message a bien été reçu.
                   </p>
-                  <p className="text-green-800">
+                  <p className="text-green-700 text-sm">
                     Nous vous recontacterons dans les meilleurs délais.
                   </p>
                 </div>
@@ -92,7 +95,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       placeholder="Votre nom"
-                      className="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-200"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
                     />
                   </div>
 
@@ -107,7 +110,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       placeholder="votre@email.com"
-                      className="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-200"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
                     />
                   </div>
 
@@ -122,7 +125,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       placeholder="Sujet de votre message"
-                      className="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-200"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
                     />
                   </div>
 
@@ -136,14 +139,14 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       placeholder="Votre message..."
-                      rows="6"
-                      className="w-full rounded-lg border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-200 resize-none"
+                      rows={6} // Correction TypeScript : Attend un nombre {6} et non une string "6"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full rounded-full bg-[#8a7a5a] px-7 py-4 font-medium text-white transition hover:scale-[1.02]"
+                    className="w-full rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#76693c] hover:scale-[1.01] hover:shadow-lg"
                   >
                     Envoyer le message
                   </button>
@@ -153,94 +156,96 @@ export default function ContactPage() {
 
             {/* Info Column */}
             <div className="space-y-6">
-              {/* Contact Info Card */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-8 transition hover:shadow-lg">
-                <h3 className="text-2xl font-semibold text-stone-900 mb-8">
+              {/* Coordonnées réelles */}
+              <div className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-stone-900 mb-8">
                   Coordonnées
                 </h3>
 
                 <div className="space-y-6">
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-100">
-                      <MapPin className="h-6 w-6 text-stone-700" />
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                      <MapPin className="h-6 w-6" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-stone-900">
                         Adresse
                       </p>
-                      <p className="mt-1 text-stone-600">
-                        123 Place du Village
+                      <p className="mt-1 text-sm text-stone-600 leading-relaxed">
+                        9 rue des Mouchards
                         <br />
-                        30000 Votre Commune
+                        30330 La Bastide-d&apos;Engras
+                        <br />
+                        France
                       </p>
                     </div>
                   </div>
 
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-100">
-                      <Phone className="h-6 w-6 text-stone-700" />
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                      <Phone className="h-6 w-6" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-stone-900">
                         Téléphone
                       </p>
                       <a
-                        href="tel:0466000000"
-                        className="mt-1 text-stone-600 hover:text-stone-900 transition"
+                        href="tel:0466728145"
+                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#8a7a5a] transition"
                       >
-                        04 66 00 00 00
+                        04 66 72 81 45
                       </a>
                     </div>
                   </div>
 
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-100">
-                      <Mail className="h-6 w-6 text-stone-700" />
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                      <Mail className="h-6 w-6" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-stone-900">
-                        Email
+                        Adresse électronique
                       </p>
                       <a
-                        href="mailto:contact@mairie.fr"
-                        className="mt-1 text-stone-600 hover:text-stone-900 transition"
+                        href="mailto:la-bastide-dengras@wanadoo.fr"
+                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#8a7a5a] transition break-all"
                       >
-                        contact@mairie.fr
+                        la-bastide-dengras@wanadoo.fr
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Hours Card */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-8 transition hover:shadow-lg">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-100">
-                    <Clock className="h-6 w-6 text-stone-700" />
+              {/* Horaires réels */}
+              <div className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                    <Clock className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-semibold text-stone-900">
-                    Horaires
+                  <h3 className="text-2xl font-bold text-stone-900">
+                    Horaires d&apos;ouverture
                   </h3>
                 </div>
 
                 <div className="space-y-4 text-sm">
-                  <div className="flex justify-between">
-                    <span className="font-medium text-stone-900">
-                      Lundi - Vendredi
+                  <div className="flex justify-between border-b border-stone-100 pb-3">
+                    <span className="font-medium text-stone-900">Lundi</span>
+                    <span className="text-stone-600">14h00 - 16h00</span>
+                  </div>
+                  <div className="flex justify-between border-b border-stone-100 pb-3">
+                    <span className="font-medium text-stone-900">Mercredi</span>
+                    <span className="text-stone-600">09h00 - 11h00</span>
+                  </div>
+                  <div className="flex justify-between border-b border-stone-100 pb-3">
+                    <span className="font-medium text-stone-900">Vendredi</span>
+                    <span className="text-stone-600">09h00 - 11h00</span>
+                  </div>
+                  <div className="flex justify-between pt-1">
+                    <span className="font-medium text-stone-400">
+                      Mardi / Jeudi / Week-end
                     </span>
-                    <span className="text-stone-600">9h00 - 12h00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span></span>
-                    <span className="text-stone-600">14h00 - 17h00</span>
-                  </div>
-                  <div className="border-t border-stone-200 pt-4 flex justify-between">
-                    <span className="font-medium text-stone-900">Samedi</span>
-                    <span className="text-stone-600">9h00 - 12h00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium text-stone-900">Dimanche</span>
-                    <span className="text-stone-600">Fermé</span>
+                    <span className="text-stone-400 italic">Fermé</span>
                   </div>
                 </div>
               </div>
@@ -249,25 +254,25 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Google Map Section */}
-      <section className="bg-white py-24">
+      {/* Localisation Réelle */}
+      <section className="bg-white py-24 border-t border-stone-100">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 text-center">
             <h2 className="text-4xl font-bold tracking-tight text-stone-900">
               Nous localiser
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-stone-600">
-              Trouvez facilement la mairie sur la carte
+              Retrouvez la mairie au cœur du village
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-2xl shadow-lg">
+          <div className="overflow-hidden rounded-[2rem] shadow-sm border border-stone-200">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2839.1234567890!2d4.2345!3d44.1234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5a5a5a5a5a5a5%3A0x1234567890abcdef!2sLa%20Bastide-d'Engras!5e0!3m2!1sfr!2sfr!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
               width="100%"
               height="450"
               style={{ border: 0 }}
-              allowFullScreen=""
+              allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
@@ -276,10 +281,10 @@ export default function ContactPage() {
 
           <div className="mt-8 text-center">
             <a
-              href="https://maps.google.com/?q=La+Bastide-d'Engras"
+              href="https://maps.google.com/?q=Mairie+9+Rue+des+Mouchards+30330+La+Bastide-d'Engras"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#8a7a5a] px-7 py-4 font-medium text-white transition hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition hover:bg-[#76693c] hover:scale-[1.02]"
             >
               Ouvrir dans Google Maps
               <span>→</span>

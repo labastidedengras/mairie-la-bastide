@@ -1,48 +1,48 @@
-import Link from "next/link";
 import {
+  FileSpreadsheet,
   FileText,
-  CalendarDays,
-  Building2,
-  School,
-  Recycle,
+  Map,
   Phone,
+  Recycle,
+  Users,
 } from "lucide-react";
+import Link from "next/link";
 
 const quickLinks = [
   {
-    title: "Démarches",
-    description: "Documents administratifs et demandes en ligne",
-    href: "/demarches",
+    title: "CNI & Passeport",
+    description: "Modalités, pièces à fournir et demandes de rendez-vous.",
+    href: "/demarches/cni-passeport",
     icon: FileText,
   },
   {
-    title: "Agenda",
-    description: "Événements, fêtes et vie associative",
-    href: "/agenda",
-    icon: CalendarDays,
+    title: "Comptes rendus",
+    description: "Retrouvez les procès-verbaux des Conseils Municipaux.",
+    href: "/mairie/comptes-rendus",
+    icon: FileSpreadsheet,
   },
   {
-    title: "Vie municipale",
-    description: "Conseil municipal, comptes rendus et projets",
-    href: "/municipalite",
-    icon: Building2,
+    title: "Urbanisme & PLU",
+    description: "Consultez le Plan Local d'Urbanisme et vos démarches.",
+    href: "/urbanisme/plu", // Ajuste le lien si nécessaire
+    icon: Map,
   },
   {
-    title: "École & Jeunesse",
-    description: "Informations scolaires et périscolaires",
-    href: "/ecole",
-    icon: School,
-  },
-  {
-    title: "Déchets & Collecte",
-    description: "Calendrier de collecte et informations utiles",
-    href: "/dechets",
+    title: "Déchets & Tri",
+    description: "Calendrier de collecte, consignes de tri et déchèterie.",
+    href: "/demarches/dechets-tri",
     icon: Recycle,
   },
   {
-    title: "Contacts utiles",
-    description: "Mairie, urgences et services locaux",
-    href: "/contacts",
+    title: "Les Élus",
+    description: "Découvrez l'équipe municipale et les commissions.",
+    href: "/mairie/elus", // Ajuste le lien si nécessaire
+    icon: Users,
+  },
+  {
+    title: "Contact & Horaires",
+    description: "Coordonnées de la mairie et horaires d'ouverture.",
+    href: "/contact",
     icon: Phone,
   },
 ];
@@ -54,7 +54,7 @@ export default function QuickAccessSection() {
         {/* Header */}
         <div className="mb-14 text-center">
           <span className="mb-4 inline-flex rounded-full bg-stone-100 px-4 py-2 text-sm font-medium text-stone-700">
-            Services & Informations
+            Services & Démarches
           </span>
 
           <h2 className="text-4xl font-bold tracking-tight text-stone-900 md:text-5xl">
@@ -62,8 +62,8 @@ export default function QuickAccessSection() {
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-lg text-stone-600">
-            Retrouvez rapidement les informations et services essentiels du
-            village.
+            Retrouvez rapidement les informations essentielles et vos démarches
+            administratives courantes.
           </p>
         </div>
 
@@ -86,10 +86,12 @@ export default function QuickAccessSection() {
                   {link.title}
                 </h3>
 
-                <p className="mt-3 text-stone-600">{link.description}</p>
+                <p className="mt-3 text-stone-600 text-sm leading-relaxed">
+                  {link.description}
+                </p>
 
-                <div className="mt-6 flex items-center gap-2 font-medium text-stone-900">
-                  En savoir plus
+                <div className="mt-6 flex items-center gap-2 font-medium text-stone-900 text-sm">
+                  Y accéder
                   <span className="transition-transform group-hover:translate-x-1">
                     →
                   </span>

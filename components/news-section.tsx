@@ -1,9 +1,53 @@
 "use client";
 
-import { CalendarDays, FileText, TriangleAlert } from "lucide-react";
-import Image from "next/image";
+import { FileText, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+// 1. Tes imports centralisés et ton nouveau composant Card
+import ActualiteCard from "@/components/ui/actualite-card";
+import { client } from "@/sanity/lib/client";
+
+interface Actualite {
+  titre: string;
+  slug: string;
+  date: string;
+  categorie: string;
+  imageUrl: string | null;
+  contenu: string | null;
+}
 
 export default function NewsSection() {
+  const [latestNews, setLatestNews] = useState<Actualite[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLatestNews() {
+      try {
+        // Requête limitée aux 3 derniers articles triés par date décroissante
+        const query = `*[_type == "actualite"] | order(datePublication desc)[0...3] {
+          titre,
+          "slug": slug.current,
+          "date": datePublication,
+          categorie,
+          "imageUrl": imagePrincipale.asset->url,
+          contenu
+        }`;
+
+        const data = await client.fetch(query);
+        setLatestNews(data);
+      } catch (error) {
+        console.error(
+          "Erreur lors du chargement des dernières actualités :",
+          error,
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLatestNews();
+  }, []);
+
   return (
     <section className="bg-stone-50 py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -24,113 +68,42 @@ export default function NewsSection() {
             </p>
           </div>
 
-          <button className="rounded-full border border-stone-300 bg-white px-6 py-3 font-medium text-stone-800 transition hover:bg-stone-100">
+          <Link
+            href="/actualites"
+            className="rounded-full border border-stone-300 bg-white px-6 py-3 font-medium text-stone-800 transition hover:bg-stone-100 text-center"
+          >
             Voir toutes les actualités
-          </button>
+          </Link>
         </div>
 
-        {/* Grid */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Card 1 - Avec image */}
-          <article className="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-lg">
-            <div className="relative h-64">
-              <Image
-                src="/images/event.webp"
-                alt="Fête du village"
-                fill
-                className="object-cover"
+        {/* Grid dynamique */}
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
+          </div>
+        ) : latestNews.length > 0 ? (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {latestNews.map((act) => (
+              <ActualiteCard
+                key={act.slug}
+                titre={act.titre}
+                slug={act.slug}
+                date={act.date}
+                categorie={act.categorie}
+                imageUrl={act.imageUrl}
+                contenu={act.contenu}
               />
-
-              <div className="absolute left-5 top-5 rounded-full bg-white/90 text-stone-900  px-4 py-2 text-sm font-medium backdrop-blur">
-                Événement
-              </div>
-            </div>
-
-            <div className="p-7">
-              <div className="mb-4 flex items-center gap-2 text-sm text-stone-500">
-                <CalendarDays className="h-4 w-4" />
-                18 juin 2026
-              </div>
-
-              <h3 className="text-2xl font-semibold text-stone-900">
-                Fête du village 2026
-              </h3>
-
-              <p className="mt-3 text-stone-600">
-                Concerts, marché local, animations et repas partagé sur la place
-                du village.
-              </p>
-
-              <button className="mt-6 font-medium text-stone-900">
-                Lire la suite →
-              </button>
-            </div>
-          </article>
-
-          {/* Card 2 - Sans image */}
-          <article className="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-lg">
-            <div className="flex h-64 items-center justify-center bg-stone-100">
-              <div className="text-center text-stone-500">
-                <FileText className="mx-auto mb-4 h-10 w-10" />
-                <span className="text-sm font-medium">
-                  Information municipale
-                </span>
-              </div>
-            </div>
-
-            <div className="p-7">
-              <div className="mb-4 flex items-center gap-2 text-sm text-stone-500">
-                <CalendarDays className="h-4 w-4" />
-                12 juin 2026
-              </div>
-
-              <h3 className="text-2xl font-semibold text-stone-900">
-                Nouveaux horaires de mairie
-              </h3>
-
-              <p className="mt-3 text-stone-600">
-                Les horaires d’ouverture de la mairie évoluent à partir du mois
-                de juin.
-              </p>
-
-              <button className="mt-6 font-medium text-stone-900">
-                Lire la suite →
-              </button>
-            </div>
-          </article>
-
-          {/* Card 3 - Alerte */}
-          <article className="overflow-hidden rounded-[2rem] bg-amber-50 shadow-sm ring-1 ring-amber-200 transition hover:-translate-y-1 hover:shadow-lg">
-            <div className="flex h-64 items-center justify-center bg-amber-100">
-              <div className="text-center text-amber-700">
-                <TriangleAlert className="mx-auto mb-4 h-10 w-10" />
-                <span className="text-sm font-medium">
-                  Information importante
-                </span>
-              </div>
-            </div>
-
-            <div className="p-7">
-              <div className="mb-4 flex items-center gap-2 text-sm text-amber-700">
-                <CalendarDays className="h-4 w-4" />
-                08 juin 2026
-              </div>
-
-              <h3 className="text-2xl font-semibold text-stone-900">
-                Coupure d’eau temporaire
-              </h3>
-
-              <p className="mt-3 text-stone-700">
-                Une intervention sur le réseau est prévue ce vendredi entre 9h
-                et 13h.
-              </p>
-
-              <button className="mt-6 font-medium text-amber-800">
-                Plus d’informations →
-              </button>
-            </div>
-          </article>
-        </div>
+            ))}
+          </div>
+        ) : (
+          /* Fallback si Sanity est vide */
+          <div className="py-16 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-[2rem]">
+            <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
+            <p className="text-sm font-light">
+              Aucune actualité récente à afficher.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
