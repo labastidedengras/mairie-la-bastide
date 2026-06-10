@@ -45,19 +45,19 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex flex-col leading-none uppercase transition-opacity hover:opacity-80"
+            className="flex flex-col leading-none uppercase transition-opacity hover:opacity-80 font-medium"
           >
-            <span className="text-sm tracking-[0.12em] sm:text-base">
+            <span className="text-sm/4 tracking-[0.12em] sm:text-lg/4">
               La Bastide
             </span>
 
-            <span className="text-sm tracking-[0.22em] sm:text-base">
+            <span className="text-sm/4 tracking-[0.22em] sm:text-lg/4">
               d&apos;Engras
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <NavigationMenu className="hidden md:flex">
+          <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList className="gap-1">
               <NavigationMenuItem>
                 <NavigationMenuLink
@@ -168,7 +168,7 @@ export default function Navbar() {
           </NavigationMenu>
 
           {/* Mobile Menu */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger className="rounded-full p-2 transition hover:bg-white/10">
                 <Menu className="h-6 w-6" />
@@ -176,18 +176,20 @@ export default function Navbar() {
 
               <SheetContent
                 side="right"
-                className="w-[300px] border-l border-stone-200 bg-white px-6 py-8"
+                className="w-[300px] border-l border-stone-200 bg-white px-6 py-6" // py-8 -> py-6 pour s'aligner sur le top-3 du bouton close
               >
-                <nav className="mt-10 flex flex-col gap-5 text-slate-900">
+                {/* mt-10 -> mt-2 : On remonte le menu pour aligner parfaitement "Accueil" avec la croix */}
+                <nav className="mt-2 flex flex-col gap-6 text-slate-900">
                   <Link
                     href="/"
-                    className="text-lg font-medium"
+                    className="text-lg font-medium pt-1" // pt-1 pour peaufiner l'alignement au millimètre
                     onClick={handleLinkClick}
                   >
                     Accueil
                   </Link>
 
-                  <div className="space-y-3 flex flex-col">
+                  {/* Ajout d'un mt-2 pour détacher le bloc "La mairie" du lien Accueil */}
+                  <div className="space-y-3 flex flex-col mt-2">
                     <p className="text-sm font-semibold uppercase text-stone-500">
                       La mairie
                     </p>
@@ -208,7 +210,8 @@ export default function Navbar() {
                     </Link>
                   </div>
 
-                  <div className="space-y-3 flex flex-col">
+                  {/* Ajout d'un mt-3 pour créer l'espace souhaité entre "La Mairie" et "Vie pratique" */}
+                  <div className="space-y-3 flex flex-col mt-3">
                     <p className="text-sm font-semibold uppercase text-stone-500">
                       Vie pratique
                     </p>
@@ -232,8 +235,9 @@ export default function Navbar() {
                     </Link>
                   </div>
 
+                  {/* Les liens seuls ont un mt-2 pour s'aérer des blocs du dessus */}
                   <Link
-                    className="text-lg font-medium"
+                    className="text-lg font-medium mt-2"
                     href="/actualites"
                     onClick={handleLinkClick}
                   >
@@ -241,7 +245,7 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    className="text-lg font-medium"
+                    className="text-lg font-medium mt-1"
                     href="/associations"
                     onClick={handleLinkClick}
                   >
@@ -249,7 +253,7 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    className="text-lg font-medium"
+                    className="text-lg font-medium mt-1"
                     href="/contact"
                     onClick={handleLinkClick}
                   >

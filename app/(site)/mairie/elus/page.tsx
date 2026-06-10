@@ -21,10 +21,9 @@ export default function ElusPage() {
     <>
       {/* Hero Section - Même style fixe que les autres pages */}
       <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center"
+        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
           backgroundImage: "url(/images/hero-1.jpg)",
-          backgroundAttachment: "fixed",
         }}
       >
         {/* Overlay */}

@@ -27,7 +27,15 @@ export default defineType({
       title: "Année du conseil",
       type: "string",
       options: {
-        list: ["2026", "2025", "2024"],
+        list: [
+          { title: "2024", value: "2024" },
+          { title: "2025", value: "2025" },
+          { title: "2026", value: "2026" },
+          { title: "2027", value: "2027" },
+          { title: "2028", value: "2028" },
+          { title: "2029", value: "2029" },
+          { title: "2030", value: "2030" },
+        ],
         layout: "dropdown",
       },
       validation: (Rule) => Rule.required(),

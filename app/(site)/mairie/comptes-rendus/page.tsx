@@ -21,12 +21,8 @@ interface CompteRendu {
 }
 
 export default function ComptesRendusPage() {
-  const [activeYear, setActiveYear] = useState("2026");
-  const [documents, setDocuments] = useState<Record<string, CompteRendu[]>>({
-    "2026": [],
-    "2025": [],
-    "2024": [],
-  });
+  const [activeYear, setActiveYear] = useState("");
+  const [documents, setDocuments] = useState<Record<string, CompteRendu[]>>({});
   const [loading, setLoading] = useState(true);
 
   // État pour gérer le compte-rendu actuellement visionné
@@ -45,11 +41,8 @@ export default function ComptesRendusPage() {
 
         const data: CompteRendu[] = await client.fetch(query);
 
-        const organizedDocs: Record<string, CompteRendu[]> = {
-          "2026": [],
-          "2025": [],
-          "2024": [],
-        };
+        // On crée l'objet dynamiquement au lieu de figer 2024, 2025, 2026
+        const organizedDocs: Record<string, CompteRendu[]> = {};
 
         data.forEach((doc) => {
           if (doc.date) {
@@ -57,14 +50,25 @@ export default function ComptesRendusPage() {
             doc.date = `${day}/${month}/${year}`;
           }
 
-          if (organizedDocs[doc.annee]) {
-            organizedDocs[doc.annee].push(doc);
-          } else {
-            organizedDocs[doc.annee] = [doc];
+          // Si l'année n'existe pas encore dans notre objet, on la crée dynamiquement
+          if (!organizedDocs[doc.annee]) {
+            organizedDocs[doc.annee] = [];
           }
+
+          organizedDocs[doc.annee].push(doc);
         });
 
         setDocuments(organizedDocs);
+
+        // On récupère toutes les années trouvées, triées par la plus récente
+        const dynamicYears = Object.keys(organizedDocs).sort((a, b) =>
+          b.localeCompare(a),
+        );
+
+        // Si on a des années disponibles, on sélectionne la plus récente par défaut
+        if (dynamicYears.length > 0) {
+          setActiveYear(dynamicYears[0]);
+        }
       } catch (error) {
         console.error(
           "Erreur lors de la récupération des données Sanity :",
@@ -78,16 +82,16 @@ export default function ComptesRendusPage() {
     fetchComptesRendus();
   }, []);
 
+  // Génère la liste des boutons d'années triée de façon décroissante
   const years = Object.keys(documents).sort((a, b) => b.localeCompare(a));
 
   return (
     <>
       {/* Hero Section */}
       <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center"
+        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
           backgroundImage: "url(/images/hero-1.jpg)",
-          backgroundAttachment: "fixed",
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -116,8 +120,8 @@ export default function ComptesRendusPage() {
               Sélectionnez une année
             </h2>
 
-            {/* Sélecteur d'année (Tabs) */}
-            <div className="flex justify-center gap-4 mt-8">
+            {/* Sélecteur d'année (Tabs) dynamiques */}
+            <div className="flex flex-wrap justify-center gap-4 mt-8">
               {years.map((year) => (
                 <button
                   key={year}
@@ -185,11 +189,13 @@ export default function ComptesRendusPage() {
                 </div>
               ))}
 
-              {(!documents[activeYear] ||
+              {/* Si aucune année n'est encore enregistrée ou aucun doc trouvé */}
+              {(years.length === 0 ||
+                !documents[activeYear] ||
                 documents[activeYear].length === 0) && (
                 <div className="py-20 text-center text-stone-400">
                   <Search className="mx-auto h-12 w-12 mb-4 opacity-20" />
-                  <p>Aucun document disponible pour cette année.</p>
+                  <p>Aucun document disponible pour le moment.</p>
                 </div>
               )}
             </div>

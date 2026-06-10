@@ -1,6 +1,13 @@
 "use client";
 
-import { Building, Download, Info, Map, ShieldAlert } from "lucide-react";
+import {
+  Building,
+  Download,
+  ExternalLink,
+  Info,
+  Map,
+  ShieldAlert,
+} from "lucide-react";
 
 export default function PLUPage() {
   // Remplace ce chemin par le vrai nom de ton fichier PLU placé dans le dossier /public (ex: "/plu-la-bastide.pdf")
@@ -8,12 +15,11 @@ export default function PLUPage() {
 
   return (
     <>
-      {/* Hero Section - Identique aux pages Contact et Bulletin */}
+      {/* Hero Section */}
       <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center"
+        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
           backgroundImage: "url(/images/hero-1.jpg)",
-          backgroundAttachment: "fixed",
         }}
       >
         {/* Overlay */}
@@ -68,7 +74,7 @@ export default function PLUPage() {
                 </a>
               </div>
 
-              {/* Box de rappel de bonnes pratiques pour les démarches */}
+              {/* Box de rappel de bonnes pratiques */}
               <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm space-y-4">
                 <h3 className="font-semibold text-stone-900 text-base flex items-center gap-2">
                   <Building className="w-4 h-4 text-stone-600" />
@@ -105,25 +111,51 @@ export default function PLUPage() {
               </div>
             </div>
 
-            {/* Colonne Droite : Lecteur PDF Intégré */}
-            <div className="lg:col-span-8">
-              <div className="mb-4 flex items-center justify-between text-stone-500 text-sm px-2">
-                <div className="flex items-center gap-2">
-                  <Map className="w-4 h-4" />
-                  <span>Consultation du document réglementaire</span>
+            {/* Colonne Droite : Zone d'affichage adaptative */}
+            <div className="lg:col-span-8 w-full">
+              {/* 📱 AFFICHAGE MOBILE (Masqué sur PC) */}
+              <div className="block md:hidden rounded-2xl border border-stone-200 bg-white p-8 text-center shadow-md">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-stone-100 text-stone-500 mb-4">
+                  <Map className="w-8 h-8" />
                 </div>
+                <h3 className="text-lg font-bold text-stone-900 mb-2">
+                  Lecture sur smartphone
+                </h3>
+                <p className="text-stone-600 text-sm font-light mb-6">
+                  Le règlement d&apos;urbanisme est un document complet. Pour
+                  parcourir facilement toutes ses pages et ses tableaux,
+                  ouvrez-le directement en plein écran.
+                </p>
+                <a
+                  href={pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 px-6 py-3 text-sm font-semibold w-full shadow-sm"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Ouvrir le document réglementaire
+                </a>
               </div>
 
-              {/* Conteneur de l'Iframe */}
-              <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-lg h-[800px] w-full">
-                <iframe
-                  src={`${pdfUrl}#view=FitH`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: "none" }}
-                  title="Lecteur Plan Local d'Urbanisme"
-                  className="w-full h-full"
-                />
+              {/* 💻 AFFICHAGE ORDINATEUR & TABLETTE */}
+              <div className="hidden md:block">
+                <div className="mb-4 flex items-center justify-between text-stone-500 text-sm px-2">
+                  <div className="flex items-center gap-2">
+                    <Map className="w-4 h-4" />
+                    <span>Consultation du document réglementaire</span>
+                  </div>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-lg h-[800px] w-full">
+                  <iframe
+                    src={`${pdfUrl}#view=FitH`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: "none" }}
+                    title="Lecteur Plan Local d'Urbanisme"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
           </div>

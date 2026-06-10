@@ -67,7 +67,7 @@ export default function AgendaSection() {
       "Déc.",
     ];
 
-    const [yearD, monthD, dayD] = dateDebutStr.split("-");
+    const [, monthD, dayD] = dateDebutStr.split("-");
     const jDebut = parseInt(dayD, 10).toString();
     const mDebut = moisTexte[parseInt(monthD, 10) - 1];
 
@@ -138,60 +138,64 @@ export default function AgendaSection() {
               return (
                 <article
                   key={event.slug}
-                  className="group rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  className="group rounded-[2rem] border border-stone-200 bg-white p-5 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
-                    {/* Badge Date Adapté aux multi-jours */}
-                    <div className="flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-[1.5rem] bg-[#8a7a5a] text-white shadow-inner px-2 text-center">
+                  {/* Ajustement du Flex : en ligne dès 'sm' (smartphone horizontal / standard) */}
+                  <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-start lg:items-center">
+                    {/* Badge Date : On le centre sur petit mobile, aligné à gauche ensuite */}
+                    <div className="flex h-24 w-24 sm:h-28 sm:w-28 shrink-0 flex-col items-center justify-center rounded-[1.5rem] bg-[#8a7a5a] text-white shadow-inner px-2 text-center mx-auto sm:mx-0">
                       <span
-                        className={`font-bold leading-none ${badge.textePrincipal.length > 2 ? "text-xl" : "text-3xl"}`}
+                        className={`font-bold leading-none ${badge.textePrincipal.length > 2 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl"}`}
                       >
                         {badge.textePrincipal}
                       </span>
-                      <span className="text-[11px] uppercase tracking-wider text-white/80 mt-1.5 font-medium block">
+                      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/80 mt-1.5 font-medium block">
                         {badge.texteSecondaire}
                       </span>
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1">
-                      <div className="mb-3">
-                        <span className="rounded-full bg-amber-50 border border-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-800">
+                    {/* Content : Prend toute la place restante */}
+                    <div className="flex-1 w-full">
+                      <div className="mb-2">
+                        <span className="rounded-full bg-amber-50 border border-amber-100 px-3 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-800 inline-block">
                           {event.dateFin
                             ? "Festival / Multi-jours"
                             : "Événement"}
                         </span>
                       </div>
 
-                      <h3 className="text-2xl font-semibold text-stone-900 group-hover:text-[#8a7a5a] transition-colors">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-stone-900 group-hover:text-[#8a7a5a] transition-colors leading-tight">
                         {event.title}
                       </h3>
 
-                      <p className="mt-2 max-w-3xl text-stone-600 line-clamp-2 text-sm leading-relaxed">
+                      <p className="mt-2 text-stone-600 line-clamp-2 text-sm leading-relaxed">
                         {event.description ||
                           "Aucune description supplémentaire."}
                       </p>
 
-                      <div className="mt-4 flex flex-col gap-3 text-xs font-medium text-stone-500 sm:flex-row sm:items-center sm:gap-6">
+                      {/* Infos pratiques adaptées aux mobiles */}
+                      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-stone-500">
                         <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-stone-400" />
-                          {event.location || "Place du village"}
+                          <MapPin className="h-4 w-4 text-stone-400 shrink-0" />
+                          <span>{event.location || "Place du village"}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Clock3 className="h-4 w-4 text-stone-400" />
-                          {event.time ||
-                            (event.dateFin
-                              ? "Plusieurs jours"
-                              : "Voir les détails")}
+                          <Clock3 className="h-4 w-4 text-stone-400 shrink-0" />
+                          <span>
+                            {event.time ||
+                              (event.dateFin
+                                ? "Plusieurs jours"
+                                : "Voir les détails")}
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* CTA */}
-                    <div className="lg:pl-4">
+                    {/* CTA : S'aligne proprement en bas ou à droite selon l'écran */}
+                    <div className="w-full sm:w-auto pt-2 sm:pt-0 sm:pl-4 flex justify-end shrink-0">
                       <Link
                         href={`/actualites/${event.slug}`}
-                        className="inline-flex items-center gap-1 rounded-full bg-stone-100 hover:bg-[#8a7a5a] text-stone-800 hover:text-white px-5 py-2.5 text-xs font-semibold transition-all group-hover:translate-x-1"
+                        className="w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 rounded-full bg-stone-100 hover:bg-[#8a7a5a] text-stone-800 hover:text-white px-5 py-2.5 text-xs font-semibold transition-all group-hover:translate-x-1"
                       >
                         En savoir plus →
                       </Link>

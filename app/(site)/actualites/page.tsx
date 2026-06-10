@@ -66,13 +66,14 @@ export default function ActualitesPage() {
     <>
       {/* Hero Section */}
       <section
-        className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center"
+        className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
           backgroundImage: "url(/images/hero-1.jpg)",
-          backgroundAttachment: "fixed",
+          // On enlève backgroundAttachment d'ici car on le gère avec Tailwind juste au-dessus !
         }}
       >
         <div className="absolute inset-0 bg-black/45" />
+
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center pt-16">
           <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
             Actualités de la commune

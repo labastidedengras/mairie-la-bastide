@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, FileText } from "lucide-react";
+import { Download, FileText, ExternalLink } from "lucide-react";
 
 export default function BulletinMunicipalPage() {
   // Remplace ce chemin par le vrai nom de ton fichier placé dans le dossier /public (ex: "/bulletin-2026.pdf")
@@ -8,12 +8,11 @@ export default function BulletinMunicipalPage() {
 
   return (
     <>
-      {/* Hero Section - Identique à la page Contact */}
+      {/* Hero Section */}
       <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center"
+        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
           backgroundImage: "url(/images/hero-1.jpg)",
-          backgroundAttachment: "fixed",
         }}
       >
         {/* Overlay */}
@@ -40,7 +39,7 @@ export default function BulletinMunicipalPage() {
       <section className="bg-stone-50 py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12 items-start">
-            {/* Colonne Gauche : Options et Informations (4 colonnes sur large écran) */}
+            {/* Colonne Gauche : Options et Informations */}
             <div className="lg:col-span-4 space-y-6">
               <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-800 mb-4">
@@ -69,23 +68,49 @@ export default function BulletinMunicipalPage() {
               </div>
             </div>
 
-            {/* Colonne Droite : Lecteur PDF Intégré (8 colonnes sur large écran) */}
-            <div className="lg:col-span-8">
-              <div className="mb-4 flex items-center gap-2 text-stone-500 text-sm px-2">
-                <FileText className="w-4 h-4" />
-                <span>Visualisation directe du document</span>
+            {/* Colonne Droite : Zone d'affichage adaptative */}
+            <div className="lg:col-span-8 w-full">
+              {/* 📱 AFFICHAGE MOBILE (Masqué sur PC avec 'md:hidden') */}
+              <div className="block md:hidden rounded-2xl border border-stone-200 bg-white p-8 text-center shadow-md">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-stone-100 text-stone-500 mb-4">
+                  <FileText className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-bold text-stone-900 mb-2">
+                  Lecture sur smartphone
+                </h3>
+                <p className="text-stone-600 text-sm font-light mb-6">
+                  Pour un confort de lecture optimal et parcourir toutes les
+                  pages du bulletin, ouvrez-le directement dans votre navigateur
+                  mobile.
+                </p>
+                <a
+                  href={pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 px-6 py-3 text-sm font-semibold w-full shadow-sm"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Ouvrir et lire le plein écran
+                </a>
               </div>
 
-              {/* Conteneur de l'Iframe avec aspect ratio pour écrans PC et tablettes */}
-              <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-lg h-[700px] w-full">
-                <iframe
-                  src={`${pdfUrl}#view=FitH`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: "none" }}
-                  title="Lecteur Bulletin Municipal"
-                  className="w-full h-full"
-                />
+              {/* 💻 AFFICHAGE ORDINATEUR & TABLETTE (Masqué sur mobile avec 'hidden md:block') */}
+              <div className="hidden md:block">
+                <div className="mb-4 flex items-center gap-2 text-stone-500 text-sm px-2">
+                  <FileText className="w-4 h-4" />
+                  <span>Visualisation directe du document</span>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-lg h-[700px] w-full">
+                  <iframe
+                    src={`${pdfUrl}#view=FitH`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: "none" }}
+                    title="Lecteur Bulletin Municipal"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
