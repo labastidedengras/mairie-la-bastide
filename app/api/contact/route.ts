@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       // C'est ici que la mairie recevra les messages des habitants.
       to: ["site.labastide@proton.me"],
       subject: `[Formulaire Contact] ${subject}`,
-      replyTo: email, // Permet à la mairie de répondre directement à l'habitant en cliquant sur "Répondre"
+      replyTo: email,
       html: `
         <h2>Nouveau message depuis le site de la Mairie</h2>
         <p><strong>Nom:</strong> ${name}</p>
