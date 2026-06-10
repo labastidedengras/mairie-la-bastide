@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Loader2, Mail, MapPin, Phone } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function ContactPage() {
@@ -11,6 +11,8 @@ export default function ContactPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Correction TypeScript : Ajout des types pour l'événement de changement
   const handleChange = (
@@ -23,14 +25,37 @@ export default function ContactPage() {
     }));
   };
 
-  // Correction TypeScript : Ajout du type pour la soumission du formulaire
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // Soumission du formulaire connectée à l'API Route de Resend
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Une erreur est survenue.");
+      }
+
+      setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-      setSubmitted(false);
-    }, 3000);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Impossible d'envoyer le message pour le moment.";
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,7 +78,7 @@ export default function ContactPage() {
             Une question ?
           </h1>
 
-          {/* Correction ESLint : Échappement propre de l'apostrophe avec &apos; */}
+          {/* Correction ESLint : Échappement propre de l'apostrophe avec ' */}
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
             L&apos;équipe de la mairie est à votre écoute pour répondre à vos
             demandes et questions.
@@ -80,9 +105,21 @@ export default function ContactPage() {
                   <p className="text-green-700 text-sm">
                     Nous vous recontacterons dans les meilleurs délais.
                   </p>
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="mt-6 text-xs text-stone-500 underline hover:text-stone-800"
+                  >
+                    Envoyer un autre message
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {error && (
+                    <div className="p-4 text-sm text-red-800 rounded-xl bg-red-50 border border-red-100">
+                      {error}
+                    </div>
+                  )}
+
                   <div>
                     <label className="block text-sm font-medium text-stone-900 mb-2">
                       Nom complet
@@ -93,8 +130,9 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       placeholder="Votre nom"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -108,8 +146,9 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       placeholder="votre@email.com"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -123,8 +162,9 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       placeholder="Sujet de votre message"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -137,17 +177,26 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       placeholder="Votre message..."
                       rows={6} // Correction TypeScript : Attend un nombre {6} et non une string "6"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all resize-none"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all resize-none disabled:opacity-50"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#76693c] hover:scale-[1.01] hover:shadow-lg"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center gap-2 rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#76693c] hover:scale-[1.01] hover:shadow-lg disabled:opacity-70"
                   >
-                    Envoyer le message
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        Envoi en cours...
+                      </>
+                    ) : (
+                      "Envoyer le message"
+                    )}
                   </button>
                 </form>
               )}
@@ -173,7 +222,7 @@ export default function ContactPage() {
                       <p className="mt-1 text-sm text-stone-600 leading-relaxed">
                         9 rue des Mouchards
                         <br />
-                        30330 La Bastide-d&apos;Engras
+                        30330 La Bastide d&apos;Engras
                         <br />
                         France
                       </p>
