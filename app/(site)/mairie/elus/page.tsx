@@ -1,9 +1,13 @@
-"use client";
-
 import { Landmark, User, Users } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Le Conseil Municipal & Les Élus",
+  description:
+    "Présentation de l'équipe municipale de La Bastide d'Engras : découvrez le mot du Maire, la liste des adjoints et les membres du conseil municipal.",
+};
 
 export default function ElusPage() {
-  // Ta liste exacte et complète du conseil municipal
   const conseillers = [
     { nom: "DUFAUD Nathalie", role: "Conseillère Municipale" },
     { nom: "CARON Chantal", role: "Conseillère Municipale" },

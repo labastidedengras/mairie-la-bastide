@@ -1,5 +1,3 @@
-"use client";
-
 import {
   AlertTriangle,
   Apple,
@@ -14,6 +12,13 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Gestion des Déchets & Tri Sélectif",
+  description:
+    "Consultez le calendrier de collecte des ordures, les consignes de tri sélectif, l'accès aux déchetteries et la gestion des encombrants de la commune.",
+};
 
 export default function DechetsTriPage() {
   return (

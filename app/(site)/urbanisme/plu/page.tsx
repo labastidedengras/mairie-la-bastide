@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Building,
   Download,
@@ -8,6 +6,13 @@ import {
   Map,
   ShieldAlert,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Plan Local d'Urbanisme (PLU)",
+  description:
+    "Consultez les documents d'urbanisme de La Bastide d'Engras : règlement du PLU, zonages, demandes de permis de construire et déclarations préalables.",
+};
 
 export default function PLUPage() {
   // Remplace ce chemin par le vrai nom de ton fichier PLU placé dans le dossier /public (ex: "/plu-la-bastide.pdf")

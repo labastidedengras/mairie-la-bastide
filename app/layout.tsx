@@ -8,9 +8,43 @@ const jakartaFont = Plus_Jakarta_Sans({
   variable: "--font-sans",
 });
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.mairie-labastidedengras.fr";
+
 export const metadata: Metadata = {
-  title: "Mairie de La Bastide d'Engras",
-  description: "Site officiel de la commune de La Bastide d'Engras (Gard)",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "Mairie de La Bastide d'Engras - Site Officiel",
+    template: "%s | Mairie de La Bastide d'Engras",
+  },
+  description:
+    "Bienvenue sur le site officiel de la commune de La Bastide d'Engras (30330) dans le Gard. Retrouvez les actualités, démarches administratives et comptes-rendus du conseil municipal.",
+  keywords: [
+    "La Bastide d'Engras",
+    "Mairie La Bastide d'Engras",
+    "30330",
+    "Commune Gard",
+    "Vie municipale",
+    "Démarches administratives",
+  ],
+  authors: [{ name: "Mairie de La Bastide d'Engras" }],
+  openGraph: {
+    title: "Mairie de La Bastide d'Engras - Site Officiel",
+    description:
+      "Retrouvez toutes les informations et actualités de la commune de La Bastide d'Engras.",
+    url: baseUrl,
+    siteName: "Mairie de La Bastide d'Engras",
+    locale: "fr_FR",
+    type: "website",
+    images: [
+      {
+        url: "/images/hero-1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "La Bastide d'Engras",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

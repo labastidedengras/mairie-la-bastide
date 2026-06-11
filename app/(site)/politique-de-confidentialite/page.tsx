@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Politique de Confidentialité & RGPD",
+  description:
+    "Engagement de la mairie de La Bastide d'Engras sur la protection des données personnelles, l'utilisation des formulaires et vos droits d'accès au titre du RGPD.",
+};
+
 export default function PolitiqueConfidentialite() {
   return (
     <>

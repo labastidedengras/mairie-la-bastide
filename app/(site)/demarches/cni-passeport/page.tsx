@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ExternalLink,
   FileText,
@@ -7,6 +5,13 @@ import {
   MapPin,
   ShieldAlert,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Cartes d'Identité & Passeports",
+  description:
+    "Toutes les informations pratiques pour vos demandes et renouvellements de carte nationale d'identité (CNI) et passeport à La Bastide d'Engras.",
+};
 
 export default function CniPasseportPage() {
   return (

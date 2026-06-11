@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Mentions Légales",
+  description:
+    "Informations légales obligatoires concernant l'éditeur, le directeur de la publication et l'hébergeur du site internet officiel de La Bastide d'Engras.",
+};
+
 export default function MentionsLegales() {
   return (
     <>

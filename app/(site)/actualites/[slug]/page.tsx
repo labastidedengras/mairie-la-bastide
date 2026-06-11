@@ -1,91 +1,67 @@
-"use client";
-
 import { client } from "@/sanity/lib/client";
-import {
-  ArrowLeft,
-  Calendar,
-  Download,
-  FileText,
-  Loader2,
-  Megaphone,
-} from "lucide-react";
+import { ArrowLeft, Megaphone } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
-
-const CATEGORIES_LABELS: Record<string, { label: string; color: string }> = {
-  "vie-municipale": {
-    label: "Vie Municipale",
-    color: "bg-blue-50 text-blue-700 border-blue-100",
-  },
-  evenement: {
-    label: "Événement & Festivités",
-    color: "bg-amber-50 text-amber-700 border-amber-100",
-  },
-  travaux: {
-    label: "Travaux & Routes",
-    color: "bg-orange-50 text-orange-700 border-orange-100",
-  },
-  alerte: {
-    label: "Alerte Info",
-    color: "bg-red-50 text-red-700 border-red-100 animate-pulse",
-  },
-};
-
-interface Article {
-  titre: string;
-  date: string;
-  categorie: string;
-  imageUrl: string | null;
-  contenu: string | null;
-  pdfUrl: string | null;
-}
+import ArticleClientContent from "./ArticleClientContent";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default function ArticleUniquePage({ params }: PageProps) {
-  const { slug } = use(params);
-  const [article, setArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState(true);
+// 1. GENERATION DES METADATAS (Côté Serveur)
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
 
-  useEffect(() => {
-    async function fetchArticleDetails() {
-      try {
-        const query = `*[_type == "actualite" && slug.current == $slug][0] {
-          titre,
-          "date": datePublication,
-          categorie,
-          "imageUrl": imagePrincipale.asset->url,
-          contenu,
-          "pdfUrl": documentJoint.asset->url
-        }`;
-        // Utilisation du client importé
-        const data = await client.fetch(query, { slug });
-        setArticle(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération :", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (slug) fetchArticleDetails();
-  }, [slug]);
+  try {
+    const query = `*[_type == "actualite" && slug.current == $slug][0] {
+      titre,
+      contenu,
+      "imageUrl": imagePrincipale.asset->url
+    }`;
 
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
-  };
+    const article = await client.fetch(query, { slug });
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-stone-50">
-        <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
-      </div>
-    );
+    if (!article) return { title: "Actualité introuvable" };
+
+    const descriptionSnippet = article.contenu
+      ? `${article.contenu.slice(0, 150)}...`
+      : "Découvrez la dernière actualité de la commune de La Bastide d'Engras.";
+
+    return {
+      title: article.titre,
+      description: descriptionSnippet,
+      openGraph: {
+        title: article.titre,
+        description: descriptionSnippet,
+        type: "article",
+        images: article.imageUrl ? [{ url: article.imageUrl }] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error("Erreur generateMetadata:", error);
+    return { title: "Actualité" };
   }
+}
 
+// 2. LE COMPOSANT SERVEUR PRINCIPAL
+export default async function ArticleUniquePage({ params }: PageProps) {
+  const { slug } = await params;
+
+  // Récupération directe des données (fini le useEffect et le useState ici !)
+  const query = `*[_type == "actualite" && slug.current == $slug][0] {
+    titre,
+    "date": datePublication,
+    categorie,
+    "imageUrl": imagePrincipale.asset->url,
+    contenu,
+    "pdfUrl": documentJoint.asset->url
+  }`;
+
+  const article = await client.fetch(query, { slug });
+
+  // Si l'article n'existe pas
   if (!article) {
     return (
       <div className="mx-auto max-w-3xl px-6 pt-40 pb-24 text-center bg-stone-50 min-h-screen flex flex-col items-center">
@@ -106,110 +82,6 @@ export default function ArticleUniquePage({ params }: PageProps) {
     );
   }
 
-  const catInfo = CATEGORIES_LABELS[article.categorie] || {
-    label: article.categorie,
-    color: "bg-stone-100 text-stone-600",
-  };
-
-  return (
-    <div className="bg-stone-50 min-h-screen flex flex-col">
-      {/* 2. LA BANNIÈRE DE FOND POUR LA NAVBAR
-        Cette section fait 160px de haut (h-40), utilise la couleur pierre foncée de ta charte 
-        et s'affiche pile derrière ta Navbar pour rendre son texte blanc parfaitement lisible.
-      */}
-      <div className="w-full h-[84px] bg-stone-900 shrink-0" />
-
-      {/* Corps principal de l'article (plus besoin de gros pt-36 ici grâce à la bannière) */}
-      <article className="py-12 pb-20 flex-1">
-        <div className="mx-auto max-w-3xl px-6">
-          {/* Retour arrière */}
-          <Link
-            href="/actualites"
-            className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#8a7a5a] transition-colors mb-8 group"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Retour aux actualités
-          </Link>
-
-          {/* Header */}
-          <header className="mb-8">
-            <span
-              className={`inline-block rounded-md border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider mb-4 ${catInfo.color}`}
-            >
-              {catInfo.label}
-            </span>
-            <h1 className="text-3xl font-bold tracking-tight text-stone-900 md:text-4xl leading-tight">
-              {article.titre}
-            </h1>
-            <div className="mt-4 flex items-center gap-1.5 text-sm text-stone-400 font-light">
-              <Calendar className="h-4 w-4" />
-              <span>Publié le {formatDate(article.date)}</span>
-            </div>
-          </header>
-
-          {article.imageUrl && (
-            <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm mb-10 flex items-center justify-center min-h-[350px] max-h-[650px]">
-              <img
-                src={article.imageUrl}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover blur-xl opacity-25 pointer-events-none"
-              />
-
-              <img
-                src={article.imageUrl}
-                alt={article.titre}
-                className="relative z-10 max-w-full max-h-[650px] object-contain p-4 md:p-6"
-              />
-            </div>
-          )}
-
-          {/* Contenu textuel */}
-          <div className="prose prose-stone max-w-none bg-white border border-stone-200 rounded-2xl p-8 shadow-sm">
-            {article.contenu ? (
-              <p className="text-stone-700 font-light leading-relaxed whitespace-pre-line text-base">
-                {article.contenu}
-              </p>
-            ) : (
-              <p className="text-stone-400 font-light italic text-sm">
-                Consultez les détails de cette information sur l&apos;affiche
-                ci-dessus ou via le document PDF joint.
-              </p>
-            )}
-
-            {/* Téléchargement du PDF */}
-            {article.pdfUrl && (
-              <div className="mt-10 pt-8 border-t border-stone-100">
-                <h3 className="text-xs font-bold text-stone-900 mb-4 uppercase tracking-wider">
-                  Document utile lié
-                </h3>
-                <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-4 shadow-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
-                      <FileText className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <span className="block text-sm font-semibold text-stone-900 line-clamp-1">
-                        Document complémentaire (PDF)
-                      </span>
-                      <span className="block text-xs text-stone-400 font-light">
-                        Cliquez pour ouvrir ou télécharger
-                      </span>
-                    </div>
-                  </div>
-                  <a
-                    href={`${article.pdfUrl}?dl=`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#8a7a5a] hover:text-white transition shadow-sm"
-                  >
-                    <Download className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </article>
-    </div>
-  );
+  // Si l'article existe, on passe les données au composant Client d'affichage
+  return <ArticleClientContent article={article} />;
 }
