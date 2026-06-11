@@ -16,7 +16,6 @@ export const metadata: Metadata = {
 export default function CniPasseportPage() {
   return (
     <>
-      {/* Hero Section - Même style que le reste du site */}
       <section
         className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
