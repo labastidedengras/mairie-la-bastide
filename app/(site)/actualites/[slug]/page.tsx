@@ -1,5 +1,6 @@
 "use client";
 
+import { client } from "@/sanity/lib/client";
 import {
   ArrowLeft,
   Calendar,
@@ -10,8 +11,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
-// 1. Utilisation de ton nouvel import centralisé
-import { client } from "@/sanity/lib/client";
 
 const CATEGORIES_LABELS: Record<string, { label: string; color: string }> = {
   "vie-municipale": {
@@ -118,7 +117,7 @@ export default function ArticleUniquePage({ params }: PageProps) {
         Cette section fait 160px de haut (h-40), utilise la couleur pierre foncée de ta charte 
         et s'affiche pile derrière ta Navbar pour rendre son texte blanc parfaitement lisible.
       */}
-      <div className="w-full h-[88px] bg-stone-900 shrink-0" />
+      <div className="w-full h-[84px] bg-stone-900 shrink-0" />
 
       {/* Corps principal de l'article (plus besoin de gros pt-36 ici grâce à la bannière) */}
       <article className="py-12 pb-20 flex-1">
@@ -148,7 +147,6 @@ export default function ArticleUniquePage({ params }: PageProps) {
             </div>
           </header>
 
-          {/* Affichage Affiche Portrait */}
           {article.imageUrl && (
             <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm mb-10 flex items-center justify-center min-h-[350px] max-h-[650px]">
               <img
@@ -156,6 +154,7 @@ export default function ArticleUniquePage({ params }: PageProps) {
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover blur-xl opacity-25 pointer-events-none"
               />
+
               <img
                 src={article.imageUrl}
                 alt={article.titre}
