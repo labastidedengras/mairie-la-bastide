@@ -134,6 +134,15 @@ export default function Navbar() {
                         Déchets & Tri
                       </NavigationMenuLink>
                     </li>
+
+                    <li>
+                      <NavigationMenuLink
+                        href="/salle-polyvalente"
+                        className="block rounded-lg p-3 transition hover:bg-slate-50"
+                      >
+                        Salle Polyvalente
+                      </NavigationMenuLink>
+                    </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -235,6 +244,10 @@ export default function Navbar() {
                       onClick={handleLinkClick}
                     >
                       Déchets & Tri
+                    </Link>
+
+                    <Link href="/salle-polyvalente" onClick={handleLinkClick}>
+                      Salle Polyvalente
                     </Link>
                   </div>
 

@@ -1,8 +1,11 @@
 "use client";
 
 import {
+  ArrowRight,
   Crosshair,
   Dumbbell,
+  HelpCircle,
+  LucideIcon,
   Mail,
   Paintbrush,
   Phone,
@@ -10,62 +13,28 @@ import {
   Sparkles,
   Trophy,
 } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
-// Les vraies données extraites du Bulletin Municipal de La Bastide-d'Engras
-const associationsReelles = [
-  {
-    nom: "Association Loisirs et Animation",
-    categorie: "loisirs",
-    description:
-      "Une association conviviale qui anime le village à travers des apéritifs, des soirées thématiques et des repas partagés, permettant à tous les habitants de se retrouver et de partager de chaleureux moments de convivialité.",
-    contactNom: "Françoise Paderi (Présidente)",
-    telephone: "04 66 72 81 45", // Standard Mairie ou à compléter
-    email: "la-bastide-dengras@wanadoo.fr",
-    icon: Sparkles,
-  },
-  {
-    nom: "Moto Club Primeur",
-    categorie: "sport",
-    description:
-      "Rassemblement de passionnés de moto partageant le goût de l'aventure, des balades touristiques (Limoux, Vercors, Diois) et des compétitions régionales ou nationales. L'association compte 77 adhérents, organise des journées Enduro sécurisées et participe activement chaque année au Téléthon.",
-    contactNom: "Robert DUFAUD (Président)",
-    telephone: "04 66 72 81 45",
-    email: "la-bastide-dengras@wanadoo.fr",
-    icon: Trophy, // Représente aussi l'esprit de compétition évoqué
-  },
-  {
-    nom: "Amicale des Chasseurs",
-    categorie: "environnement",
-    description:
-      "Gestion de la chasse locale, entretien des espaces naturels du territoire et préservation des traditions fauniques de la commune dans un esprit de camaraderie.",
-    contactNom: "Bureau de l'Amicale",
-    telephone: "04 66 72 81 45",
-    email: "la-bastide-dengras@wanadoo.fr",
-    icon: Crosshair,
-  },
-  {
-    nom: "Section Gymnastique",
-    categorie: "sport",
-    description:
-      "Séances hebdomadaires complètes incluant étirements, stretching et cardio. Des exercices adaptés pour se maintenir en forme, bouger et évacuer le stress dans une ambiance détendue. Tous les lundis de 18h00 à 19h00 au foyer communal.",
-    contactNom: "Secrétariat Loisirs",
-    telephone: "04 66 72 81 45",
-    email: "la-bastide-dengras@wanadoo.fr",
-    icon: Dumbbell,
-  },
-  {
-    nom: "Loisirs et Création (Peinture & Aquarelle)",
-    categorie: "culture",
-    description:
-      "Ateliers d'expression artistique. Les sessions de peinture se déroulent le mercredi après-midi au foyer communal de La Bastide d'Engras. Les cours de technique d'aquarelle ont lieu le mardi après-midi à la salle polyvalente de St-Laurent-la-Vernède. L'association organise également une grande exposition et rencontre artistique fin juillet.",
-    contactNom: "Mireille Pithon",
-    telephone: "06 35 44 37 20",
-    telephoneFixe: "04 66 72 83 16",
-    email: "la-bastide-dengras@wanadoo.fr",
-    icon: Paintbrush,
-  },
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  sparkles: Sparkles,
+  trophy: Trophy,
+  crosshair: Crosshair,
+  dumbbell: Dumbbell,
+  paintbrush: Paintbrush,
+};
+
+interface Association {
+  nom: string;
+  slug: string;
+  categorie: string;
+  description: string;
+  contactNom: string;
+  telephone?: string | null;
+  telephoneFixe?: string | null;
+  email?: string | null;
+  iconKey: string;
+}
 
 const categories = [
   { id: "all", label: "Toutes" },
@@ -75,13 +44,16 @@ const categories = [
   { id: "environnement", label: "Nature & Chasse" },
 ];
 
-export default function AssociationsClientContent() {
+export default function AssociationsClientContent({
+  initialAssociations,
+}: {
+  initialAssociations: Association[];
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  // Filtrage intelligent en temps réel
   const filteredAssociations = useMemo(() => {
-    return associationsReelles.filter((asso) => {
+    return initialAssociations.filter((asso) => {
       const matchesSearch =
         asso.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
         asso.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -90,7 +62,7 @@ export default function AssociationsClientContent() {
         activeCategory === "all" || asso.categorie === activeCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, activeCategory]);
+  }, [searchQuery, activeCategory, initialAssociations]);
 
   return (
     <div className="min-h-screen bg-stone-50 pb-24">
@@ -158,11 +130,11 @@ export default function AssociationsClientContent() {
         {filteredAssociations.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2">
             {filteredAssociations.map((asso) => {
-              const IconComponent = asso.icon;
+              const IconComponent = ICON_MAP[asso.iconKey] || HelpCircle;
               return (
                 <article
                   key={asso.nom}
-                  className="group flex flex-col justify-between rounded-[2rem] border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="relative group flex flex-col justify-between rounded-[2rem] border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#8a7a5a]/30"
                 >
                   <div>
                     {/* Catégorie + Icône */}
@@ -178,15 +150,28 @@ export default function AssociationsClientContent() {
 
                     {/* Titre & Description */}
                     <h2 className="text-2xl font-bold text-stone-900 group-hover:text-[#8a7a5a] transition-colors">
-                      {asso.nom}
+                      {/* C'est ce lien invisible (after:inset-0) qui rend toute la carte cliquable */}
+                      <Link
+                        href={`/associations/${asso.slug}`}
+                        className="focus:outline-none after:absolute after:inset-0 after:rounded-[2rem]"
+                      >
+                        {asso.nom}
+                      </Link>
                     </h2>
-                    <p className="mt-3 text-stone-600 text-sm leading-relaxed font-light">
+
+                    <p className="mt-3 text-stone-600 text-sm leading-relaxed font-light line-clamp-3">
                       {asso.description}
                     </p>
+
+                    {/* Le petit mot discret qui s'anime au survol de la carte */}
+                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#8a7a5a] group-hover:text-[#76693c] transition-colors">
+                      <span>Voir la fiche complète</span>
+                      <ArrowRight className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
 
-                  {/* Infos Contact Réelles */}
-                  <div className="mt-8 pt-6 border-t border-stone-100">
+                  {/* Infos Contact Réelles (le z-10 permet de garder ces liens cliquables individuellement sans être bloqués par le lien global) */}
+                  <div className="relative z-10 mt-8 pt-6 border-t border-stone-100">
                     <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
                       Contact : {asso.contactNom}
                     </p>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { FileText } from "lucide-react";
 import ActualiteCard from "@/components/ui/actualite-card";
+import { FileText } from "lucide-react";
+import { useState } from "react";
 
 const CATEGORIES_LABELS = {
   "vie-municipale": "Vie Municipale",
@@ -20,7 +20,6 @@ interface Actualite {
   contenu: string | null;
 }
 
-// Le composant reçoit désormais les actualités directement depuis le serveur !
 export default function ActualitesClientContent({
   initialActualites,
 }: {
@@ -35,7 +34,6 @@ export default function ActualitesClientContent({
 
   return (
     <>
-      {/* Hero Section */}
       <section
         className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{ backgroundImage: "url(/images/hero-1.jpg)" }}
@@ -55,10 +53,8 @@ export default function ActualitesClientContent({
         </div>
       </section>
 
-      {/* Main Content */}
       <section className="bg-stone-50 py-24">
         <div className="mx-auto max-w-7xl px-6">
-          {/* Filtres de catégories */}
           <div className="flex flex-wrap justify-center gap-3 mb-16">
             <button
               onClick={() => setSelectedCategory("toutes")}
@@ -85,7 +81,6 @@ export default function ActualitesClientContent({
             ))}
           </div>
 
-          {/* Plus besoin de loader ! L'HTML est généré instantanément avec les cartes */}
           {filteredActualites.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredActualites.map((act) => (

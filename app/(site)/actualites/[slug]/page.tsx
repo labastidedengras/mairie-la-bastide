@@ -8,7 +8,6 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// 1. GENERATION DES METADATAS (Côté Serveur)
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -45,9 +44,7 @@ export async function generateMetadata({
   }
 }
 
-// En haut ou en bas de ton fichier :
 export async function generateStaticParams() {
-  // On récupère TOUS les slugs existants dans Sanity
   const query = `*[_type == "actualite"] { "slug": slug.current }`;
   const articles = await client.fetch(query);
 
@@ -56,11 +53,9 @@ export async function generateStaticParams() {
   }));
 }
 
-// 2. LE COMPOSANT SERVEUR PRINCIPAL
 export default async function ArticleUniquePage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Récupération directe des données (fini le useEffect et le useState ici !)
   const query = `*[_type == "actualite" && slug.current == $slug][0] {
     titre,
     "date": datePublication,
@@ -72,7 +67,6 @@ export default async function ArticleUniquePage({ params }: PageProps) {
 
   const article = await client.fetch(query, { slug });
 
-  // Si l'article n'existe pas
   if (!article) {
     return (
       <div className="mx-auto max-w-3xl px-6 pt-40 pb-24 text-center bg-stone-50 min-h-screen flex flex-col items-center">
@@ -93,6 +87,5 @@ export default async function ArticleUniquePage({ params }: PageProps) {
     );
   }
 
-  // Si l'article existe, on passe les données au composant Client d'affichage
   return <ArticleClientContent article={article} />;
 }

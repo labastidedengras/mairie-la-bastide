@@ -1,8 +1,8 @@
 "use client";
 
+import { ArrowLeft, Calendar, Download, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Calendar, FileText, Download } from "lucide-react";
 
 const CATEGORIES_LABELS: Record<string, { label: string; color: string }> = {
   "vie-municipale": {
@@ -77,7 +77,6 @@ export default function ArticleClientContent({
             </div>
           </header>
 
-          {/* Intégration de Next Image optimisée avec l'effet de halo */}
           {article.imageUrl && (
             <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm mb-10 flex items-center justify-center min-h-[350px] h-[550px]">
               <Image

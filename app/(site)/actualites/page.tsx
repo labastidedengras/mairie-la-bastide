@@ -1,8 +1,7 @@
+import { client } from "@/sanity/lib/client";
 import type { Metadata } from "next";
 import ActualitesClientContent from "./ActualitesClientContent";
-import { client } from "@/sanity/lib/client";
 
-// Les métadonnées lues par les moteurs de recherche
 export const metadata: Metadata = {
   title: "Le Mag' Info - Actualités",
   description:
@@ -22,7 +21,6 @@ export default async function ActualitesPage() {
       contenu
     }`;
 
-    // Le serveur récupère les actualités
     actualites = await client.fetch(query);
   } catch (error) {
     console.error(
@@ -31,6 +29,5 @@ export default async function ActualitesPage() {
     );
   }
 
-  // On passe les données au composant client qui gère les boutons de filtres
   return <ActualitesClientContent initialActualites={actualites} />;
 }

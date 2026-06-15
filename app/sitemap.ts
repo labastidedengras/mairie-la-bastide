@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { MetadataRoute } from "next";
 
+// Récupération des slugs pour les actualités
 async function getSanityArticles(): Promise<string[]> {
   try {
     const query = `*[_type == "actualite" && defined(slug.current)].slug.current`;
@@ -9,6 +10,21 @@ async function getSanityArticles(): Promise<string[]> {
   } catch (error) {
     console.error(
       "Erreur lors de la récupération des articles Sanity pour le sitemap:",
+      error,
+    );
+    return [];
+  }
+}
+
+// 🛠️ Récupération dynamique des slugs pour les associations
+async function getSanityAssociations(): Promise<string[]> {
+  try {
+    const query = `*[_type == "association" && defined(slug.current)].slug.current`;
+    const slugs: string[] = await client.fetch(query);
+    return slugs;
+  } catch (error) {
+    console.error(
+      "Erreur lors de la récupération des associations Sanity pour le sitemap:",
       error,
     );
     return [];
@@ -38,7 +54,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/associations`,
       lastModified: currentDate,
       changeFrequency: "monthly",
-      priority: 0.6,
+      priority: 0.7, // Augmenté un poil la priorité vu qu'elle a des sous-pages maintenant
+    },
+    {
+      url: `${baseUrl}/salle-polyvalente`, // 🏛️ Ajout de la nouvelle page de la salle
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/bulletin-municipal`,
@@ -52,7 +74,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.5,
     },
-
     {
       url: `${baseUrl}/demarches/cni-passeport`,
       lastModified: currentDate,
@@ -65,7 +86,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.6,
     },
-
     {
       url: `${baseUrl}/mairie/comptes-rendus`,
       lastModified: currentDate,
@@ -78,14 +98,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.6,
     },
-
     {
       url: `${baseUrl}/urbanisme/plu`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
-
     {
       url: `${baseUrl}/mentions-legales`,
       lastModified: currentDate,
@@ -100,13 +118,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Génération des routes dynamiques pour les actualités
   const articleSlugs = await getSanityArticles();
-  const dynamicRoutes = articleSlugs.map((slug) => ({
+  const articleRoutes = articleSlugs.map((slug) => ({
     url: `${baseUrl}/actualites/${slug}`,
     lastModified: currentDate,
     changeFrequency: "weekly" as const,
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...dynamicRoutes];
+  // 🛠️ Génération des routes dynamiques pour les associations
+  const associationSlugs = await getSanityAssociations();
+  const associationRoutes = associationSlugs.map((slug) => ({
+    url: `${baseUrl}/associations/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: "monthly" as const, // Les fiches d'assos changent moins souvent que les actus
+    priority: 0.6,
+  }));
+
+  // On fusionne tout proprement (Statiques + Actus + Assos)
+  return [...staticRoutes, ...articleRoutes, ...associationRoutes];
 }
