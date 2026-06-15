@@ -1,8 +1,7 @@
 "use client";
 
-import { client } from "@/sanity/lib/client";
-import { FileText, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { FileText } from "lucide-react";
 import ActualiteCard from "@/components/ui/actualite-card";
 
 const CATEGORIES_LABELS = {
@@ -21,57 +20,27 @@ interface Actualite {
   contenu: string | null;
 }
 
-export default function ActualitesClientContent() {
-  const [actualites, setActualites] = useState<Actualite[]>([]);
-  const [filteredActualites, setFilteredActualites] = useState<Actualite[]>([]);
+// Le composant reçoit désormais les actualités directement depuis le serveur !
+export default function ActualitesClientContent({
+  initialActualites,
+}: {
+  initialActualites: Actualite[];
+}) {
   const [selectedCategory, setSelectedCategory] = useState<string>("toutes");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchActualites() {
-      try {
-        const query = `*[_type == "actualite"] | order(datePublication desc) {
-          titre,
-          "slug": slug.current,
-          "date": datePublication,
-          categorie,
-          "imageUrl": imagePrincipale.asset->url,
-          contenu
-        }`;
-        const data: Actualite[] = await client.fetch(query);
-        setActualites(data);
-        setFilteredActualites(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des actualités :", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchActualites();
-  }, []);
-
-  const handleFilter = (category: string) => {
-    setSelectedCategory(category);
-    if (category === "toutes") {
-      setFilteredActualites(actualites);
-    } else {
-      setFilteredActualites(
-        actualites.filter((act) => act.categorie === category),
-      );
-    }
-  };
+  const filteredActualites =
+    selectedCategory === "toutes"
+      ? initialActualites
+      : initialActualites.filter((act) => act.categorie === selectedCategory);
 
   return (
     <>
       {/* Hero Section */}
       <section
         className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{
-          backgroundImage: "url(/images/hero-1.jpg)",
-        }}
+        style={{ backgroundImage: "url(/images/hero-1.jpg)" }}
       >
         <div className="absolute inset-0 bg-black/45" />
-
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center pt-16">
           <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
             Actualités de la commune
@@ -92,7 +61,7 @@ export default function ActualitesClientContent() {
           {/* Filtres de catégories */}
           <div className="flex flex-wrap justify-center gap-3 mb-16">
             <button
-              onClick={() => handleFilter("toutes")}
+              onClick={() => setSelectedCategory("toutes")}
               className={`px-6 py-3 rounded-full text-sm font-medium transition ${
                 selectedCategory === "toutes"
                   ? "bg-stone-900 text-white shadow-md"
@@ -104,7 +73,7 @@ export default function ActualitesClientContent() {
             {Object.entries(CATEGORIES_LABELS).map(([key, label]) => (
               <button
                 key={key}
-                onClick={() => handleFilter(key)}
+                onClick={() => setSelectedCategory(key)}
                 className={`px-6 py-3 rounded-full text-sm font-medium transition ${
                   selectedCategory === key
                     ? "bg-stone-900 text-white shadow-md"
@@ -116,12 +85,8 @@ export default function ActualitesClientContent() {
             ))}
           </div>
 
-          {/* Grid de contenu ou Loader */}
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
-            </div>
-          ) : (
+          {/* Plus besoin de loader ! L'HTML est généré instantanément avec les cartes */}
+          {filteredActualites.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredActualites.map((act) => (
                 <ActualiteCard
@@ -135,10 +100,7 @@ export default function ActualitesClientContent() {
                 />
               ))}
             </div>
-          )}
-
-          {/* Aucun article */}
-          {!loading && filteredActualites.length === 0 && (
+          ) : (
             <div className="py-24 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-[2rem]">
               <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
               <p className="text-sm font-light">

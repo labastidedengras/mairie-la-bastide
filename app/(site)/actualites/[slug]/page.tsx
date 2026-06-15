@@ -45,6 +45,17 @@ export async function generateMetadata({
   }
 }
 
+// En haut ou en bas de ton fichier :
+export async function generateStaticParams() {
+  // On récupère TOUS les slugs existants dans Sanity
+  const query = `*[_type == "actualite"] { "slug": slug.current }`;
+  const articles = await client.fetch(query);
+
+  return articles.map((article: { slug: string }) => ({
+    slug: article.slug,
+  }));
+}
+
 // 2. LE COMPOSANT SERVEUR PRINCIPAL
 export default async function ArticleUniquePage({ params }: PageProps) {
   const { slug } = await params;

@@ -170,7 +170,10 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <div className="lg:hidden">
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-              <SheetTrigger className="rounded-full p-2 transition hover:bg-white/10">
+              <SheetTrigger
+                aria-label="Ouvrir le menu mobile"
+                className="rounded-full p-2 transition hover:bg-white/10"
+              >
                 <Menu className="h-6 w-6" />
               </SheetTrigger>
 

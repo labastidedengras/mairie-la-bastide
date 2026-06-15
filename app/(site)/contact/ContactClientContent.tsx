@@ -324,6 +324,7 @@ export default function ContactPage() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
+              aria-label="Carte Google Maps de la Mairie de La Bastide d'Engras"
             />
           </div>
 

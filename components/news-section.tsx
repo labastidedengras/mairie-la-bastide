@@ -1,11 +1,8 @@
-"use client";
-
-import { FileText, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-// 1. Tes imports centralisés et ton nouveau composant Card
+// 1. On retire le "use client" ! C'est maintenant un Server Component
 import ActualiteCard from "@/components/ui/actualite-card";
 import { client } from "@/sanity/lib/client";
+import { FileText } from "lucide-react";
+import Link from "next/link";
 
 interface Actualite {
   titre: string;
@@ -16,37 +13,28 @@ interface Actualite {
   contenu: string | null;
 }
 
-export default function NewsSection() {
-  const [latestNews, setLatestNews] = useState<Actualite[]>([]);
-  const [loading, setLoading] = useState(true);
+// 2. On rend la fonction async pour fetcher directement côté serveur
+export default async function NewsSection() {
+  let latestNews: Actualite[] = [];
 
-  useEffect(() => {
-    async function fetchLatestNews() {
-      try {
-        // Requête limitée aux 3 derniers articles triés par date décroissante
-        const query = `*[_type == "actualite"] | order(datePublication desc)[0...3] {
-          titre,
-          "slug": slug.current,
-          "date": datePublication,
-          categorie,
-          "imageUrl": imagePrincipale.asset->url,
-          contenu
-        }`;
+  try {
+    const query = `*[_type == "actualite"] | order(datePublication desc)[0...3] {
+      titre,
+      "slug": slug.current,
+      "date": datePublication,
+      categorie,
+      "imageUrl": imagePrincipale.asset->url,
+      contenu
+    }`;
 
-        const data = await client.fetch(query);
-        setLatestNews(data);
-      } catch (error) {
-        console.error(
-          "Erreur lors du chargement des dernières actualités :",
-          error,
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchLatestNews();
-  }, []);
+    // On fait le fetch directement ici. Next.js va mettre cette page en cache static.
+    latestNews = await client.fetch(query);
+  } catch (error) {
+    console.error(
+      "Erreur lors du chargement des dernières actualités :",
+      error,
+    );
+  }
 
   return (
     <section className="bg-stone-50 py-24">
@@ -57,11 +45,9 @@ export default function NewsSection() {
             <span className="mb-3 inline-flex rounded-full bg-stone-200 px-4 py-2 text-sm font-medium text-stone-700">
               Vie du village
             </span>
-
             <h2 className="text-4xl font-bold tracking-tight text-stone-900 md:text-5xl">
               Actualités & Informations
             </h2>
-
             <p className="mt-4 max-w-2xl text-lg text-stone-600">
               Retrouvez les événements, informations municipales et actualités
               importantes du village.
@@ -76,12 +62,8 @@ export default function NewsSection() {
           </Link>
         </div>
 
-        {/* Grid dynamique */}
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
-          </div>
-        ) : latestNews.length > 0 ? (
+        {/* Plus besoin de loader client (l'HTML arrive déjà prêt chez l'utilisateur !) */}
+        {latestNews.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {latestNews.map((act) => (
               <ActualiteCard
@@ -96,7 +78,6 @@ export default function NewsSection() {
             ))}
           </div>
         ) : (
-          /* Fallback si Sanity est vide */
           <div className="py-16 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-[2rem]">
             <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
             <p className="text-sm font-light">

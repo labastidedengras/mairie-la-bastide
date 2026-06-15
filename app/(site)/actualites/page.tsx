@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ActualitesClientContent from "./ActualitesClientContent";
+import { client } from "@/sanity/lib/client";
 
 // Les métadonnées lues par les moteurs de recherche
 export const metadata: Metadata = {
@@ -8,6 +9,28 @@ export const metadata: Metadata = {
     "Suivez au quotidien l'actualité de la commune de La Bastide d'Engras : décisions de la mairie, chantiers en cours, alertes et événements à venir.",
 };
 
-export default function ActualitesPage() {
-  return <ActualitesClientContent />;
+export default async function ActualitesPage() {
+  let actualites = [];
+
+  try {
+    const query = `*[_type == "actualite"] | order(datePublication desc) {
+      titre,
+      "slug": slug.current,
+      "date": datePublication,
+      categorie,
+      "imageUrl": imagePrincipale.asset->url,
+      contenu
+    }`;
+
+    // Le serveur récupère les actualités
+    actualites = await client.fetch(query);
+  } catch (error) {
+    console.error(
+      "Erreur lors du chargement des actualités sur le serveur :",
+      error,
+    );
+  }
+
+  // On passe les données au composant client qui gère les boutons de filtres
+  return <ActualitesClientContent initialActualites={actualites} />;
 }

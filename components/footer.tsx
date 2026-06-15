@@ -103,7 +103,7 @@ export default function Footer() {
 
       {/* Bas de page */}
       <div className="border-t border-white/5">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-8 py-6 text-xs text-white/25 sm:flex-row">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-8 py-6 text-xs text-white/50 sm:flex-row">
           <span>
             © {new Date().getFullYear()}{" "}
             <a
@@ -116,23 +116,20 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <a
               href="/mentions-legales"
-              className="transition-colors hover:text-white/50"
+              className="transition-colors hover:text-white/70"
             >
               Mentions légales
             </a>
             <a
               href="/politique-de-confidentialite"
-              className="transition-colors hover:text-white/50"
+              className="transition-colors hover:text-white/70"
             >
               Politique de confidentialité
             </a>
             <span className="h-3 w-px bg-white/10" />
             <span>
               Site réalisé par{" "}
-              <a
-                href="#"
-                className="text-white/40 transition-colors hover:text-white/70"
-              >
+              <a href="#" className="transition-colors hover:text-white/70">
                 Bastien ANDRE
               </a>
             </span>
