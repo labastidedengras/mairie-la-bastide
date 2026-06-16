@@ -3,7 +3,7 @@
 import { Calendar } from "@/components/ui/calendar";
 import { fr } from "date-fns/locale";
 import { CalendarDays, Info, Loader2, Send } from "lucide-react";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 interface SallePolyvalenteClientProps {
   datesOccupees: string[];
@@ -95,7 +95,7 @@ export default function SallePolyvalenteClient({
           <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
             Salle Polyvalente
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-white/90 leading-relaxed">
+          <p className="mx-auto mt-6 max-w-2xl texte-base md:text-lg text-white/90 leading-relaxed">
             Consultez le calendrier des disponibilités en temps réel et
             planifiez vos événements familiaux ou associatifs.
           </p>
