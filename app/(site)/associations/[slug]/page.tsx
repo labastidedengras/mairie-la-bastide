@@ -1,3 +1,4 @@
+import GalleryLightbox from "@/components/gallery-lightbox";
 import { client } from "@/sanity/lib/client";
 import type {
   PortableTextBlock,
@@ -5,7 +6,7 @@ import type {
 } from "@portabletext/react";
 import { PortableText } from "@portabletext/react";
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 interface PageProps {
@@ -64,61 +65,113 @@ export default async function AssociationUniquePage({ params }: PageProps) {
 
   return (
     <>
-      <div className="w-full h-[84px] bg-stone-900 shrink-0" />
-      <div className="min-h-screen bg-stone-50 py-24">
-        <div className="mx-auto max-w-4xl px-6">
+      <div className="w-full h-20 md:h-[84px] bg-stone-900 shrink-0" />
+      <div className="min-h-screen bg-stone-50 py-12 md:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/associations"
-            className="inline-flex items-center gap-2 text-sm text-[#8a7a5a] mb-8 hover:underline"
+            className="inline-flex items-center gap-2 text-sm text-[#8a7a5a] mb-6 hover:underline"
           >
             <ArrowLeft className="h-4 w-4" /> Retour aux associations
           </Link>
 
-          <h1 className="text-4xl font-bold text-stone-900 md:text-5xl mb-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 mb-4 md:mb-6">
             {asso.nom}
           </h1>
 
-          {/* Contenu textuel riche */}
-          <div className="prose prose-stone max-w-none mb-12">
-            {asso.contenuDetaille ? (
-              <PortableText
-                value={asso.contenuDetaille}
-                components={portableTextComponents}
-              />
-            ) : (
-              <p className="text-stone-600 whitespace-pre-line">
-                {asso.description}
-              </p>
+          <div className="grid gap-8 md:grid-cols-3">
+            {/* Main content */}
+            <main className="md:col-span-2">
+              <div className="prose prose-stone max-w-none mb-8">
+                {asso.contenuDetaille ? (
+                  <PortableText
+                    value={asso.contenuDetaille}
+                    components={portableTextComponents}
+                  />
+                ) : (
+                  <p className="text-stone-600 whitespace-pre-line">
+                    {asso.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Contact rapide */}
+              <div className="rounded-2xl bg-white p-4 border border-stone-200 shadow-sm mb-8">
+                <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">
+                  Contact : {asso.contactNom}
+                </p>
+                <div className="flex flex-wrap gap-4 text-sm text-stone-600">
+                  {asso.telephone && (
+                    <a
+                      href={`tel:${asso.telephone.replace(/\s/g, "")}`}
+                      className="hover:text-[#8a7a5a]"
+                    >
+                      {asso.telephone}
+                    </a>
+                  )}
+                  {asso.telephoneFixe && (
+                    <a
+                      href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
+                      className="hover:text-[#8a7a5a]"
+                    >
+                      {asso.telephoneFixe}
+                    </a>
+                  )}
+                  {asso.email && (
+                    <a
+                      href={`mailto:${asso.email}`}
+                      className="hover:text-[#8a7a5a] break-all"
+                    >
+                      {asso.email}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </main>
+
+            {/* Aside / Gallery */}
+            {asso.photos && asso.photos.length > 0 && (
+              <section className="mb-12">
+                <h2 className="text-lg sm:text-xl font-bold text-stone-900 mb-4">
+                  Galerie photos
+                </h2>
+                <GalleryLightbox photos={asso.photos} title={asso.nom} />
+              </section>
             )}
           </div>
-
-          {/* Galerie photos si elle existe */}
-          {asso.photos && asso.photos.length > 0 && (
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold text-stone-900 mb-6">
-                Galerie photos
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-                {asso.photos.map((url: string, index: number) => (
-                  <div
-                    key={index}
-                    className="relative h-48 overflow-hidden rounded-2xl border border-stone-200 shadow-sm group"
-                  >
-                    <Image
-                      src={url}
-                      alt={`Photo ${asso.nom}`}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
         </div>
       </div>
     </>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  // On récupère uniquement ce dont on a besoin pour le SEO
+  const query = `*[_type == "association" && slug.current == $slug][0] { nom, description }`;
+  const asso = await client.fetch(query, { slug });
+
+  // Fallback si l'association n'existe pas
+  if (!asso) {
+    return {
+      title: "Association introuvable - Mairie de La Bastide d'Engras",
+    };
+  }
+
+  return {
+    title: `${asso.nom} - Association à La Bastide d'Engras`,
+    description:
+      asso.description ||
+      `Découvrez l'association ${asso.nom} de la commune de La Bastide d'Engras.`,
+    openGraph: {
+      title: `${asso.nom} - La Bastide d'Engras`,
+      description: asso.description,
+      type: "article",
+    },
+  };
 }
 
 // Génération statique magique pour le Webhook !
