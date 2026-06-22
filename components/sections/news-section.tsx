@@ -1,5 +1,5 @@
 // 1. On retire le "use client" ! C'est maintenant un Server Component
-import ActualiteCard from "@/components/ui/actualite-card";
+import ActualiteCard from "@/components/features/actualites/actualite-card";
 import { client } from "@/sanity/lib/client";
 import { FileText } from "lucide-react";
 import Link from "next/link";

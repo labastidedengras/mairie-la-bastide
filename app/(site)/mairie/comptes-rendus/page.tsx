@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ComptesRendusClientContent from "./ComptesRendusClientContent";
+import ComptesRendusClientContent from "./comptes-rendus-client-content";
 
 export const metadata: Metadata = {
   title: "Comptes-rendus du Conseil Municipal",

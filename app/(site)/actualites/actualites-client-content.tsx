@@ -1,6 +1,6 @@
 "use client";
 
-import ActualiteCard from "@/components/ui/actualite-card";
+import ActualiteCard from "@/components/features/actualites/actualite-card";
 import { FileText } from "lucide-react";
 import { useState } from "react";
 

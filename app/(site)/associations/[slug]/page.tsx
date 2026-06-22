@@ -1,4 +1,4 @@
-import GalleryLightbox from "@/components/gallery-lightbox";
+import GalleryLightbox from "@/components/features/associations/gallery-lightbox";
 import { client } from "@/sanity/lib/client";
 import type {
   PortableTextBlock,

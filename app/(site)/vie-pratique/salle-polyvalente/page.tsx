@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import type { Metadata } from "next";
-import SallePolyvalenteClient from "./SallePolyvalenteClient";
+import SallePolyvalenteClient from "./salle-polyvalente-client";
 
 export const metadata: Metadata = {
   title: "Réservation de la Salle Polyvalente",

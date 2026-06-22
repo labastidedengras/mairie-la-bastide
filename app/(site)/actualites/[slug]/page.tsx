@@ -2,7 +2,7 @@ import { client } from "@/sanity/lib/client";
 import { ArrowLeft, Megaphone } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import ArticleClientContent from "./ArticleClientContent";
+import ArticleClientContent from "./article-client-content";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BulletinMunicipalClientContent from "./BulletinMunicipalClientContent";
+import BulletinMunicipalClientContent from "./bulletin-municipal-client-content";
 
 export const metadata: Metadata = {
   title: "Bulletin Municipal",

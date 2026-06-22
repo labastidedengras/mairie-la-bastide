@@ -12,7 +12,7 @@ const quickLinks = [
   {
     title: "CNI & Passeport",
     description: "Modalités, pièces à fournir et demandes de rendez-vous.",
-    href: "/demarches/cni-passeport",
+    href: "/vie-pratique/cni-passeport",
     icon: FileText,
     accent: "#b5651d", // terracotta — administratif
   },
@@ -26,14 +26,14 @@ const quickLinks = [
   {
     title: "Urbanisme & PLU",
     description: "Consultez le Plan Local d'Urbanisme et vos démarches.",
-    href: "/urbanisme/plu",
+    href: "/vie-pratique/plu",
     icon: Map,
     accent: "#b5651d",
   },
   {
     title: "Déchets & Tri",
     description: "Calendrier de collecte, consignes de tri et déchèterie.",
-    href: "/demarches/dechets-tri",
+    href: "/vie-pratique/dechets-tri",
     icon: Recycle,
     accent: "#5c6b47", // vert garrigue — cadre de vie
   },

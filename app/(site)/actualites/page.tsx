@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import type { Metadata } from "next";
-import ActualitesClientContent from "./ActualitesClientContent";
+import ActualitesClientContent from "./actualites-client-content";
 
 export const metadata: Metadata = {
   title: "Le Mag' Info - Actualités",

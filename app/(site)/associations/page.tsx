@@ -1,6 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import type { Metadata } from "next";
-import AssociationsClientContent from "./AssociationsClientContent";
+import AssociationsClientContent from "./associations-client-content";
 
 export const metadata: Metadata = {
   title: "Vie Associative & Événements",

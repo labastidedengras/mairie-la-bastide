@@ -93,7 +93,7 @@ export default function Navbar() {
 
                     <li>
                       <NavigationMenuLink
-                        href="/bulletin-municipal"
+                        href="/mairie/bulletin-municipal"
                         className="block rounded-lg p-3 transition hover:bg-slate-50"
                       >
                         Bulletin Municipal
@@ -110,7 +110,7 @@ export default function Navbar() {
                   <ul className="grid w-[320px] gap-2 rounded-xl bg-white p-4 text-slate-900">
                     <li>
                       <NavigationMenuLink
-                        href="/demarches/cni-passeport"
+                        href="/vie-pratique/cni-passeport"
                         className="block rounded-lg p-3 transition hover:bg-slate-50"
                       >
                         CNI & Passeport
@@ -119,7 +119,7 @@ export default function Navbar() {
 
                     <li>
                       <NavigationMenuLink
-                        href="/urbanisme/plu"
+                        href="/vie-pratique/plu"
                         className="block rounded-lg p-3 transition hover:bg-slate-50"
                       >
                         Urbanisme & PLU
@@ -128,7 +128,7 @@ export default function Navbar() {
 
                     <li>
                       <NavigationMenuLink
-                        href="/demarches/dechets-tri"
+                        href="/vie-pratique/dechets-tri"
                         className="block rounded-lg p-3 transition hover:bg-slate-50"
                       >
                         Déchets & Tri
@@ -137,7 +137,7 @@ export default function Navbar() {
 
                     <li>
                       <NavigationMenuLink
-                        href="/salle-polyvalente"
+                        href="/vie-pratique/salle-polyvalente"
                         className="block rounded-lg p-3 transition hover:bg-slate-50"
                       >
                         Salle Polyvalente
@@ -217,7 +217,10 @@ export default function Navbar() {
                       Comptes-rendus
                     </Link>
 
-                    <Link href="/bulletin-municipal" onClick={handleLinkClick}>
+                    <Link
+                      href="/mairie/bulletin-municipal"
+                      onClick={handleLinkClick}
+                    >
                       Bulletin Municipal
                     </Link>
                   </div>
@@ -229,24 +232,27 @@ export default function Navbar() {
                     </p>
 
                     <Link
-                      href="/demarches/cni-passeport"
+                      href="/vie-pratique/cni-passeport"
                       onClick={handleLinkClick}
                     >
                       CNI & Passeport
                     </Link>
 
-                    <Link href="/urbanisme/plu" onClick={handleLinkClick}>
+                    <Link href="/vie-pratique/plu" onClick={handleLinkClick}>
                       Urbanisme & PLU
                     </Link>
 
                     <Link
-                      href="/demarches/dechets-tri"
+                      href="/vie-pratique/dechets-tri"
                       onClick={handleLinkClick}
                     >
                       Déchets & Tri
                     </Link>
 
-                    <Link href="/salle-polyvalente" onClick={handleLinkClick}>
+                    <Link
+                      href="/vie-pratique/salle-polyvalente"
+                      onClick={handleLinkClick}
+                    >
                       Salle Polyvalente
                     </Link>
                   </div>

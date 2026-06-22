@@ -54,16 +54,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/associations`,
       lastModified: currentDate,
       changeFrequency: "monthly",
-      priority: 0.7, // Augmenté un poil la priorité vu qu'elle a des sous-pages maintenant
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/salle-polyvalente`, // 🏛️ Ajout de la nouvelle page de la salle
+      url: `${baseUrl}/vie-pratique/salle-polyvalente`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/bulletin-municipal`,
+      url: `${baseUrl}/mairie/bulletin-municipal`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
@@ -75,13 +75,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/demarches/cni-passeport`,
+      url: `${baseUrl}/vie-pratique/cni-passeport`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/demarches/dechets-tri`,
+      url: `${baseUrl}/vie-pratique/dechets-tri`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.6,
@@ -99,7 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/urbanisme/plu`,
+      url: `${baseUrl}/vie-pratique/plu`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,

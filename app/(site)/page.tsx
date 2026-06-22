@@ -1,8 +1,8 @@
-import Hero from "@/components/hero";
-import AgendaSection from "@/components/home/AgendaSection";
-import DiscoverVillageSection from "@/components/home/DiscoverVillageSection";
-import NewsSection from "@/components/news-section";
-import QuickAccessSection from "@/components/QuickAccessSection";
+import Hero from "@/components/sections/hero";
+import AgendaSection from "@/components/sections/agenda-section";
+import DiscoverVillageSection from "@/components/sections/discover-village-section";
+import NewsSection from "@/components/sections/news-section";
+import QuickAccessSection from "@/components/sections/quick-access-section";
 
 export default function Home() {
   return (
