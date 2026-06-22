@@ -4,22 +4,29 @@ import { ArrowLeft, Calendar, Download, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const CATEGORIES_LABELS: Record<string, { label: string; color: string }> = {
+const CATEGORIES_LABELS: Record<
+  string,
+  { label: string; color: string; accent: string }
+> = {
   "vie-municipale": {
     label: "Vie Municipale",
-    color: "bg-blue-50 text-blue-700 border-blue-100",
+    color: "bg-[#6b5b4d]/10 text-[#6b5b4d] border-[#6b5b4d]/20",
+    accent: "#6b5b4d",
   },
   evenement: {
     label: "Événement & Festivités",
-    color: "bg-amber-50 text-amber-700 border-amber-100",
+    color: "bg-[#b5651d]/10 text-[#b5651d] border-[#b5651d]/20",
+    accent: "#b5651d",
   },
   travaux: {
     label: "Travaux & Routes",
-    color: "bg-orange-50 text-orange-700 border-orange-100",
+    color: "bg-[#5c6b47]/10 text-[#5c6b47] border-[#5c6b47]/20",
+    accent: "#5c6b47",
   },
   alerte: {
     label: "Alerte Info",
     color: "bg-red-50 text-red-700 border-red-100 animate-pulse",
+    accent: "#b91c1c",
   },
 };
 
@@ -45,7 +52,8 @@ export default function ArticleClientContent({
 
   const catInfo = CATEGORIES_LABELS[article.categorie] || {
     label: article.categorie,
-    color: "bg-stone-100 text-stone-600",
+    color: "bg-stone-100 text-stone-600 border-stone-200",
+    accent: "#6b5b4d",
   };
 
   return (
@@ -56,7 +64,7 @@ export default function ArticleClientContent({
         <div className="mx-auto max-w-3xl px-6">
           <Link
             href="/actualites"
-            className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#8a7a5a] transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#b5651d] transition-colors mb-8 group"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Retour aux actualités
@@ -68,7 +76,7 @@ export default function ArticleClientContent({
             >
               {catInfo.label}
             </span>
-            <h1 className="text-3xl font-bold tracking-tight text-stone-900 md:text-4xl leading-tight">
+            <h1 className="font-serif text-3xl font-medium tracking-tight text-stone-900 md:text-4xl leading-tight">
               {article.titre}
             </h1>
             <div className="mt-4 flex items-center gap-1.5 text-sm text-stone-400 font-light">
@@ -130,14 +138,14 @@ export default function ArticleClientContent({
                       </span>
                     </div>
                   </div>
-                  <a
+                  <Link
                     href={`${article.pdfUrl}?dl=`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#8a7a5a] hover:text-white transition shadow-sm"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#b5651d] hover:text-white transition shadow-sm"
                   >
                     <Download className="h-4 w-4" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}

@@ -14,36 +14,42 @@ const quickLinks = [
     description: "Modalités, pièces à fournir et demandes de rendez-vous.",
     href: "/demarches/cni-passeport",
     icon: FileText,
+    accent: "#b5651d", // terracotta — administratif
   },
   {
     title: "Comptes rendus",
     description: "Retrouvez les procès-verbaux des Conseils Municipaux.",
     href: "/mairie/comptes-rendus",
     icon: FileSpreadsheet,
+    accent: "#b5651d",
   },
   {
     title: "Urbanisme & PLU",
     description: "Consultez le Plan Local d'Urbanisme et vos démarches.",
-    href: "/urbanisme/plu", // Ajuste le lien si nécessaire
+    href: "/urbanisme/plu",
     icon: Map,
+    accent: "#b5651d",
   },
   {
     title: "Déchets & Tri",
     description: "Calendrier de collecte, consignes de tri et déchèterie.",
     href: "/demarches/dechets-tri",
     icon: Recycle,
+    accent: "#5c6b47", // vert garrigue — cadre de vie
   },
   {
     title: "Les Élus",
     description: "Découvrez l'équipe municipale et les commissions.",
-    href: "/mairie/elus", // Ajuste le lien si nécessaire
+    href: "/mairie/elus",
     icon: Users,
+    accent: "#6b5b4d", // brun pierre — civique
   },
   {
     title: "Contact & Horaires",
     description: "Coordonnées de la mairie et horaires d'ouverture.",
     href: "/contact",
     icon: Phone,
+    accent: "#6b5b4d",
   },
 ];
 
@@ -53,11 +59,15 @@ export default function QuickAccessSection() {
       <div className="mx-auto max-w-7xl px-6">
         {/* Header */}
         <div className="mb-14 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-stone-100 px-4 py-2 text-sm font-medium text-stone-700">
-            Services & Démarches
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-[#b5651d]/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b5651d]">
+              Services & Démarches
+            </span>
+            <span className="h-px w-8 bg-[#b5651d]/40" />
+          </div>
 
-          <h2 className="text-4xl font-bold tracking-tight text-stone-900 md:text-5xl">
+          <h2 className="text-4xl font-serif font-semibold tracking-tight text-stone-900 md:text-5xl">
             Accès rapides
           </h2>
 
@@ -76,10 +86,14 @@ export default function QuickAccessSection() {
               <Link
                 key={link.title}
                 href={link.href}
-                className="group rounded-[2rem] border border-stone-200 bg-stone-50 p-8 transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:bg-white hover:shadow-lg"
+                className="group rounded-2xl border border-stone-200 bg-stone-50 p-8 transition duration-300 hover:-translate-y-1 hover:border-stone-300 hover:bg-white hover:shadow-lg"
+                style={{ borderTopWidth: "3px", borderTopColor: link.accent }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-stone-200 transition group-hover:scale-105">
-                  <Icon className="h-7 w-7 text-stone-700" />
+                <div
+                  className="flex h-14 w-14 items-center justify-center rounded-xl shadow-sm ring-1 ring-stone-200 transition group-hover:scale-105"
+                  style={{ backgroundColor: `${link.accent}15` }}
+                >
+                  <Icon className="h-7 w-7" style={{ color: link.accent }} />
                 </div>
 
                 <h3 className="mt-6 text-2xl font-semibold text-stone-900">
@@ -90,7 +104,10 @@ export default function QuickAccessSection() {
                   {link.description}
                 </p>
 
-                <div className="mt-6 flex items-center gap-2 font-medium text-stone-900 text-sm">
+                <div
+                  className="mt-6 flex items-center gap-2 font-medium text-sm"
+                  style={{ color: link.accent }}
+                >
                   Y accéder
                   <span className="transition-transform group-hover:translate-x-1">
                     →

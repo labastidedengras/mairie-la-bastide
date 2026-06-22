@@ -42,10 +42,13 @@ export default async function NewsSection() {
         {/* Header */}
         <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <span className="mb-3 inline-flex rounded-full bg-stone-200 px-4 py-2 text-sm font-medium text-stone-700">
-              Vie du village
-            </span>
-            <h2 className="text-4xl font-bold tracking-tight text-stone-900 md:text-5xl">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#b5651d]/40" />
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b5651d]">
+                Vie du village
+              </span>
+            </div>
+            <h2 className="font-serif text-4xl font-semibold tracking-tight text-stone-900 md:text-5xl">
               Actualités & Informations
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-stone-600">
@@ -56,9 +59,9 @@ export default async function NewsSection() {
 
           <Link
             href="/actualites"
-            className="rounded-full border border-stone-300 bg-white px-6 py-3 font-medium text-stone-800 transition hover:bg-stone-100 text-center"
+            className="rounded-md border border-[#b5651d] px-6 py-3 font-medium text-[#b5651d] transition hover:bg-[#b5651d] hover:text-white text-center"
           >
-            Voir toutes les actualités
+            Voir toutes les actualités →
           </Link>
         </div>
 

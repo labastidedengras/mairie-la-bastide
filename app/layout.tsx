@@ -1,11 +1,16 @@
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const jakartaFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const frauncesFont = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-serif",
 });
 
 const baseUrl =
@@ -59,7 +64,9 @@ export default function RootLayout({
         "h-full",
         "antialiased",
         jakartaFont.className,
+        frauncesFont.variable,
         "font-sans",
+        "font-serif",
       )}
     >
       <body className="min-h-full bg-stone-50 text-stone-900">{children}</body>

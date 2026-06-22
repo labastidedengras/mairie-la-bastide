@@ -70,15 +70,18 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-black/50" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Nous contacter
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Nous contacter
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Une question ?
           </h1>
 
-          {/* Correction ESLint : Échappement propre de l'apostrophe avec ' */}
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
             L&apos;équipe de la mairie est à votre écoute pour répondre à vos
             demandes et questions.
@@ -92,17 +95,17 @@ export default function ContactPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Form Column */}
             <div>
-              <h2 className="text-3xl font-bold text-stone-900 mb-8">
+              <h2 className="font-serif text-3xl font-medium text-stone-900 mb-8">
                 Envoyez-nous un message
               </h2>
 
               {submitted ? (
-                <div className="rounded-2xl border border-green-200 bg-green-50/50 p-12 text-center backdrop-blur-sm">
-                  <div className="mb-4 text-4xl text-green-600">✓</div>
-                  <p className="text-lg font-semibold text-green-900 mb-2">
+                <div className="rounded-2xl border border-[#5c6b47]/20 bg-[#5c6b47]/5 p-12 text-center">
+                  <div className="mb-4 text-4xl text-[#5c6b47]">✓</div>
+                  <p className="text-lg font-semibold text-stone-900 mb-2">
                     Merci ! Votre message a bien été reçu.
                   </p>
-                  <p className="text-green-700 text-sm">
+                  <p className="text-stone-600 text-sm">
                     Nous vous recontacterons dans les meilleurs délais.
                   </p>
                   <button
@@ -132,7 +135,7 @@ export default function ContactPage() {
                       required
                       disabled={isSubmitting}
                       placeholder="Votre nom"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -148,7 +151,7 @@ export default function ContactPage() {
                       required
                       disabled={isSubmitting}
                       placeholder="votre@email.com"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -164,7 +167,7 @@ export default function ContactPage() {
                       required
                       disabled={isSubmitting}
                       placeholder="Sujet de votre message"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all disabled:opacity-50"
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -179,15 +182,15 @@ export default function ContactPage() {
                       required
                       disabled={isSubmitting}
                       placeholder="Votre message..."
-                      rows={6} // Correction TypeScript : Attend un nombre {6} et non une string "6"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#8a7a5a] focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all resize-none disabled:opacity-50"
+                      rows={6}
+                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all resize-none disabled:opacity-50"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#76693c] hover:scale-[1.01] hover:shadow-lg disabled:opacity-70"
+                    className="w-full flex items-center justify-center gap-2 rounded-md bg-[#b5651d] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#964f17] disabled:opacity-70"
                   >
                     {isSubmitting ? (
                       <>
@@ -205,14 +208,14 @@ export default function ContactPage() {
             {/* Info Column */}
             <div className="space-y-6">
               {/* Coordonnées réelles */}
-              <div className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-stone-900 mb-8">
+              <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
+                <h3 className="font-serif text-2xl font-medium text-stone-900 mb-8">
                   Coordonnées
                 </h3>
 
                 <div className="space-y-6">
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                       <MapPin className="h-6 w-6" />
                     </div>
                     <div>
@@ -230,7 +233,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                       <Phone className="h-6 w-6" />
                     </div>
                     <div>
@@ -239,7 +242,7 @@ export default function ContactPage() {
                       </p>
                       <a
                         href="tel:0466728145"
-                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#8a7a5a] transition"
+                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#b5651d] transition"
                       >
                         04 66 72 81 45
                       </a>
@@ -247,7 +250,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                       <Mail className="h-6 w-6" />
                     </div>
                     <div>
@@ -256,7 +259,7 @@ export default function ContactPage() {
                       </p>
                       <a
                         href="mailto:la-bastide-dengras@wanadoo.fr"
-                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#8a7a5a] transition break-all"
+                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#b5651d] transition break-all"
                       >
                         la-bastide-dengras@wanadoo.fr
                       </a>
@@ -266,12 +269,12 @@ export default function ContactPage() {
               </div>
 
               {/* Horaires réels */}
-              <div className="rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
+              <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                     <Clock className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-stone-900">
+                  <h3 className="font-serif text-2xl font-medium text-stone-900">
                     Horaires d&apos;ouverture
                   </h3>
                 </div>
@@ -306,7 +309,7 @@ export default function ContactPage() {
       <section className="bg-white py-24 border-t border-stone-100">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 text-center">
-            <h2 className="text-4xl font-bold tracking-tight text-stone-900">
+            <h2 className="font-serif text-4xl font-medium tracking-tight text-stone-900">
               Nous localiser
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-stone-600">
@@ -314,7 +317,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-[2rem] shadow-sm border border-stone-200">
+          <div className="overflow-hidden rounded-2xl shadow-sm border border-stone-200">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
               width="100%"
@@ -333,7 +336,7 @@ export default function ContactPage() {
               href="https://maps.google.com/?q=Mairie+9+Rue+des+Mouchards+30330+La+Bastide-d'Engras"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#8a7a5a] px-7 py-4 font-semibold text-white shadow-md transition hover:bg-[#76693c] hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-md bg-[#b5651d] px-7 py-4 font-semibold text-white shadow-md transition hover:bg-[#964f17]"
             >
               Ouvrir dans Google Maps
               <span>→</span>

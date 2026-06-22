@@ -67,7 +67,7 @@ export default function Hero() {
           <span className="text-[clamp(1.6rem,4vw,3rem)] font-light tracking-wide text-white/90">
             Bienvenue à
           </span>
-          <span className="text-[clamp(2.8rem,7vw,6rem)] font-bold leading-none tracking-tight text-white drop-shadow-lg">
+          <span className="text-[clamp(2.8rem,7vw,6rem)] font-serif font-semibold leading-none tracking-tight text-white drop-shadow-lg">
             La Bastide d&apos;Engras
           </span>
         </h1>
@@ -81,7 +81,7 @@ export default function Hero() {
         {/* CTA */}
         <button
           onClick={scrollToContent}
-          className="mt-8 bg-[#8a7a5a] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-colors duration-200 hover:bg-[#76693c] shadow-lg rounded-sm"
+          className="mt-8 bg-[#b5651d] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-colors duration-200 hover:bg-[#76693c] shadow-lg rounded-sm"
         >
           Découvrir le village
         </button>

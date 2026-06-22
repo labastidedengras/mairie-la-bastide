@@ -97,11 +97,15 @@ export default function ComptesRendusPage() {
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Vie Citoyenne
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Vie Citoyenne
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Comptes-rendus
           </h1>
 
@@ -116,7 +120,7 @@ export default function ComptesRendusPage() {
       <section className="bg-stone-50 py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-stone-900 mb-4">
+            <h2 className="font-serif text-3xl font-medium text-stone-900 mb-4">
               Sélectionnez une année
             </h2>
 
@@ -126,9 +130,9 @@ export default function ComptesRendusPage() {
                 <button
                   key={year}
                   onClick={() => setActiveYear(year)}
-                  className={`px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  className={`px-8 py-3 rounded-md text-sm font-semibold transition-all duration-300 ${
                     activeYear === year
-                      ? "bg-[#8a7a5a] text-white shadow-lg scale-105"
+                      ? "bg-[#b5651d] text-white shadow-lg"
                       : "bg-white text-stone-600 border border-stone-200 hover:border-stone-400"
                   }`}
                 >
@@ -140,7 +144,7 @@ export default function ComptesRendusPage() {
 
           {loading ? (
             <div className="flex justify-center py-20 text-stone-400">
-              <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#b5651d]" />
             </div>
           ) : (
             /* Liste des documents de l'année sélectionnée */
@@ -151,7 +155,7 @@ export default function ComptesRendusPage() {
                   className="group flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:shadow-md"
                 >
                   <div className="flex items-center gap-5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-stone-100 text-stone-500 transition-colors group-hover:bg-[#8a7a5a] group-hover:text-white">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-stone-100 text-stone-500 transition-colors group-hover:bg-[#b5651d] group-hover:text-white">
                       <FileText className="h-6 w-6" />
                     </div>
                     <div>
@@ -169,7 +173,7 @@ export default function ComptesRendusPage() {
                     {/* Bouton Voir le document */}
                     <button
                       onClick={() => setViewingDoc(doc)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-100 bg-stone-50 text-stone-600 transition hover:bg-stone-200"
+                      className="flex h-10 w-10 items-center justify-center rounded-md border border-stone-200 bg-stone-50 text-stone-600 transition hover:bg-stone-200"
                       title="Consulter en ligne"
                     >
                       <Eye className="h-4 w-4" />
@@ -180,7 +184,7 @@ export default function ComptesRendusPage() {
                       href={`${doc.url}?dl=`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-100 bg-stone-50 text-stone-600 transition hover:bg-[#8a7a5a] hover:text-white"
+                      className="flex h-10 w-10 items-center justify-center rounded-md border border-stone-200 bg-stone-50 text-stone-600 transition hover:bg-[#b5651d] hover:text-white"
                       title="Télécharger le PDF"
                     >
                       <Download className="h-4 w-4" />
@@ -202,9 +206,9 @@ export default function ComptesRendusPage() {
           )}
 
           {/* Note informative */}
-          <div className="mt-16 rounded-2xl bg-stone-100/50 p-6 border border-stone-200 flex gap-4 items-center">
-            <div className="bg-white p-2 rounded-lg shadow-sm">
-              <Calendar className="h-5 w-5 text-[#8a7a5a]" />
+          <div className="mt-16 rounded-2xl bg-[#b5651d]/5 p-6 border border-[#b5651d]/15 flex gap-4 items-center">
+            <div className="bg-white p-2 rounded-md shadow-sm">
+              <Calendar className="h-5 w-5 text-[#b5651d]" />
             </div>
             <p className="text-sm text-stone-600 leading-relaxed font-light">
               Les comptes-rendus sont affichés en mairie et publiés sur le site
@@ -221,7 +225,7 @@ export default function ComptesRendusPage() {
           {/* Barre supérieure d'actions */}
           <div className="flex items-center justify-between bg-white px-6 py-4 rounded-t-2xl border-b border-stone-200">
             <div>
-              <h2 className="text-lg font-bold text-stone-900 leading-tight">
+              <h2 className="font-serif text-lg font-medium text-stone-900 leading-tight">
                 {viewingDoc.titre}
               </h2>
               <p className="text-xs text-stone-500 mt-0.5">
@@ -232,7 +236,7 @@ export default function ComptesRendusPage() {
             <div className="flex items-center gap-3">
               <a
                 href={`${viewingDoc.url}?dl=`}
-                className="flex items-center gap-2 rounded-full bg-[#8a7a5a] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#736549] shadow-sm"
+                className="flex items-center gap-2 rounded-md bg-[#b5651d] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#964f17] shadow-sm"
               >
                 <Download className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Télécharger</span>

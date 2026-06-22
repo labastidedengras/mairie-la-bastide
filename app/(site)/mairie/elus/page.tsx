@@ -35,11 +35,15 @@ export default function ElusPage() {
 
         {/* Content */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Vie municipale
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Vie municipale
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Vos Élus
           </h1>
 
@@ -56,19 +60,22 @@ export default function ElusPage() {
           {/* 1. SECTION : LE MAIRE */}
           <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 mb-6">
-              <Landmark className="w-4 h-4 text-[#8a7a5a]" />
+              <Landmark className="w-4 h-4 text-[#b5651d]" />
               Le Maire
             </div>
 
-            <div className="mx-auto max-w-sm rounded-2xl border border-stone-200 bg-white p-8 shadow-sm transition hover:shadow-md">
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-stone-50 text-[#8a7a5a] border border-stone-200">
+            <div
+              className="mx-auto max-w-sm rounded-2xl border-t-4 border-stone-200 bg-white p-8 shadow-sm transition hover:shadow-md"
+              style={{ borderTopColor: "#b5651d" }}
+            >
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#b5651d]/10 text-[#b5651d]">
                 <User className="h-8 w-8" />
               </div>
 
-              <h2 className="text-2xl font-bold text-stone-900">
+              <h2 className="font-serif text-2xl font-medium text-stone-900">
                 M. PARIS Laurent
               </h2>
-              <p className="mt-2 text-sm font-medium uppercase tracking-wider text-[#8a7a5a]">
+              <p className="mt-2 text-sm font-medium uppercase tracking-wider text-[#b5651d]">
                 Maire de la commune
               </p>
             </div>
@@ -83,7 +90,7 @@ export default function ElusPage() {
                 <Users className="w-4 h-4 text-stone-400" />
                 Le Conseil Municipal
               </div>
-              <h3 className="text-3xl font-bold text-stone-900 tracking-tight">
+              <h3 className="font-serif text-3xl font-medium text-stone-900 tracking-tight">
                 Les Conseillers Municipaux
               </h3>
             </div>
@@ -95,11 +102,11 @@ export default function ElusPage() {
                   key={index}
                   className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition hover:shadow-md flex flex-col items-center text-center"
                 >
-                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-stone-50 text-stone-400 border border-stone-100">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-stone-100 text-stone-400">
                     <User className="h-6 w-6" />
                   </div>
 
-                  <h4 className="text-base font-semibold text-stone-900">
+                  <h4 className="font-serif text-base font-medium text-stone-900">
                     {conseiller.nom}
                   </h4>
 

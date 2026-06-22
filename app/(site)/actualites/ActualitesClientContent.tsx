@@ -40,10 +40,14 @@ export default function ActualitesClientContent({
       >
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center pt-16">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Actualités de la commune
-          </span>
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Actualités de la commune
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Le Mag&apos; Info
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90 font-light">
@@ -58,9 +62,9 @@ export default function ActualitesClientContent({
           <div className="flex flex-wrap justify-center gap-3 mb-16">
             <button
               onClick={() => setSelectedCategory("toutes")}
-              className={`px-6 py-3 rounded-full text-sm font-medium transition ${
+              className={`px-6 py-3 rounded-md text-sm font-medium transition ${
                 selectedCategory === "toutes"
-                  ? "bg-stone-900 text-white shadow-md"
+                  ? "bg-[#b5651d] text-white shadow-md"
                   : "bg-white text-stone-800 border border-stone-300 hover:bg-stone-100"
               }`}
             >
@@ -70,9 +74,9 @@ export default function ActualitesClientContent({
               <button
                 key={key}
                 onClick={() => setSelectedCategory(key)}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition ${
+                className={`px-6 py-3 rounded-md text-sm font-medium transition ${
                   selectedCategory === key
-                    ? "bg-stone-900 text-white shadow-md"
+                    ? "bg-[#b5651d] text-white shadow-md"
                     : "bg-white text-stone-800 border border-stone-300 hover:bg-stone-100"
                 }`}
               >
@@ -96,7 +100,7 @@ export default function ActualitesClientContent({
               ))}
             </div>
           ) : (
-            <div className="py-24 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-[2rem]">
+            <div className="py-24 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-2xl">
               <FileText className="mx-auto h-12 w-12 mb-4 opacity-20" />
               <p className="text-sm font-light">
                 Aucune actualité publiée pour le moment dans cette catégorie.

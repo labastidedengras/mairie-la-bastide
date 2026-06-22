@@ -10,8 +10,8 @@ export default function PolitiqueConfidentialite() {
   return (
     <>
       <div className="w-full h-[84px] bg-stone-900 shrink-0" />
-      <div className="max-w-4xl mx-auto px-4 py-12 md:py-20 text-slate-800">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 border-b pb-4 text-slate-900">
+      <div className="max-w-4xl mx-auto px-4 py-12 md:py-20 text-stone-700">
+        <h1 className="font-serif text-3xl md:text-4xl font-medium mb-8 border-b border-stone-200 pb-4 text-stone-900">
           Politique de Confidentialité
         </h1>
 
@@ -23,7 +23,7 @@ export default function PolitiqueConfidentialite() {
         </p>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-slate-900">
+          <h2 className="font-serif text-xl font-medium mb-3 text-stone-900">
             1. Collecte et finalité des données
           </h2>
           <p className="leading-relaxed text-justify mb-3">
@@ -41,7 +41,7 @@ export default function PolitiqueConfidentialite() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-slate-900">
+          <h2 className="font-serif text-xl font-medium mb-3 text-stone-900">
             2. Durée de conservation
           </h2>
           <p className="leading-relaxed text-justify">
@@ -53,7 +53,7 @@ export default function PolitiqueConfidentialite() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-slate-900">
+          <h2 className="font-serif text-xl font-medium mb-3 text-stone-900">
             3. Non-transmission des données
           </h2>
           <p className="leading-relaxed text-justify">
@@ -66,7 +66,7 @@ export default function PolitiqueConfidentialite() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-slate-900">
+          <h2 className="font-serif text-xl font-medium mb-3 text-stone-900">
             4. Vos Droits (RGPD)
           </h2>
           <p className="leading-relaxed text-justify mb-4">
@@ -78,8 +78,8 @@ export default function PolitiqueConfidentialite() {
           <p className="leading-relaxed text-justify">
             Vous pouvez exercer ces droits à tout moment en envoyant un e-mail à
             l&apos;adresse officielle de la mairie ou un courrier postal signé,
-            accompagné d’une copie de votre pièce d’identité, aux coordonnées
-            indiquées sur notre page des mentions légales.
+            accompagné d&apos;une copie de votre pièce d&apos;identité, aux
+            coordonnées indiquées sur notre page des mentions légales.
           </p>
         </section>
       </div>

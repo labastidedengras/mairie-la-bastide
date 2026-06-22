@@ -32,11 +32,15 @@ export default function PLUPage() {
 
         {/* Content */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Cadre de vie & Urbanisme
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Cadre de vie & Urbanisme
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Plan Local d&apos;Urbanisme
           </h1>
 
@@ -54,11 +58,11 @@ export default function PLUPage() {
             {/* Colonne Gauche : Options et Informations */}
             <div className="lg:col-span-4 space-y-6">
               <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-800 mb-4">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-[#5c6b47]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#5c6b47] mb-4">
                   Document Officiel en Vigueur
                 </span>
 
-                <h2 className="text-2xl font-bold text-stone-900 mb-4">
+                <h2 className="font-serif text-2xl font-medium text-stone-900 mb-4">
                   Règlement du PLU
                 </h2>
 
@@ -72,7 +76,7 @@ export default function PLUPage() {
                 <a
                   href={pdfUrl}
                   download
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#8a7a5a] px-6 py-3.5 font-medium text-white transition hover:scale-[1.02] shadow-sm"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#5c6b47] px-6 py-3.5 font-medium text-white transition hover:bg-[#4a5739] shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   Télécharger le PLU complet
@@ -81,8 +85,8 @@ export default function PLUPage() {
 
               {/* Box de rappel de bonnes pratiques */}
               <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm space-y-4">
-                <h3 className="font-semibold text-stone-900 text-base flex items-center gap-2">
-                  <Building className="w-4 h-4 text-stone-600" />
+                <h3 className="font-serif font-medium text-stone-900 text-base flex items-center gap-2">
+                  <Building className="w-4 h-4 text-[#5c6b47]" />
                   Avant vos travaux
                 </h3>
                 <p className="text-stone-600 font-light text-sm leading-relaxed">
@@ -92,7 +96,7 @@ export default function PLUPage() {
                   ou Permis de Construire).
                 </p>
                 <div className="pt-2 border-t border-stone-100 flex gap-4 items-start text-xs text-stone-500">
-                  <ShieldAlert className="w-4 h-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                  <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <span>
                     Le non-respect du PLU peut faire l&apos;objet de poursuites
                     et d&apos;une obligation de remise en état.
@@ -104,7 +108,7 @@ export default function PLUPage() {
               <div className="bg-stone-100/80 border border-stone-200 rounded-2xl p-6 flex gap-4 items-start">
                 <Info className="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div className="text-sm">
-                  <h4 className="font-semibold text-stone-900 mb-1">
+                  <h4 className="font-serif font-medium text-stone-900 mb-1">
                     Assistance technique
                   </h4>
                   <p className="text-stone-600 font-light leading-relaxed">
@@ -120,10 +124,10 @@ export default function PLUPage() {
             <div className="lg:col-span-8 w-full">
               {/* 📱 AFFICHAGE MOBILE (Masqué sur PC) */}
               <div className="block md:hidden rounded-2xl border border-stone-200 bg-white p-8 text-center shadow-md">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-stone-100 text-stone-500 mb-4">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#5c6b47]/10 text-[#5c6b47] mb-4">
                   <Map className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-bold text-stone-900 mb-2">
+                <h3 className="font-serif text-lg font-medium text-stone-900 mb-2">
                   Lecture sur smartphone
                 </h3>
                 <p className="text-stone-600 text-sm font-light mb-6">
@@ -135,7 +139,7 @@ export default function PLUPage() {
                   href={pdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 px-6 py-3 text-sm font-semibold w-full shadow-sm"
+                  className="inline-flex items-center justify-center gap-2 rounded-md border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 px-6 py-3 text-sm font-semibold w-full shadow-sm"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Ouvrir le document réglementaire

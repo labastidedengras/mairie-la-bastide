@@ -70,12 +70,12 @@ export default async function AssociationUniquePage({ params }: PageProps) {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/associations"
-            className="inline-flex items-center gap-2 text-sm text-[#8a7a5a] mb-6 hover:underline"
+            className="inline-flex items-center gap-2 text-sm text-[#b5651d] mb-6 hover:underline"
           >
             <ArrowLeft className="h-4 w-4" /> Retour aux associations
           </Link>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 mb-4 md:mb-6">
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium text-stone-900 mb-4 md:mb-6">
             {asso.nom}
           </h1>
 
@@ -104,7 +104,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                   {asso.telephone && (
                     <a
                       href={`tel:${asso.telephone.replace(/\s/g, "")}`}
-                      className="hover:text-[#8a7a5a]"
+                      className="hover:text-[#b5651d]"
                     >
                       {asso.telephone}
                     </a>
@@ -112,7 +112,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                   {asso.telephoneFixe && (
                     <a
                       href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
-                      className="hover:text-[#8a7a5a]"
+                      className="hover:text-[#b5651d]"
                     >
                       {asso.telephoneFixe}
                     </a>
@@ -120,7 +120,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                   {asso.email && (
                     <a
                       href={`mailto:${asso.email}`}
-                      className="hover:text-[#8a7a5a] break-all"
+                      className="hover:text-[#b5651d] break-all"
                     >
                       {asso.email}
                     </a>
@@ -132,7 +132,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
             {/* Aside / Gallery */}
             {asso.photos && asso.photos.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-lg sm:text-xl font-bold text-stone-900 mb-4">
+                <h2 className="font-serif text-lg sm:text-xl font-medium text-stone-900 mb-4">
                   Galerie photos
                 </h2>
                 <GalleryLightbox photos={asso.photos} title={asso.nom} />

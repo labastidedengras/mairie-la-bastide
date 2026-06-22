@@ -5,7 +5,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-8">
         <div className="flex items-center gap-4 py-10">
           <span className="h-px flex-1 bg-white/10" />
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30">
+          <span className="font-serif text-xs uppercase tracking-[0.3em] text-white/30">
             La Bastide d&apos;Engras
           </span>
           <span className="h-px flex-1 bg-white/10" />
@@ -92,7 +92,7 @@ export default function Footer() {
                   href={item.href}
                   className="flex items-center gap-2 transition-colors hover:text-white"
                 >
-                  <span className="h-px w-3 bg-[#8a7a5a]" />
+                  <span className="h-px w-3 bg-[#b5651d]" />
                   {item.label}
                 </a>
               </li>

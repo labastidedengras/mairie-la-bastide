@@ -77,11 +77,15 @@ export default function AssociationsClientContent({
 
         {/* Content */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Vie associative
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Vie associative
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Les Associations
           </h1>
 
@@ -95,7 +99,7 @@ export default function AssociationsClientContent({
       {/* 🏢 Contenu de la page */}
       <div className="mx-auto max-w-7xl px-6 -mt-10 relative z-20">
         {/* Barre de recherche et Filtres */}
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between bg-white p-6 rounded-[2rem] border border-stone-200/80 shadow-lg">
+        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between bg-white p-6 rounded-2xl border border-stone-200/80 shadow-lg">
           {/* Input de recherche */}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
@@ -104,7 +108,7 @@ export default function AssociationsClientContent({
               placeholder="Rechercher une activité, un président..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-stone-200 bg-stone-50 py-3 pl-12 pr-4 text-sm text-stone-900 placeholder-stone-400 focus:border-[#8a7a5a] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8a7a5a] transition-all"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 py-3 pl-12 pr-4 text-sm text-stone-900 placeholder-stone-400 focus:border-[#b5651d] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all"
             />
           </div>
 
@@ -114,9 +118,9 @@ export default function AssociationsClientContent({
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
+                className={`rounded-md px-4 py-2 text-xs font-semibold transition-all ${
                   activeCategory === cat.id
-                    ? "bg-[#8a7a5a] text-white shadow-md shadow-[#8a7a5a]/20"
+                    ? "bg-[#b5651d] text-white shadow-md shadow-[#b5651d]/20"
                     : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                 }`}
               >
@@ -134,26 +138,26 @@ export default function AssociationsClientContent({
               return (
                 <article
                   key={asso.nom}
-                  className="relative group flex flex-col justify-between rounded-[2rem] border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#8a7a5a]/30"
+                  className="relative group flex flex-col justify-between rounded-2xl border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#b5651d]/30"
                 >
                   <div>
                     {/* Catégorie + Icône */}
                     <div className="flex items-center justify-between gap-4 mb-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-50 border border-stone-100 text-[#8a7a5a] shadow-inner">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                         <IconComponent className="h-6 w-6" />
                       </div>
-                      <span className="rounded-full bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                      <span className="rounded-md bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">
                         {categories.find((c) => c.id === asso.categorie)
                           ?.label || asso.categorie}
                       </span>
                     </div>
 
                     {/* Titre & Description */}
-                    <h2 className="text-2xl font-bold text-stone-900 group-hover:text-[#8a7a5a] transition-colors">
-                      {/* C'est ce lien invisible (after:inset-0) qui rend toute la carte cliquable */}
+                    <h2 className="font-serif text-2xl font-medium text-stone-900 group-hover:text-[#b5651d] transition-colors">
+                      {/* Ce lien invisible (after:inset-0) rend toute la carte cliquable */}
                       <Link
                         href={`/associations/${asso.slug}`}
-                        className="focus:outline-none after:absolute after:inset-0 after:rounded-[2rem]"
+                        className="focus:outline-none after:absolute after:inset-0 after:rounded-2xl"
                       >
                         {asso.nom}
                       </Link>
@@ -164,13 +168,13 @@ export default function AssociationsClientContent({
                     </p>
 
                     {/* Le petit mot discret qui s'anime au survol de la carte */}
-                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#8a7a5a] group-hover:text-[#76693c] transition-colors">
+                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#b5651d] group-hover:text-[#964f17] transition-colors">
                       <span>Voir la fiche complète</span>
                       <ArrowRight className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
 
-                  {/* Infos Contact Réelles (le z-10 permet de garder ces liens cliquables individuellement sans être bloqués par le lien global) */}
+                  {/* Infos Contact Réelles (z-10 garde ces liens cliquables individuellement) */}
                   <div className="relative z-10 mt-8 pt-6 border-t border-stone-100">
                     <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
                       Contact : {asso.contactNom}
@@ -179,7 +183,7 @@ export default function AssociationsClientContent({
                       {asso.telephone && (
                         <a
                           href={`tel:${asso.telephone.replace(/\s/g, "")}`}
-                          className="flex items-center gap-1.5 hover:text-[#8a7a5a] transition-colors"
+                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors"
                         >
                           <Phone className="h-3.5 w-3.5 text-stone-400" />
                           {asso.telephone}
@@ -188,7 +192,7 @@ export default function AssociationsClientContent({
                       {asso.telephoneFixe && (
                         <a
                           href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
-                          className="flex items-center gap-1.5 hover:text-[#8a7a5a] transition-colors"
+                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors"
                         >
                           <Phone className="h-3.5 w-3.5 text-stone-400" />
                           {asso.telephoneFixe} (Fixe)
@@ -197,7 +201,7 @@ export default function AssociationsClientContent({
                       {asso.email && (
                         <a
                           href={`mailto:${asso.email}`}
-                          className="flex items-center gap-1.5 hover:text-[#8a7a5a] transition-colors break-all"
+                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors break-all"
                         >
                           <Mail className="h-3.5 w-3.5 text-stone-400" />
                           {asso.email}
@@ -211,7 +215,7 @@ export default function AssociationsClientContent({
           </div>
         ) : (
           /* Fallback si recherche vide */
-          <div className="text-center py-20 bg-white border border-stone-200 rounded-[2rem]">
+          <div className="text-center py-20 bg-white border border-stone-200 rounded-2xl">
             <p className="text-stone-500 font-medium">
               Aucune activité ni association ne correspond à vos critères.
             </p>
@@ -220,7 +224,7 @@ export default function AssociationsClientContent({
                 setSearchQuery("");
                 setActiveCategory("all");
               }}
-              className="mt-4 text-sm font-semibold text-[#8a7a5a] underline hover:text-[#76693c]"
+              className="mt-4 text-sm font-semibold text-[#b5651d] underline hover:text-[#964f17]"
             >
               Réinitialiser les filtres
             </button>
@@ -228,7 +232,7 @@ export default function AssociationsClientContent({
         )}
 
         {/* Note de pied de page Mairie */}
-        <div className="mt-16 text-center bg-stone-200/40 rounded-[1.5rem] p-6 border border-stone-200/60 max-w-2xl mx-auto">
+        <div className="mt-16 text-center bg-stone-200/40 rounded-xl p-6 border border-stone-200/60 max-w-2xl mx-auto">
           <p className="text-sm text-stone-600">
             Vous faites partie du bureau d&apos;une de ces associations et vous
             souhaitez modifier une information ou ajouter un événement à

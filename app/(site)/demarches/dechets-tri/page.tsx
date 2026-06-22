@@ -33,11 +33,15 @@ export default function DechetsTriPage() {
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Cadre de vie & Environnement
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Cadre de vie & Environnement
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Gestion des Déchets & Tri
           </h1>
 
@@ -65,7 +69,7 @@ export default function DechetsTriPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider text-stone-400 block">
                       Collecte sélective
                     </span>
-                    <h2 className="text-xl font-bold text-stone-900">
+                    <h2 className="font-serif text-xl font-medium text-stone-900">
                       Sacs jaunes d&apos;emballages
                     </h2>
                   </div>
@@ -115,7 +119,7 @@ export default function DechetsTriPage() {
                     <span className="text-xs font-semibold uppercase tracking-wider text-stone-400 block">
                       Réduction des déchets
                     </span>
-                    <h2 className="text-xl font-bold text-stone-900">
+                    <h2 className="font-serif text-xl font-medium text-stone-900">
                       Composteur individuel offert
                     </h2>
                   </div>
@@ -155,14 +159,14 @@ export default function DechetsTriPage() {
           {/* ================= NOUVEAU BLOC : TOUT SUR LE COMPOSTAGE & LE SITE DE LA COMMUNE ================= */}
           <div className="mt-12 rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-6 border-b border-stone-100 pb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-stone-100 text-[#8a7a5a]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#5c6b47]/10 text-[#5c6b47]">
                 <Apple className="h-5 w-5" />
               </div>
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-stone-400 block">
                   Réglementation & Pratique
                 </span>
-                <h2 className="text-2xl font-bold text-stone-900">
+                <h2 className="font-serif text-2xl font-medium text-stone-900">
                   Le tri des biodéchets & Le site de compostage
                 </h2>
               </div>
@@ -172,8 +176,8 @@ export default function DechetsTriPage() {
               {/* Infos Générales */}
               <div className="lg:col-span-1 space-y-4">
                 <div className="bg-stone-50 rounded-xl p-5 border border-stone-100">
-                  <h3 className="font-bold text-stone-900 text-sm mb-2 flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-[#8a7a5a]" /> Tri à la
+                  <h3 className="font-semibold text-stone-900 text-sm mb-2 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-[#5c6b47]" /> Tri à la
                     source obligatoire
                   </h3>
                   <p className="text-xs text-stone-600 font-light leading-relaxed">
@@ -186,7 +190,7 @@ export default function DechetsTriPage() {
                 </div>
 
                 <div className="bg-stone-50 rounded-xl p-5 border border-stone-100">
-                  <h3 className="font-bold text-stone-900 text-sm mb-2">
+                  <h3 className="font-semibold text-stone-900 text-sm mb-2">
                     Qu&apos;est-ce que c&apos;est ?
                   </h3>
                   <ul className="text-xs text-stone-600 font-light space-y-2">
@@ -204,9 +208,9 @@ export default function DechetsTriPage() {
               </div>
 
               {/* Les 5 bacs du village */}
-              <div className="lg:col-span-2 bg-[#8a7a5a]/5 rounded-xl p-6 border border-[#8a7a5a]/10 flex flex-col justify-between">
+              <div className="lg:col-span-2 bg-[#5c6b47]/5 rounded-xl p-6 border border-[#5c6b47]/15 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-stone-950 mb-1">
+                  <h3 className="font-serif text-base font-medium text-stone-950 mb-1">
                     Le site de compostage de La Bastide-d&apos;Engras
                   </h3>
                   <p className="text-xs text-stone-600 font-light mb-4">
@@ -217,7 +221,7 @@ export default function DechetsTriPage() {
 
                   <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 text-xs">
                     <div className="bg-white rounded-lg p-3 border border-stone-200">
-                      <span className="font-bold text-[#8a7a5a] block mb-1">
+                      <span className="font-bold text-[#5c6b47] block mb-1">
                         Bac 1
                       </span>
                       <p className="text-stone-600 font-light">
@@ -234,7 +238,7 @@ export default function DechetsTriPage() {
                       </p>
                     </div>
                     <div className="bg-white rounded-lg p-3 border border-stone-200">
-                      <span className="font-bold text-[#8a7a5a] block mb-1">
+                      <span className="font-bold text-[#5c6b47] block mb-1">
                         Bac 3
                       </span>
                       <p className="text-stone-600 font-light">
@@ -272,7 +276,7 @@ export default function DechetsTriPage() {
                 <span className="text-xs font-semibold uppercase tracking-wider text-stone-400 block">
                   Service SICTOMU
                 </span>
-                <h2 className="text-2xl font-bold text-stone-900">
+                <h2 className="font-serif text-2xl font-medium text-stone-900">
                   Collecte des encombrants sur rendez-vous
                 </h2>
               </div>
@@ -332,34 +336,34 @@ export default function DechetsTriPage() {
                   </h3>
                   <ul className="space-y-3 text-xs font-light">
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-[#7d8f64] shrink-0 mt-0.5" />
                       <span>
                         <strong>Maximum 3 objets</strong> par rendez-vous.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-[#7d8f64] shrink-0 mt-0.5" />
                       <span>
                         Poids individuel par objet strictement{" "}
                         <strong>inférieur à 70kg</strong>.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-[#7d8f64] shrink-0 mt-0.5" />
                       <span>
                         Les objets doivent être préalablement{" "}
                         <strong>vidés, propres et salubres</strong>.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-[#7d8f64] shrink-0 mt-0.5" />
                       <span>
                         Objets garantis{" "}
                         <strong>ni toxiques, ni dangereux</strong>.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-[#8a7a5a] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-[#7d8f64] shrink-0 mt-0.5" />
                       <span>
                         Les encombrants doivent être impérativement{" "}
                         <strong>mis en limite de voirie</strong> le jour J.
@@ -379,8 +383,8 @@ export default function DechetsTriPage() {
           {/* ================= COORDONNÉES DE CONTACT DU SICTOMU ================= */}
           <div className="mt-16 rounded-2xl border border-stone-200 bg-white p-8 shadow-md">
             <div className="flex items-center gap-2 mb-6">
-              <Trash2 className="h-5 w-5 text-[#8a7a5a]" />
-              <h3 className="text-lg font-bold text-stone-900">
+              <Trash2 className="h-5 w-5 text-[#5c6b47]" />
+              <h3 className="font-serif text-lg font-medium text-stone-900">
                 Le SICTOMU à votre service
               </h3>
             </div>
@@ -429,7 +433,7 @@ export default function DechetsTriPage() {
                     href="https://www.sictomu.fr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[#8a7a5a] hover:underline font-medium mt-0.5 block"
+                    className="text-sm text-[#5c6b47] hover:underline font-medium mt-0.5 block"
                   >
                     www.sictomu.fr
                   </a>

@@ -1,7 +1,7 @@
 "use client";
 
 import { client } from "@/sanity/lib/client";
-import { Calendar, Clock3, Loader2, MapPin } from "lucide-react";
+import { Calendar, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -24,17 +24,12 @@ export default function AgendaSection() {
       try {
         const today = new Date().toISOString().split("T")[0];
 
-        /* Magie GROQ : 
-           On prend la date de fin si elle existe, sinon la date de début, sinon la date de publication.
-           L'événement reste visible tant que sa date de fin n'est pas dépassée par rapport à "today".
-        */
         const query = `*[_type == "actualite" && categorie == "evenement" && coalesce(dateFinEvenement, dateDebutEvenement, datePublication) >= "${today}"] | order(coalesce(dateDebutEvenement, datePublication) asc)[0...3] {
           "title": titre,
           "slug": slug.current,
           "dateDebut": coalesce(dateDebutEvenement, datePublication),
           "dateFin": dateFinEvenement,
           "description": contenu,
-          location,
           time
         }`;
 
@@ -50,7 +45,7 @@ export default function AgendaSection() {
     fetchUpcomingEvents();
   }, []);
 
-  // Fonction intelligente pour formater la date du badge marron
+  // Fonction intelligente pour formater la date du badge
   const formatBadgeDate = (dateDebutStr: string, dateFinStr: string | null) => {
     const moisTexte = [
       "Janv.",
@@ -76,14 +71,12 @@ export default function AgendaSection() {
       const jFin = parseInt(dayF, 10).toString();
       const mFin = moisTexte[parseInt(monthF, 10) - 1];
 
-      // Si c'est le même mois (ex: 14-16 Juin)
       if (monthD === monthF) {
         return {
           textePrincipal: `${jDebut}-${jFin}`,
           texteSecondaire: mDebut,
         };
       } else {
-        // Si ça chevauche deux mois (ex: 30 Juin au 2 Juil.)
         return {
           textePrincipal: `${jDebut} ${mDebut.slice(0, 3)}.`,
           texteSecondaire: `au ${jFin} ${mFin.slice(0, 3)}.`,
@@ -91,7 +84,6 @@ export default function AgendaSection() {
       }
     }
 
-    // Événement sur un seul jour (ex: 14 Juin)
     return {
       textePrincipal: jDebut,
       texteSecondaire: mDebut,
@@ -104,10 +96,13 @@ export default function AgendaSection() {
         {/* Header */}
         <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="mb-4 inline-flex rounded-full bg-stone-200 px-4 py-2 text-sm font-medium text-stone-700">
-              Vie locale
-            </span>
-            <h2 className="text-4xl font-bold tracking-tight text-stone-900 md:text-5xl">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#b5651d]/40" />
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b5651d]">
+                Vie locale
+              </span>
+            </div>
+            <h2 className="font-serif text-4xl font-medium tracking-tight text-stone-900 md:text-5xl">
               Agenda du village
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-stone-600">
@@ -118,34 +113,33 @@ export default function AgendaSection() {
 
           <Link
             href="/actualites"
-            className="inline-flex rounded-full border border-stone-300 bg-white px-6 py-3 font-medium text-stone-800 transition hover:bg-stone-100"
+            className="inline-flex rounded-md border border-[#b5651d] bg-white px-6 py-3 font-medium text-[#b5651d] transition hover:bg-[#b5651d] hover:text-white"
           >
-            Voir tout l’agenda
+            Voir tout l&apos;agenda →
           </Link>
         </div>
 
         {/* Liste */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#8a7a5a]" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#b5651d]" />
           </div>
         ) : events.length > 0 ? (
           <div className="space-y-5">
             {events.map((event) => {
-              // Récupération des textes dynamiques pour le badge
               const badge = formatBadgeDate(event.dateDebut, event.dateFin);
 
               return (
-                <article
+                <Link
                   key={event.slug}
-                  className="group rounded-[2rem] border border-stone-200 bg-white p-5 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  href={`/actualites/${event.slug}`}
+                  className="group block rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  {/* Ajustement du Flex : en ligne dès 'sm' (smartphone horizontal / standard) */}
                   <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-start lg:items-center">
-                    {/* Badge Date : On le centre sur petit mobile, aligné à gauche ensuite */}
-                    <div className="flex h-24 w-24 sm:h-28 sm:w-28 shrink-0 flex-col items-center justify-center rounded-[1.5rem] bg-[#8a7a5a] text-white shadow-inner px-2 text-center mx-auto sm:mx-0">
+                    {/* Badge Date */}
+                    <div className="flex h-24 w-24 sm:h-28 sm:w-28 shrink-0 flex-col items-center justify-center rounded-xl bg-[#b5651d] text-white shadow-inner px-2 text-center mx-auto sm:mx-0">
                       <span
-                        className={`font-bold leading-none ${badge.textePrincipal.length > 2 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl"}`}
+                        className={`font-serif font-semibold leading-none ${badge.textePrincipal.length > 2 ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl"}`}
                       >
                         {badge.textePrincipal}
                       </span>
@@ -154,17 +148,17 @@ export default function AgendaSection() {
                       </span>
                     </div>
 
-                    {/* Content : Prend toute la place restante */}
+                    {/* Content */}
                     <div className="flex-1 w-full">
                       <div className="mb-2">
-                        <span className="rounded-full bg-amber-50 border border-amber-100 px-3 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-800 inline-block">
+                        <span className="rounded-md bg-[#5c6b47]/10 border border-[#5c6b47]/20 px-3 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#5c6b47] inline-block">
                           {event.dateFin
                             ? "Festival / Multi-jours"
                             : "Événement"}
                         </span>
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-semibold text-stone-900 group-hover:text-[#8a7a5a] transition-colors leading-tight">
+                      <h3 className="font-serif text-xl sm:text-2xl font-medium text-stone-900 group-hover:text-[#b5651d] transition-colors leading-tight">
                         {event.title}
                       </h3>
 
@@ -172,41 +166,24 @@ export default function AgendaSection() {
                         {event.description ||
                           "Aucune description supplémentaire."}
                       </p>
-
-                      {/* Infos pratiques adaptées aux mobiles */}
-                      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-stone-500">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-stone-400 shrink-0" />
-                          <span>{event.location || "Place du village"}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock3 className="h-4 w-4 text-stone-400 shrink-0" />
-                          <span>
-                            {event.time ||
-                              (event.dateFin
-                                ? "Plusieurs jours"
-                                : "Voir les détails")}
-                          </span>
-                        </div>
-                      </div>
                     </div>
 
-                    {/* CTA : S'aligne proprement en bas ou à droite selon l'écran */}
+                    {/* CTA visuel (plus de <Link> ici, juste un span stylé) */}
                     <div className="w-full sm:w-auto pt-2 sm:pt-0 sm:pl-4 flex justify-end shrink-0">
-                      <Link
-                        href={`/actualites/${event.slug}`}
-                        className="w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 rounded-full bg-stone-100 hover:bg-[#8a7a5a] text-stone-800 hover:text-white px-5 py-2.5 text-xs font-semibold transition-all group-hover:translate-x-1"
-                      >
-                        En savoir plus →
-                      </Link>
+                      <span className="w-full sm:w-auto text-center inline-flex items-center justify-center gap-1 rounded-md bg-stone-100 group-hover:bg-[#b5651d] text-stone-800 group-hover:text-white px-5 py-2.5 text-xs font-semibold transition-all">
+                        En savoir plus
+                        <span className="transition-transform group-hover:translate-x-1">
+                          →
+                        </span>
+                      </span>
                     </div>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>
         ) : (
-          <div className="py-16 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-[2rem]">
+          <div className="py-16 text-center text-stone-400 border border-dashed border-stone-200 bg-white rounded-2xl">
             <Calendar className="mx-auto h-12 w-12 mb-4 opacity-20" />
             <p className="text-sm font-light">
               Aucun événement n&apos;est programmé pour les semaines à venir.

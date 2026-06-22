@@ -25,11 +25,15 @@ export default function CniPasseportPage() {
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <span className="mb-4 inline-flex rounded-full bg-white/20 border border-white/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
-            Démarches administratives
-          </span>
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-white/40" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
+              Démarches administratives
+            </span>
+            <span className="h-px w-8 bg-white/40" />
+          </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
             Carte d&apos;Identité & Passeport
           </h1>
 
@@ -50,7 +54,7 @@ export default function CniPasseportPage() {
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-stone-900 mb-2">
+                <h2 className="font-serif text-xl font-medium text-stone-900 mb-2">
                   Information importante aux administrés
                 </h2>
                 <p className="text-stone-700 font-light leading-relaxed text-sm">
@@ -72,8 +76,8 @@ export default function CniPasseportPage() {
             {/* Colonne Gauche : Où se rendre à proximité */}
             <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm flex flex-col justify-between">
               <div>
-                <h3 className="text-xl font-bold text-stone-900 mb-6 flex items-center gap-2.5">
-                  <MapPin className="h-5 w-5 text-[#8a7a5a]" />
+                <h3 className="font-serif text-xl font-medium text-stone-900 mb-6 flex items-center gap-2.5">
+                  <MapPin className="h-5 w-5 text-[#b5651d]" />
                   Mairies à proximité
                 </h3>
 
@@ -89,10 +93,10 @@ export default function CniPasseportPage() {
                     href="https://www.uzes.fr/demarches/formalites-administratives/carte-nationale-didentite-passeport/carte-didentite"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-stone-300 transition group text-sm font-medium text-stone-900"
+                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
                   >
                     <span>Mairie d&apos;Uzès</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#8a7a5a] transition" />
+                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
                   </a>
 
                   {/* Lien Cartographie du Gard */}
@@ -100,10 +104,10 @@ export default function CniPasseportPage() {
                     href="https://passeport.ants.gouv.fr/services/geolocaliser-une-mairie-habilitee"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-stone-300 transition group text-sm font-medium text-stone-900"
+                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
                   >
                     <span>Autres communes équipées (Gard)</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#8a7a5a] transition" />
+                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
                   </a>
                 </div>
               </div>
@@ -112,8 +116,8 @@ export default function CniPasseportPage() {
             {/* Colonne Droite : Pré-demande et informations nationales */}
             <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm flex flex-col justify-between">
               <div>
-                <h3 className="text-xl font-bold text-stone-900 mb-6 flex items-center gap-2.5">
-                  <FileText className="h-5 w-5 text-[#8a7a5a]" />
+                <h3 className="font-serif text-xl font-medium text-stone-900 mb-6 flex items-center gap-2.5">
+                  <FileText className="h-5 w-5 text-[#b5651d]" />
                   Préparer son dossier
                 </h3>
 
@@ -130,10 +134,10 @@ export default function CniPasseportPage() {
                     href="http://www.gard.gouv.fr/Demarches-administratives/Carte-Nationale-d-Identite/Carte-Nationale-d-Identite#!/Particuliers/page/N358"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-stone-300 transition group text-sm font-medium text-stone-900"
+                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
                   >
                     <span>Toutes les informations officielles</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#8a7a5a] transition" />
+                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
                   </a>
                 </div>
               </div>
