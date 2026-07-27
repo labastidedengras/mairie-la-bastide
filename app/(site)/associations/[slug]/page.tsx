@@ -80,7 +80,6 @@ export default async function AssociationUniquePage({ params }: PageProps) {
           </h1>
 
           <div className="grid gap-8 md:grid-cols-3 items-start">
-            {/* Contenu principal (2 colonnes) */}
             <main className="md:col-span-2">
               <div className="prose prose-stone max-w-none mb-8">
                 {asso.contenuDetaille ? (
@@ -95,7 +94,6 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                 )}
               </div>
 
-              {/* Bloc Contact */}
               <div className="rounded-2xl bg-white p-6 border border-stone-200 shadow-sm mb-8">
                 <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
                   Contact : {asso.contactNom}
@@ -129,7 +127,6 @@ export default async function AssociationUniquePage({ params }: PageProps) {
               </div>
             </main>
 
-            {/* Barre latérale : Photos grand format en 1 colonne */}
             {asso.photos && asso.photos.length > 0 && (
   <aside className="md:col-span-1 space-y-6">
 

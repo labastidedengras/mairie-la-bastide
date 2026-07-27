@@ -66,7 +66,6 @@ export default function AssociationsClientContent({
 
   return (
     <div className="min-h-screen bg-stone-50 pb-24">
-      {/* 🖼️ Bannière Hero avec effet Parallax */}
       <section
         className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
@@ -75,7 +74,6 @@ export default function AssociationsClientContent({
       >
         <div className="absolute inset-0 bg-black/50" />
 
-        {/* Content */}
         <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-white/40" />
@@ -96,11 +94,8 @@ export default function AssociationsClientContent({
         </div>
       </section>
 
-      {/* 🏢 Contenu de la page */}
       <div className="mx-auto max-w-7xl px-6 -mt-10 relative z-20">
-        {/* Barre de recherche et Filtres */}
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between bg-white p-6 rounded-2xl border border-stone-200/80 shadow-lg">
-          {/* Input de recherche */}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
             <input
@@ -112,7 +107,6 @@ export default function AssociationsClientContent({
             />
           </div>
 
-          {/* Boutons de catégorie */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -130,7 +124,6 @@ export default function AssociationsClientContent({
           </div>
         </div>
 
-        {/* Grille des associations */}
         {filteredAssociations.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2">
             {filteredAssociations.map((asso) => {
@@ -141,7 +134,6 @@ export default function AssociationsClientContent({
                   className="relative group flex flex-col justify-between rounded-2xl border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#b5651d]/30"
                 >
                   <div>
-                    {/* Catégorie + Icône */}
                     <div className="flex items-center justify-between gap-4 mb-6">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
                         <IconComponent className="h-6 w-6" />
@@ -152,9 +144,7 @@ export default function AssociationsClientContent({
                       </span>
                     </div>
 
-                    {/* Titre & Description */}
                     <h2 className="font-serif text-2xl font-medium text-stone-900 group-hover:text-[#b5651d] transition-colors">
-                      {/* Ce lien invisible (after:inset-0) rend toute la carte cliquable */}
                       <Link
                         href={`/associations/${asso.slug}`}
                         className="focus:outline-none after:absolute after:inset-0 after:rounded-2xl"
@@ -167,14 +157,12 @@ export default function AssociationsClientContent({
                       {asso.description}
                     </p>
 
-                    {/* Le petit mot discret qui s'anime au survol de la carte */}
                     <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#b5651d] group-hover:text-[#964f17] transition-colors">
                       <span>Voir la fiche complète</span>
                       <ArrowRight className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
 
-                  {/* Infos Contact Réelles (z-10 garde ces liens cliquables individuellement) */}
                   <div className="relative z-10 mt-8 pt-6 border-t border-stone-100">
                     <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
                       Contact : {asso.contactNom}
@@ -214,7 +202,6 @@ export default function AssociationsClientContent({
             })}
           </div>
         ) : (
-          /* Fallback si recherche vide */
           <div className="text-center py-20 bg-white border border-stone-200 rounded-2xl">
             <p className="text-stone-500 font-medium">
               Aucune activité ni association ne correspond à vos critères.
@@ -231,7 +218,6 @@ export default function AssociationsClientContent({
           </div>
         )}
 
-        {/* Note de pied de page Mairie */}
         <div className="mt-16 text-center bg-stone-200/40 rounded-xl p-6 border border-stone-200/60 max-w-2xl mx-auto">
           <p className="text-sm text-stone-600">
             Vous faites partie du bureau d&apos;une de ces associations et vous

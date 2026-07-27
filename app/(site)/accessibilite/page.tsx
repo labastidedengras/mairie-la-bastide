@@ -1,4 +1,3 @@
-// app/accessibilite/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,8 +7,7 @@ export const metadata: Metadata = {
     "Déclaration d'accessibilité du site de la Mairie de La Bastide d'Engras, conforme au RGAA.",
 };
 
-
-const NOM_SITE = "mairie-la-bastide-dengras.fr"; // à adapter au domaine réel
+const NOM_SITE = "mairie-la-bastide-dengras.fr";
 const EMAIL_CONTACT = "la-bastide-dengras@wanadoo.fr";
 const ADRESSE_MAIRIE = "9 rue des Mouchards, 30330 La Bastide-d'Engras";
 const TELEPHONE_MAIRIE = "04 66 72 81 45";
@@ -46,7 +44,6 @@ export default function AccessibilitePage() {
         <strong>{NOM_SITE}</strong>.
       </p>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-10">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           État de conformité
@@ -60,7 +57,6 @@ export default function AccessibilitePage() {
         </p>
       </section>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-10">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           Résultats des tests
@@ -72,7 +68,6 @@ export default function AccessibilitePage() {
         </p>
       </section>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-10">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           Contenus non accessibles
@@ -99,7 +94,6 @@ export default function AccessibilitePage() {
         </ul>
       </section>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-10">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           Établissement de cette déclaration
@@ -117,7 +111,6 @@ export default function AccessibilitePage() {
         </ul>
       </section>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-10">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           Retour d&apos;information et contact
@@ -150,7 +143,6 @@ export default function AccessibilitePage() {
         </ul>
       </section>
 
-      {/* --------------------------------------------------------------- */}
       <section className="mb-4">
         <h2 className="mb-3 font-serif text-2xl text-stone-900">
           Voies de recours

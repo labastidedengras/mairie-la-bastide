@@ -14,7 +14,6 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Correction TypeScript : Ajout des types pour l'événement de changement
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -25,7 +24,6 @@ export default function ContactPage() {
     }));
   };
 
-  // Soumission du formulaire connectée à l'API Route de Resend
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -60,7 +58,6 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Hero Section */}
       <section
         className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
         style={{
@@ -89,11 +86,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Main Content */}
       <section className="bg-stone-50 py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-2">
-            {/* Form Column */}
             <div>
               <h2 className="font-serif text-3xl font-medium text-stone-900 mb-8">
                 Envoyez-nous un message
@@ -205,9 +200,7 @@ export default function ContactPage() {
               )}
             </div>
 
-            {/* Info Column */}
             <div className="space-y-6">
-              {/* Coordonnées réelles */}
               <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
                 <h3 className="font-serif text-2xl font-medium text-stone-900 mb-8">
                   Coordonnées

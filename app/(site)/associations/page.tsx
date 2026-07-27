@@ -12,7 +12,6 @@ export default async function AssociationsPage() {
   let associations = [];
 
   try {
-    // Requête GROQ pour extraire toutes les associations triées par nom
     const query = `*[_type == "association"] | order(nom asc) {
       nom,
       "slug": slug.current,
@@ -30,6 +29,5 @@ export default async function AssociationsPage() {
     console.error("Erreur lors de la récupération des associations :", error);
   }
 
-  // On injecte les données récupérées côté serveur dans le module de filtrage client
   return <AssociationsClientContent initialAssociations={associations} />;
 }

@@ -3,6 +3,7 @@
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 const slides = [
@@ -88,13 +89,24 @@ export default function Hero() {
           Actualités, événements, informations municipales et vie du village.
         </p>
 
-        {/* CTA — couleur de hover corrigée pour rester dans la charte orange */}
-        <button
-  onClick={scrollToContent}
-  className="mt-8 rounded-sm bg-[#9e5218] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white shadow-lg transition-all duration-200 hover:bg-[#854311] active:scale-[0.98]"
->
-  Découvrir le village
-</button>
+        {/* Groupe de CTA */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md sm:max-w-none">
+          {/* CTA Principal */}
+          <button
+            onClick={scrollToContent}
+            className="w-full sm:w-auto rounded-sm bg-[#9e5218] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white shadow-lg transition-all duration-200 hover:bg-[#854311] active:scale-[0.98]"
+          >
+            Découvrir le village
+          </button>
+
+          {/* CTA Secondaire */}
+          <Link
+            href="/contact"
+            className="w-full sm:w-auto rounded-sm border border-white/30 bg-white/10 px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white backdrop-blur-md shadow-lg transition-all duration-200 hover:bg-white/20 hover:border-white/60 active:scale-[0.98]"
+          >
+            Nous contacter
+          </Link>
+        </div>
 
         {/* Indicateurs de slide */}
         <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">

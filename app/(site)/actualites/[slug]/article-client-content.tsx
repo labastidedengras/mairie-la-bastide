@@ -68,7 +68,6 @@ export default function ArticleClientContent({
             hasImage ? "max-w-6xl" : "max-w-3xl"
           }`}
         >
-          {/* Bouton retour */}
           <Link
             href="/actualites"
             className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#b5651d] transition-colors mb-8 group"
@@ -77,7 +76,6 @@ export default function ArticleClientContent({
             Retour aux actualités
           </Link>
 
-          {/* En-tête de l'article */}
           <header className="mb-8">
             <span
               className={`inline-block rounded-md border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider mb-4 ${catInfo.color}`}
@@ -93,7 +91,6 @@ export default function ArticleClientContent({
             </div>
           </header>
 
-          {/* Grille : 2 colonnes sur desktop si image présente */}
           <div
             className={
               hasImage
@@ -101,7 +98,6 @@ export default function ArticleClientContent({
                 : "block"
             }
           >
-            {/* Colonne Gauche : Contenu texte & PDF */}
             <div className={hasImage ? "lg:col-span-7 space-y-6" : "space-y-6"}>
               <div className="prose prose-stone max-w-none bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
                 {article.contenu ? (
@@ -115,7 +111,6 @@ export default function ArticleClientContent({
                   </p>
                 )}
 
-                {/* Document PDF attaché */}
                 {article.pdfUrl && (
                   <div className="mt-8 pt-6 border-t border-stone-100">
                     <h3 className="text-xs font-bold text-stone-900 mb-4 uppercase tracking-wider">
@@ -149,11 +144,9 @@ export default function ArticleClientContent({
               </div>
             </div>
 
-            {/* Colonne Droite : Affiche / Image (sur mobile passe au-dessus ou sous le texte) */}
             {hasImage && article.imageUrl && (
               <div className="lg:col-span-5 order-first lg:order-last lg:sticky lg:top-28">
                 <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm flex items-center justify-center min-h-[380px] h-[520px]">
-                  {/* Flou d'arrière-plan */}
                   <Image
                     src={article.imageUrl}
                     alt=""
@@ -162,7 +155,6 @@ export default function ArticleClientContent({
                     priority
                     className="object-cover blur-xl opacity-25 pointer-events-none"
                   />
-                  {/* Image principale contenue */}
                   <div className="relative z-10 w-full h-full p-4 flex items-center justify-center">
                     <Image
                       src={article.imageUrl}
