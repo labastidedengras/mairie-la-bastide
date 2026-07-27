@@ -68,6 +68,29 @@ export default defineType({
       hidden: ({ document }) => document?.categorie !== "evenement",
     }),
 
+    // --- NOUVEAU CHAMP ---
+    defineField({
+      name: "dateExpiration",
+      title: "Cette information reste valable jusqu'au",
+      description:
+        "Obligatoire pour les alertes et travaux : passée cette date, l'alerte disparaît automatiquement du popup et n'est plus affichée aux visiteurs.",
+      type: "date",
+      options: { dateFormat: "YYYY-MM-DD" },
+      hidden: ({ document }) => document?.categorie === "evenement",
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const categorie = (context.document as { categorie?: string })
+            ?.categorie;
+          if (
+            (categorie === "alerte" || categorie === "travaux") &&
+            !value
+          ) {
+            return "Une date de fin est obligatoire pour une alerte ou des travaux, sinon elle restera affichée indéfiniment.";
+          }
+          return true;
+        }),
+    }),
+
     defineField({
       name: "imagePrincipale",
       title: "Image d'illustration (Optionnel)",
@@ -93,4 +116,24 @@ export default defineType({
       },
     }),
   ],
+  preview: {
+    select: {
+      title: "titre",
+      categorie: "categorie",
+      media: "imagePrincipale",
+    },
+    prepare({ title, categorie, media }) {
+      const labels: Record<string, string> = {
+        "vie-municipale": "🏛 Vie municipale",
+        evenement: "🎉 Événement",
+        travaux: "🚧 Travaux",
+        alerte: "⚠️ Alerte",
+      };
+      return {
+        title,
+        subtitle: labels[categorie] ?? categorie,
+        media,
+      };
+    },
+  },
 });

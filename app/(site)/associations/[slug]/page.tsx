@@ -1,4 +1,3 @@
-import GalleryLightbox from "@/components/features/associations/gallery-lightbox";
 import { client } from "@/sanity/lib/client";
 import type {
   PortableTextBlock,
@@ -7,6 +6,7 @@ import type {
 import { PortableText } from "@portabletext/react";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 interface PageProps {
@@ -79,8 +79,8 @@ export default async function AssociationUniquePage({ params }: PageProps) {
             {asso.nom}
           </h1>
 
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Main content */}
+          <div className="grid gap-8 md:grid-cols-3 items-start">
+            {/* Contenu principal (2 colonnes) */}
             <main className="md:col-span-2">
               <div className="prose prose-stone max-w-none mb-8">
                 {asso.contenuDetaille ? (
@@ -95,16 +95,16 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                 )}
               </div>
 
-              {/* Contact rapide */}
-              <div className="rounded-2xl bg-white p-4 border border-stone-200 shadow-sm mb-8">
-                <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">
+              {/* Bloc Contact */}
+              <div className="rounded-2xl bg-white p-6 border border-stone-200 shadow-sm mb-8">
+                <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
                   Contact : {asso.contactNom}
                 </p>
                 <div className="flex flex-wrap gap-4 text-sm text-stone-600">
                   {asso.telephone && (
                     <a
                       href={`tel:${asso.telephone.replace(/\s/g, "")}`}
-                      className="hover:text-[#b5651d]"
+                      className="hover:text-[#b5651d] transition-colors"
                     >
                       {asso.telephone}
                     </a>
@@ -112,7 +112,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                   {asso.telephoneFixe && (
                     <a
                       href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
-                      className="hover:text-[#b5651d]"
+                      className="hover:text-[#b5651d] transition-colors"
                     >
                       {asso.telephoneFixe}
                     </a>
@@ -120,7 +120,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
                   {asso.email && (
                     <a
                       href={`mailto:${asso.email}`}
-                      className="hover:text-[#b5651d] break-all"
+                      className="hover:text-[#b5651d] break-all transition-colors"
                     >
                       {asso.email}
                     </a>
@@ -129,15 +129,28 @@ export default async function AssociationUniquePage({ params }: PageProps) {
               </div>
             </main>
 
-            {/* Aside / Gallery */}
+            {/* Barre latérale : Photos grand format en 1 colonne */}
             {asso.photos && asso.photos.length > 0 && (
-              <section className="mb-12">
-                <h2 className="font-serif text-lg sm:text-xl font-medium text-stone-900 mb-4">
-                  Galerie photos
-                </h2>
-                <GalleryLightbox photos={asso.photos} title={asso.nom} />
-              </section>
-            )}
+  <aside className="md:col-span-1 space-y-6">
+
+    <div className="flex flex-col gap-6">
+      {asso.photos.map((photoUrl: string, index: number) => (
+        <div
+          key={index}
+          className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm transition-all duration-300 hover:shadow-md"
+        >
+          <Image
+            src={photoUrl}
+            alt={`${asso.nom} - Photo ${index + 1}`}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+          />
+        </div>
+      ))}
+    </div>
+  </aside>
+)}
           </div>
         </div>
       </div>
@@ -150,11 +163,9 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  // On récupère uniquement ce dont on a besoin pour le SEO
   const query = `*[_type == "association" && slug.current == $slug][0] { nom, description }`;
   const asso = await client.fetch(query, { slug });
 
-  // Fallback si l'association n'existe pas
   if (!asso) {
     return {
       title: "Association introuvable - Mairie de La Bastide d'Engras",
@@ -174,7 +185,6 @@ export async function generateMetadata({
   };
 }
 
-// Génération statique magique pour le Webhook !
 export async function generateStaticParams() {
   const query = `*[_type == "association"] { "slug": slug.current }`;
   const assos = await client.fetch(query);

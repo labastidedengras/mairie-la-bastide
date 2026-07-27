@@ -2,9 +2,8 @@
 
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const slides = [
   "/images/hero-1.jpg",
@@ -13,23 +12,35 @@ const slides = [
 ];
 
 export default function Hero() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   const autoplay = useMemo(
     () => Autoplay({ delay: 5000, stopOnInteraction: false }),
     [],
   );
 
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [autoplay]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
+
+  // Suivi de la slide active pour les indicateurs
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
 
   const scrollToContent = () => {
     window.scrollTo({
-      top: window.innerHeight, // Défilement pile de la hauteur de l'écran
+      top: window.innerHeight,
       behavior: "smooth",
     });
   };
 
   return (
-    /* Retour au h-screen pur pour un rendu plein écran impeccable */
-    <section className="relative h-screen w-full overflow-hidden bg-stone-950">
+    <section className="relative h-[80vh] min-h-[560px] w-full overflow-hidden bg-stone-950">
       {/* Carousel */}
       <div className="absolute inset-0 h-full overflow-hidden" ref={emblaRef}>
         <div className="flex h-full">
@@ -47,7 +58,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Overlays (Légèrement accentués en bas pour détacher le bouton de défilement) */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-black/30" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
@@ -72,34 +83,34 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* Sous-titre - Augmentation de la marge inférieure pour aérer */}
-        {/* Remplacer le bloc "Sous-titre" par celui-ci */}
+        {/* Sous-titre */}
         <p className="mt-6 max-w-xl text-base font-medium text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-relaxed">
           Actualités, événements, informations municipales et vie du village.
         </p>
 
-        {/* CTA */}
+        {/* CTA — couleur de hover corrigée pour rester dans la charte orange */}
         <button
-          onClick={scrollToContent}
-          className="mt-8 bg-[#b5651d] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-colors duration-200 hover:bg-[#76693c] shadow-lg rounded-sm"
-        >
-          Découvrir le village
-        </button>
+  onClick={scrollToContent}
+  className="mt-8 rounded-sm bg-[#9e5218] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white shadow-lg transition-all duration-200 hover:bg-[#854311] active:scale-[0.98]"
+>
+  Découvrir le village
+</button>
 
-        {/* Indicateur de défilement "anti-illusion de fin de page" :
-          On lui met un bg-black/20 et un flou pour qu'il soit ultra-lisible peu importe la photo derrière.
-        */}
-        {/* Remplacer le bouton "Faire défiler" par celui-ci pour booster sa visibilité */}
-        <button
-          onClick={scrollToContent}
-          aria-label="Défiler vers le bas"
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-white/60 hover:text-white transition-colors group"
-        >
-          <span className="text-[10px] uppercase tracking-widest font-medium opacity-80 group-hover:opacity-100">
-            Faire défiler
-          </span>
-          <ChevronDown className="h-5 w-5 animate-bounce" />
-        </button>
+        {/* Indicateurs de slide */}
+        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+          {slides.map((image, index) => (
+            <button
+              key={image}
+              aria-label={`Aller à la photo ${index + 1}`}
+              onClick={() => emblaApi?.scrollTo(index)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                selectedIndex === index
+                  ? "w-6 bg-[#d98a4e]"
+                  : "w-1.5 bg-white/40 hover:bg-white/60"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -56,12 +56,19 @@ export default function ArticleClientContent({
     accent: "#6b5b4d",
   };
 
+  const hasImage = Boolean(article.imageUrl);
+
   return (
     <div className="bg-stone-50 min-h-screen flex flex-col">
       <div className="w-full h-[84px] bg-stone-900 shrink-0" />
 
       <article className="py-12 pb-20 flex-1">
-        <div className="mx-auto max-w-3xl px-6">
+        <div
+          className={`mx-auto px-6 transition-all duration-300 ${
+            hasImage ? "max-w-6xl" : "max-w-3xl"
+          }`}
+        >
+          {/* Bouton retour */}
           <Link
             href="/actualites"
             className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#b5651d] transition-colors mb-8 group"
@@ -70,13 +77,14 @@ export default function ArticleClientContent({
             Retour aux actualités
           </Link>
 
+          {/* En-tête de l'article */}
           <header className="mb-8">
             <span
               className={`inline-block rounded-md border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider mb-4 ${catInfo.color}`}
             >
               {catInfo.label}
             </span>
-            <h1 className="font-serif text-3xl font-medium tracking-tight text-stone-900 md:text-4xl leading-tight">
+            <h1 className="font-serif text-3xl font-medium tracking-tight text-stone-900 md:text-4xl lg:text-5xl leading-tight max-w-4xl">
               {article.titre}
             </h1>
             <div className="mt-4 flex items-center gap-1.5 text-sm text-stone-400 font-light">
@@ -85,67 +93,85 @@ export default function ArticleClientContent({
             </div>
           </header>
 
-          {article.imageUrl && (
-            <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm mb-10 flex items-center justify-center min-h-[350px] h-[550px]">
-              <Image
-                src={article.imageUrl}
-                alt=""
-                fill
-                sizes="100w"
-                priority
-                className="object-cover blur-xl opacity-25 pointer-events-none"
-              />
-              <div className="relative z-10 w-full h-full p-4 md:p-6 flex items-center justify-center">
-                <Image
-                  src={article.imageUrl}
-                  alt={article.titre}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 80vw"
-                  className="object-contain p-4 md:p-6"
-                />
-              </div>
-            </div>
-          )}
+          {/* Grille : 2 colonnes sur desktop si image présente */}
+          <div
+            className={
+              hasImage
+                ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
+                : "block"
+            }
+          >
+            {/* Colonne Gauche : Contenu texte & PDF */}
+            <div className={hasImage ? "lg:col-span-7 space-y-6" : "space-y-6"}>
+              <div className="prose prose-stone max-w-none bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                {article.contenu ? (
+                  <p className="text-stone-700 font-light leading-relaxed whitespace-pre-line text-base">
+                    {article.contenu}
+                  </p>
+                ) : (
+                  <p className="text-stone-400 font-light italic text-sm">
+                    Consultez les détails de cette information sur l&apos;affiche
+                    {hasImage ? " ci-contre" : ""} ou via le document PDF joint.
+                  </p>
+                )}
 
-          <div className="prose prose-stone max-w-none bg-white border border-stone-200 rounded-2xl p-8 shadow-sm">
-            {article.contenu ? (
-              <p className="text-stone-700 font-light leading-relaxed whitespace-pre-line text-base">
-                {article.contenu}
-              </p>
-            ) : (
-              <p className="text-stone-400 font-light italic text-sm">
-                Consultez les détails de cette information sur l&apos;affiche
-                ci-dessus ou via le document PDF joint.
-              </p>
-            )}
-
-            {article.pdfUrl && (
-              <div className="mt-10 pt-8 border-t border-stone-100">
-                <h3 className="text-xs font-bold text-stone-900 mb-4 uppercase tracking-wider">
-                  Document utile lié
-                </h3>
-                <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-4 shadow-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
-                      <FileText className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <span className="block text-sm font-semibold text-stone-900 line-clamp-1">
-                        Document complémentaire (PDF)
-                      </span>
-                      <span className="block text-xs text-stone-400 font-light">
-                        Cliquez pour ouvrir ou télécharger
-                      </span>
+                {/* Document PDF attaché */}
+                {article.pdfUrl && (
+                  <div className="mt-8 pt-6 border-t border-stone-100">
+                    <h3 className="text-xs font-bold text-stone-900 mb-4 uppercase tracking-wider">
+                      Document utile lié
+                    </h3>
+                    <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-4 shadow-inner">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                          <FileText className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <span className="block text-sm font-semibold text-stone-900 line-clamp-1">
+                            Document complémentaire (PDF)
+                          </span>
+                          <span className="block text-xs text-stone-400 font-light">
+                            Cliquez pour ouvrir ou télécharger
+                          </span>
+                        </div>
+                      </div>
+                      <Link
+                        href={`${article.pdfUrl}?dl=`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#b5651d] hover:text-white transition shadow-sm"
+                      >
+                        <Download className="h-4 w-4" />
+                      </Link>
                     </div>
                   </div>
-                  <Link
-                    href={`${article.pdfUrl}?dl=`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#b5651d] hover:text-white transition shadow-sm"
-                  >
-                    <Download className="h-4 w-4" />
-                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* Colonne Droite : Affiche / Image (sur mobile passe au-dessus ou sous le texte) */}
+            {hasImage && article.imageUrl && (
+              <div className="lg:col-span-5 order-first lg:order-last lg:sticky lg:top-28">
+                <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm flex items-center justify-center min-h-[380px] h-[520px]">
+                  {/* Flou d'arrière-plan */}
+                  <Image
+                    src={article.imageUrl}
+                    alt=""
+                    fill
+                    sizes="100w"
+                    priority
+                    className="object-cover blur-xl opacity-25 pointer-events-none"
+                  />
+                  {/* Image principale contenue */}
+                  <div className="relative z-10 w-full h-full p-4 flex items-center justify-center">
+                    <Image
+                      src={article.imageUrl}
+                      alt={article.titre}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 40vw"
+                      className="object-contain p-2"
+                    />
+                  </div>
                 </div>
               </div>
             )}

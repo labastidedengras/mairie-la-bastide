@@ -1,3 +1,4 @@
+import AlertPopupLoader from "@/components/features/alertes/alert-popup-loader";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
@@ -69,7 +70,7 @@ export default function RootLayout({
         "font-serif",
       )}
     >
-      <body className="min-h-full bg-stone-50 text-stone-900">{children}</body>
+      <body className="min-h-full bg-stone-50 text-stone-900"><AlertPopupLoader />{children}</body>
     </html>
   );
 }

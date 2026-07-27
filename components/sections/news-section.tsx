@@ -1,4 +1,3 @@
-// 1. On retire le "use client" ! C'est maintenant un Server Component
 import ActualiteCard from "@/components/features/actualites/actualite-card";
 import { client } from "@/sanity/lib/client";
 import { FileText } from "lucide-react";
@@ -13,12 +12,11 @@ interface Actualite {
   contenu: string | null;
 }
 
-// 2. On rend la fonction async pour fetcher directement côté serveur
 export default async function NewsSection() {
   let latestNews: Actualite[] = [];
 
   try {
-    const query = `*[_type == "actualite"] | order(datePublication desc)[0...3] {
+    const query = `*[_type == "actualite" && categorie != "alerte"] | order(datePublication desc)[0...3] {
       titre,
       "slug": slug.current,
       "date": datePublication,
@@ -27,7 +25,6 @@ export default async function NewsSection() {
       contenu
     }`;
 
-    // On fait le fetch directement ici. Next.js va mettre cette page en cache static.
     latestNews = await client.fetch(query);
   } catch (error) {
     console.error(
@@ -39,7 +36,6 @@ export default async function NewsSection() {
   return (
     <section className="bg-stone-50 py-24">
       <div className="mx-auto max-w-7xl px-6">
-        {/* Header */}
         <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <div className="mb-3 flex items-center gap-3">
@@ -65,7 +61,6 @@ export default async function NewsSection() {
           </Link>
         </div>
 
-        {/* Plus besoin de loader client (l'HTML arrive déjà prêt chez l'utilisateur !) */}
         {latestNews.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {latestNews.map((act) => (

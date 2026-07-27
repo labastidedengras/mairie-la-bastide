@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-stone-950 text-white/70">
@@ -12,41 +14,41 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Contenu principal */}
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-8 pb-16 md:grid-cols-3">
+      {/* Contenu principal (grille sur 4 colonnes alignées en haut) */}
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-10 px-8 pb-16 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
         {/* Colonne 1 — Mairie & Coordonnées */}
         <div>
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Mairie
           </h3>
-          <ul className="space-y-3 text-sm">
-            <li className="leading-relaxed">
+          <address className="space-y-3 text-sm not-italic">
+            <p className="leading-relaxed">
               9 rue des Mouchards
               <br />
               30330 La Bastide-d&apos;Engras
               <br />
               France
-            </li>
-            <li className="pt-2">
+            </p>
+            <p className="pt-2">
               <a
                 href="tel:0466728145"
-                className="transition-colors hover:text-white"
+                className="rounded-sm transition-colors hover:text-[#d98a4e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
               >
                 04 66 72 81 45
               </a>
-            </li>
-            <li>
+            </p>
+            <p>
               <a
                 href="mailto:la-bastide-dengras@wanadoo.fr"
-                className="transition-colors hover:text-white break-all"
+                className="break-all rounded-sm transition-colors hover:text-[#d98a4e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
               >
                 la-bastide-dengras@wanadoo.fr
               </a>
-            </li>
-          </ul>
+            </p>
+          </address>
         </div>
 
-        {/* Colonne 2 — Horaires Réels */}
+        {/* Colonne 2 — Horaires */}
         <div>
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Horaires d&apos;ouverture
@@ -75,8 +77,8 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Colonne 3 — Liens utiles */}
-        <div>
+        {/* Colonne 3 — Navigation */}
+        <nav aria-label="Navigation du pied de page">
           <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
             Navigation
           </h3>
@@ -88,16 +90,84 @@ export default function Footer() {
               { label: "Contact", href: "/contact" },
             ].map((item) => (
               <li key={item.label}>
-                <a
+                <Link
                   href={item.href}
-                  className="flex items-center gap-2 transition-colors hover:text-white"
+                  className="flex items-center gap-2 rounded-sm transition-colors hover:text-[#d98a4e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
                 >
                   <span className="h-px w-3 bg-[#b5651d]" />
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
+        </nav>
+
+        {/* Colonne 4 — Intercommunalité & Numéros d'urgence */}
+        <div>
+          <h3 className="mb-5 text-xs uppercase tracking-[0.25em] text-white/40">
+            Informations utiles
+          </h3>
+
+          {/* Intercommunalité */}
+          <div className="mb-6 space-y-2">
+            <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">
+              Intercommunalité
+            </span>
+            <a
+              href="https://www.cc-paysduzes.fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm transition-colors hover:text-[#d98a4e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
+            >
+              <span className="h-px w-3 bg-[#b5651d]" />
+              CC Pays d&apos;Uzès
+            </a>
+          </div>
+
+          {/* Numéros d'urgence */}
+          <div className="space-y-2">
+            <span className="block text-xs font-semibold uppercase tracking-wider text-white/50">
+              Urgences
+            </span>
+            <ul className="space-y-1.5 text-xs">
+              <li className="flex items-center justify-between border-b border-white/5 pb-1">
+                <span>SAMU</span>
+                <a
+                  href="tel:15"
+                  className="font-mono text-white/80 transition-colors hover:text-[#d98a4e]"
+                >
+                  15
+                </a>
+              </li>
+              <li className="flex items-center justify-between border-b border-white/5 pb-1">
+                <span>Gendarmerie</span>
+                <a
+                  href="tel:17"
+                  className="font-mono text-white/80 transition-colors hover:text-[#d98a4e]"
+                >
+                  17
+                </a>
+              </li>
+              <li className="flex items-center justify-between border-b border-white/5 pb-1">
+                <span>Sapeurs-Pompiers</span>
+                <a
+                  href="tel:18"
+                  className="font-mono text-white/80 transition-colors hover:text-[#d98a4e]"
+                >
+                  18
+                </a>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Appel d&apos;urgence européen</span>
+                <a
+                  href="tel:112"
+                  className="font-mono text-white/80 transition-colors hover:text-[#d98a4e]"
+                >
+                  112
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -106,30 +176,41 @@ export default function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-8 py-6 text-xs text-white/50 sm:flex-row">
           <span>
             © {new Date().getFullYear()}{" "}
-            <a
-              href="https://labastide-dengras.fr/"
-              className="hover:underline hover:text-white/40 transition-colors"
+            <Link
+              href="/"
+              className="rounded-sm transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
             >
               Mairie de La Bastide-d&apos;Engras
-            </a>
+            </Link>
           </span>
-          <div className="flex items-center gap-6">
-            <a
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link
               href="/mentions-legales"
-              className="transition-colors hover:text-white/70"
+              className="rounded-sm transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
             >
               Mentions légales
-            </a>
-            <a
+            </Link>
+            <Link
               href="/politique-de-confidentialite"
-              className="transition-colors hover:text-white/70"
+              className="rounded-sm transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
             >
               Politique de confidentialité
-            </a>
-            <span className="h-3 w-px bg-white/10" />
+            </Link>
+            <Link
+              href="/accessibilite"
+              className="rounded-sm transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
+            >
+              Accessibilité : non conforme
+            </Link>
+            <span className="h-3 w-px bg-white/10" aria-hidden="true" />
             <span>
               Site réalisé par{" "}
-              <a href="#" className="transition-colors hover:text-white/70">
+              <a
+                href="https://votre-site-portfolio.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-sm transition-colors hover:text-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d]"
+              >
                 Bastien ANDRE
               </a>
             </span>

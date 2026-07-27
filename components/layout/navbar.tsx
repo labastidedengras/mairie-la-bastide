@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -44,17 +45,26 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link
-            href="/"
-            className="flex flex-col leading-none uppercase transition-opacity hover:opacity-80 font-medium"
-          >
-            <span className="text-sm/4 tracking-[0.12em] sm:text-lg/4">
-              La Bastide
-            </span>
+  href="/"
+  className="flex items-center gap-3 font-medium transition-opacity hover:opacity-80"
+>
+  <Image
+    src="/favicon.ico" // Remplacez par le bon chemin (ex: /icon.png ou /logo.svg)
+    alt="Logo La Bastide d'Engras"
+    width={36}
+    height={36}
+    className="h-8 w-8 sm:h-9 sm:w-9 object-contain"
+  />
 
-            <span className="text-sm/4 tracking-[0.22em] sm:text-lg/4">
-              d&apos;Engras
-            </span>
-          </Link>
+  <div className="flex flex-col leading-none uppercase">
+    <span className="text-sm/4 tracking-[0.12em] sm:text-lg/4">
+      La Bastide
+    </span>
+    <span className="text-sm/4 tracking-[0.22em] sm:text-lg/4">
+      d&apos;Engras
+    </span>
+  </div>
+</Link>
 
           {/* Desktop Navigation */}
           <NavigationMenu className="hidden lg:flex">

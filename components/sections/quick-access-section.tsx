@@ -1,12 +1,13 @@
 import {
+  Building2,
   FileSpreadsheet,
   FileText,
   Map,
   Phone,
-  Recycle,
-  Users,
+  Recycle
 } from "lucide-react";
 import Link from "next/link";
+
 
 const quickLinks = [
   {
@@ -14,7 +15,7 @@ const quickLinks = [
     description: "Modalités, pièces à fournir et demandes de rendez-vous.",
     href: "/vie-pratique/cni-passeport",
     icon: FileText,
-    accent: "#b5651d", // terracotta — administratif
+    accent: "#b5651d",
   },
   {
     title: "Comptes rendus",
@@ -35,14 +36,14 @@ const quickLinks = [
     description: "Calendrier de collecte, consignes de tri et déchèterie.",
     href: "/vie-pratique/dechets-tri",
     icon: Recycle,
-    accent: "#5c6b47", // vert garrigue — cadre de vie
+    accent: "#5c6b47",
   },
   {
-    title: "Les Élus",
-    description: "Découvrez l'équipe municipale et les commissions.",
-    href: "/mairie/elus",
-    icon: Users,
-    accent: "#6b5b4d", // brun pierre — civique
+    title: "Salle polyvalente",
+    description: "Tarifs, disponibilités et demande de réservation.",
+    href: "/vie-pratique/salle-polyvalente",
+    icon: Building2,
+    accent: "#5c6b47",
   },
   {
     title: "Contact & Horaires",
@@ -61,7 +62,7 @@ export default function QuickAccessSection() {
         <div className="mb-14 text-center">
           <div className="mb-4 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-[#b5651d]/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b5651d]">
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#9e5218]">
               Services & Démarches
             </span>
             <span className="h-px w-8 bg-[#b5651d]/40" />

@@ -60,7 +60,7 @@ export default defineType({
       title: "Galerie de photos",
       type: "array",
       description:
-        "Ajoutez les photos de l'association (Maximum 6 photos pour ne pas surcharger le site)",
+        "Ajoutez les photos de l'association (Maximum 3 photos pour ne pas surcharger le site)",
       of: [
         {
           type: "image",
@@ -75,7 +75,7 @@ export default defineType({
         },
       ],
       validation: (Rule) =>
-        Rule.max(6).error("Vous ne pouvez pas ajouter plus de 6 photos."),
+        Rule.max(3).error("Vous ne pouvez pas ajouter plus de 3 photos."),
     }),
     defineField({
       name: "contactNom",
