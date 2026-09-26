@@ -1,15 +1,11 @@
 import AlertPopupLoader from "@/components/features/alertes/alert-popup-loader";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Albert_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const jakartaFont = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const frauncesFont = Fraunces({
+const sansFont = Albert_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const serifFont = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-serif",
 });
@@ -64,13 +60,16 @@ export default function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        jakartaFont.className,
-        frauncesFont.variable,
+        sansFont.className,
+        serifFont.variable,
         "font-sans",
         "font-serif",
       )}
     >
-      <body className="min-h-full bg-stone-50 text-stone-900"><AlertPopupLoader />{children}</body>
+      <body className="min-h-full bg-stone-50 text-stone-900">
+        <AlertPopupLoader />
+        {children}
+      </body>
     </html>
   );
 }

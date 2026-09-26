@@ -4,7 +4,6 @@ import { CalendarDays, FileText, TriangleAlert } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Configuration des catégories avec couleur d'accent par type
 const CATEGORIES_CONFIG: Record<
   string,
   { label: string; isAlerte: boolean; accent: string }
@@ -12,22 +11,22 @@ const CATEGORIES_CONFIG: Record<
   "vie-municipale": {
     label: "Vie Municipale",
     isAlerte: false,
-    accent: "#6b5b4d", // brun pierre
+    accent: "#6b5b4d",
   },
   evenement: {
     label: "Événement & Festivités",
     isAlerte: false,
-    accent: "#b5651d", // terracotta
+    accent: "#9e5218",
   },
   travaux: {
     label: "Travaux & Routes",
     isAlerte: false,
-    accent: "#5c6b47", // vert garrigue
+    accent: "#5c6b47",
   },
   alerte: {
     label: "Alerte Info",
     isAlerte: true,
-    accent: "#b45309", // ambre
+    accent: "#b45309",
   },
 };
 
@@ -54,7 +53,6 @@ export default function ActualiteCard({
     accent: "#6b5b4d",
   };
 
-  // Formater la date en français (ex: 18 juin 2026)
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
@@ -75,35 +73,38 @@ export default function ActualiteCard({
     return `${parseInt(day, 10)} ${mois[parseInt(month, 10) - 1]} ${year}`;
   };
 
-  // CAS 1 : C'est une ALERTE INFO (Design ambré complet)
   if (config.isAlerte) {
     return (
       <Link
         href={`/actualites/${slug}`}
-        className="group overflow-hidden rounded-2xl bg-amber-50 shadow-sm ring-1 ring-amber-200 transition hover:-translate-y-1 hover:shadow-lg flex flex-col justify-between"
+        className="group overflow-hidden rounded-sm bg-amber-50 shadow-sm ring-1 ring-amber-200 transition hover:-translate-y-1 hover:shadow-md flex flex-col justify-between"
       >
         <div>
-          <div className="flex h-64 items-center justify-center bg-amber-100">
-            <div className="text-center text-amber-700">
-              <TriangleAlert className="mx-auto mb-4 h-10 w-10" />
-              <span className="text-sm font-medium">{config.label}</span>
+          <div className="flex h-64 items-center justify-center bg-amber-100/60 border-b border-amber-200/40">
+            <div className="text-center text-amber-800">
+              <TriangleAlert className="mx-auto mb-3 h-9 w-9 stroke-[1.5]" />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                {config.label}
+              </span>
             </div>
           </div>
 
-          <div className="p-7">
-            <div className="mb-4 flex items-center gap-2 text-sm text-amber-700">
+          <div className="p-6">
+            <div className="mb-3 flex items-center gap-2 text-xs font-medium text-amber-800">
               <CalendarDays className="h-4 w-4" />
               {formatDate(date)}
             </div>
-            <h3 className="font-serif text-2xl font-medium text-stone-900 line-clamp-2">
+            <h3 className="font-serif text-xl font-bold text-stone-900 line-clamp-2 transition-colors group-hover:text-amber-900">
               {titre}
             </h3>
-            <p className="mt-3 text-stone-700 line-clamp-3">{contenu}</p>
+            <p className="mt-2 text-xs leading-relaxed text-stone-700 line-clamp-3">
+              {contenu}
+            </p>
           </div>
         </div>
 
-        <div className="px-7 pb-7">
-          <span className="font-medium text-amber-800 inline-flex items-center gap-1">
+        <div className="px-6 pb-6">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 inline-flex items-center gap-1">
             Plus d&apos;informations
             <span className="transition-transform group-hover:translate-x-1">
               →
@@ -114,60 +115,60 @@ export default function ActualiteCard({
     );
   }
 
-  // CAS 2 & 3 : ARTICLE TRADITIONNEL (Avec ou sans image)
   return (
     <Link
       href={`/actualites/${slug}`}
-      className="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-lg flex flex-col justify-between"
+      className="group overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-stone-200 transition hover:-translate-y-1 hover:shadow-md flex flex-col justify-between"
     >
       <div>
         {imageUrl ? (
-          /* Avec image d'illustration */
-          <div className="relative h-64 w-full overflow-hidden">
+          <div className="relative h-64 w-full overflow-hidden bg-stone-100 p-2 border-b border-stone-100">
             <Image
               src={imageUrl}
               alt={titre}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.02]"
               unoptimized
             />
             <div
-              className="absolute left-5 top-5 rounded-md px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur"
-              style={{ backgroundColor: `${config.accent}cc` }}
+              className="absolute left-4 top-4 rounded-sm px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm"
+              style={{ backgroundColor: config.accent }}
             >
               {config.label}
             </div>
           </div>
         ) : (
-          /* Sans image (Fallback) teinté selon la catégorie */
           <div
-            className="flex h-64 items-center justify-center"
-            style={{ backgroundColor: `${config.accent}10` }}
+            className="flex h-64 items-center justify-center border-b border-stone-100"
+            style={{ backgroundColor: `${config.accent}08` }}
           >
             <div className="text-center" style={{ color: config.accent }}>
-              <FileText className="mx-auto mb-4 h-10 w-10" />
-              <span className="text-sm font-medium">{config.label}</span>
+              <FileText className="mx-auto mb-3 h-9 w-9 stroke-[1.5]" />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                {config.label}
+              </span>
             </div>
           </div>
         )}
 
-        <div className="p-7">
-          <div className="mb-4 flex items-center gap-2 text-sm text-stone-500">
+        <div className="p-6">
+          <div className="mb-3 flex items-center gap-2 text-xs text-stone-400">
             <CalendarDays className="h-4 w-4" />
             {formatDate(date)}
           </div>
-          <h3 className="font-serif text-2xl font-medium text-stone-900 line-clamp-2">
+
+          <h3 className="font-serif text-xl font-bold text-stone-900 line-clamp-2 transition-colors group-hover:text-[#9e5218]">
             {titre}
           </h3>
-          <p className="mt-3 text-stone-600 line-clamp-3">
+          <p className="mt-2 text-xs leading-relaxed text-stone-500 line-clamp-3">
             {contenu ||
               "Consultez les détails de cette publication en cliquant sur le bouton ci-dessous."}
           </p>
         </div>
       </div>
 
-      <div className="px-7 pb-7">
-        <span className="font-medium text-stone-900 inline-flex items-center gap-1">
+      <div className="px-6 pb-6">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#9e5218] inline-flex items-center gap-1">
           Lire la suite
           <span className="transition-transform group-hover:translate-x-1">
             →
