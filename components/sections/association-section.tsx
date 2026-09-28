@@ -1,98 +1,96 @@
-"use client";
-
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AssociationsSection() {
-  const categories = [
-    {
-      title: "Animations & Loisirs",
-      description:
-        "Comité des fêtes, animations estivales, clubs de jeux et rencontres conviviales du village.",
-      image: "/images/asso/animation.jpg",
-    },
-    {
-      title: "Sport & Santé",
-      description:
-        "Activités physiques, clubs sportifs locaux, gym douce et actions de bien-être pour tous.",
-      image: "/images/asso/sport.jpg",
-    },
-    {
-      title: "Nature & Chasse",
-      description:
-        "Préservation de l'environnement, société de chasse, randonnées et valorisation de la garrigue.",
-      image: "/images/asso/nature.jpg",
-    },
-    {
-      title: "Arts & Culture",
-      description:
-        "Ateliers créatifs, sauvegarde du patrimoine historique, musique et événements culturels.",
-      image: "/images/asso/culture.jpg",
-    },
-  ];
+// Damier : 7/5 puis 5/7. Le ratio de l'image compense la largeur
+// pour que les deux images d'une même rangée aient à peu près la même hauteur.
+const categories = [
+  {
+    title: "Animations et loisirs",
+    description:
+      "Comité des fêtes, animations estivales, clubs de jeux et rencontres conviviales du village.",
+    image: "/images/asso/animation.jpg",
+    col: "lg:col-span-7",
+    aspect: "aspect-[16/10]",
+  },
+  {
+    title: "Sport et santé",
+    description:
+      "Activités physiques, clubs sportifs locaux, gym douce et actions de bien-être pour tous.",
+    image: "/images/asso/sport.jpg",
+    col: "lg:col-span-5",
+    aspect: "aspect-[8/7]",
+  },
+  {
+    title: "Nature et chasse",
+    description:
+      "Préservation de l'environnement, société de chasse, randonnées et valorisation de la garrigue.",
+    image: "/images/asso/nature.jpg",
+    col: "lg:col-span-5",
+    aspect: "aspect-[8/7]",
+  },
+  {
+    title: "Arts et culture",
+    description:
+      "Ateliers créatifs, sauvegarde du patrimoine historique, musique et événements culturels.",
+    image: "/images/asso/culture.jpg",
+    col: "lg:col-span-7",
+    aspect: "aspect-[16/10]",
+  },
+];
 
+export default function AssociationsSection() {
   return (
-    <section className="bg-stone-50 py-24 text-stone-900 border-t border-stone-200/50">
+    <section className="border-t border-stone-200/50 bg-white py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+        <div className="mb-14 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-px w-8 bg-[#9e5218]/40" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#9e5218]">
-                Lien social &amp; Engagement
-              </span>
-            </div>
             <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
-              Vie associative &amp; Collective
+              Vie associative
             </h2>
-            <p className="mt-2 max-w-xl text-sm text-stone-500">
-              Découvrez le tissu associatif dynamique qui fait vivre La Bastide
-              d&apos;Engras au quotidien.
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-stone-600">
+              Comités, clubs et ateliers : les associations qui animent le
+              village.
             </p>
           </div>
 
           <Link
             href="/associations"
-            className="inline-flex items-center gap-2 rounded-sm border border-stone-300 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-widest text-stone-700 shadow-sm transition-all duration-200 hover:bg-stone-50 hover:text-stone-900 active:scale-[0.98]"
+            className="text-base font-semibold text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218]"
           >
-            Voir toutes les associations
-            <ArrowRight className="h-3.5 w-3.5 text-[#9e5218]" />
+            Toutes les associations
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((cat, index) => (
+        <div className="grid gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-12">
+          {categories.map((cat) => (
             <Link
-              key={index}
+              key={cat.title}
               href={`/associations?categorie=${encodeURIComponent(cat.title)}`}
-              className="group flex flex-col overflow-hidden rounded-sm border border-stone-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-stone-300 hover:shadow-md"
+              className={`group block ${cat.col}`}
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-100">
+              <div
+                className={`relative w-full overflow-hidden bg-stone-200 ${cat.aspect}`}
+              >
                 <Image
                   src={cat.image}
-                  alt={cat.title}
+                  alt=""
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-104"
+                  sizes="(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
                 />
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-[#9e5218] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
-              <div className="flex flex-1 flex-col justify-between p-6">
+              <div className="mt-5 flex items-start justify-between gap-6">
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-stone-900 transition-colors group-hover:text-[#9e5218]">
+                  <h3 className="font-serif text-2xl font-semibold text-stone-900 transition-colors group-hover:text-[#9e5218]">
                     {cat.title}
                   </h3>
-
-                  <p className="mt-3 text-xs leading-relaxed text-stone-500">
+                  <p className="mt-2 max-w-md text-base leading-relaxed text-stone-600">
                     {cat.description}
                   </p>
                 </div>
-
-                <div className="mt-6 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#9e5218]">
-                  <span>Découvrir</span>
-                  <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
-                </div>
+                <ArrowUpRight className="mt-2 h-5 w-5 shrink-0 text-stone-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#9e5218]" />
               </div>
             </Link>
           ))}

@@ -90,21 +90,21 @@ export default function ActualiteCard({
           </div>
 
           <div className="p-6">
-            <div className="mb-3 flex items-center gap-2 text-xs font-medium text-amber-800">
+            <div className="mb-3 flex items-center gap-2 text-base font-medium text-amber-800">
               <CalendarDays className="h-4 w-4" />
               {formatDate(date)}
             </div>
             <h3 className="font-serif text-xl font-bold text-stone-900 line-clamp-2 transition-colors group-hover:text-amber-900">
               {titre}
             </h3>
-            <p className="mt-2 text-xs leading-relaxed text-stone-700 line-clamp-3">
+            <p className="mt-2 text-base leading-relaxed text-stone-700 line-clamp-3">
               {contenu}
             </p>
           </div>
         </div>
 
         <div className="px-6 pb-6">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 inline-flex items-center gap-1">
+          <span className="text-base font-bold uppercase tracking-wider text-amber-900 inline-flex items-center gap-1">
             Plus d&apos;informations
             <span className="transition-transform group-hover:translate-x-1">
               →
@@ -131,7 +131,7 @@ export default function ActualiteCard({
               unoptimized
             />
             <div
-              className="absolute left-4 top-4 rounded-sm px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm"
+              className="absolute left-4 top-4 rounded-sm px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm"
               style={{ backgroundColor: config.accent }}
             >
               {config.label}
@@ -152,7 +152,7 @@ export default function ActualiteCard({
         )}
 
         <div className="p-6">
-          <div className="mb-3 flex items-center gap-2 text-xs text-stone-400">
+          <div className="mb-3 flex items-center gap-2 text-base text-stone-500">
             <CalendarDays className="h-4 w-4" />
             {formatDate(date)}
           </div>
@@ -160,7 +160,7 @@ export default function ActualiteCard({
           <h3 className="font-serif text-xl font-bold text-stone-900 line-clamp-2 transition-colors group-hover:text-[#9e5218]">
             {titre}
           </h3>
-          <p className="mt-2 text-xs leading-relaxed text-stone-500 line-clamp-3">
+          <p className="mt-2 text-base leading-relaxed text-stone-600 line-clamp-3">
             {contenu ||
               "Consultez les détails de cette publication en cliquant sur le bouton ci-dessous."}
           </p>
@@ -168,7 +168,7 @@ export default function ActualiteCard({
       </div>
 
       <div className="px-6 pb-6">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#9e5218] inline-flex items-center gap-1">
+        <span className="text-base font-bold uppercase tracking-wider text-[#9e5218] inline-flex items-center gap-1">
           Lire la suite
           <span className="transition-transform group-hover:translate-x-1">
             →

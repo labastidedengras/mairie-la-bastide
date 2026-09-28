@@ -1,54 +1,49 @@
-"use client";
-
-import { Calendar, Landmark } from "lucide-react";
 import Image from "next/image";
+
+// Ici, la chronologie est un vrai contenu : ce sont des dates, dans l'ordre.
+const timeline = [
+  {
+    date: "XIe–XIIe siècle",
+    text: "Premières fondations du terroir et construction de la chapelle Saint-Jean d'Orgerolles.",
+  },
+  {
+    date: "Vers 1300",
+    text: "Construction du château fort, qui appartenait à l'évêque d'Uzès.",
+  },
+  {
+    date: "XVIe siècle",
+    text: "Le château est reconstruit par la famille de la Fare.",
+  },
+  {
+    date: "1893",
+    text: "La Tour de l'Horloge s'élève à vingt mètres devant la mairie.",
+  },
+];
 
 export default function DiscoverVillageSection() {
   return (
-    <section className="relative overflow-hidden bg-[#f3ede4] py-24 text-stone-900">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:items-center lg:gap-16">
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg border border-stone-200 shadow-xl lg:aspect-square">
+    <section className="bg-white">
+      <div className="grid lg:grid-cols-2">
+        {/* La photo va jusqu'au bord de l'écran ; hauteur minimale pour ne pas trop la recadrer */}
+        <div className="relative min-h-[26rem] lg:min-h-[46rem]">
           <Image
-            src="/images/village-discover.jpg"
-            alt="La Tour de l'Horloge de La Bastide-d'Engras"
+            src="/images/chapelle-la-bastide.jpg"
+            alt="Clocher en pierre de la chapelle de La Bastide-d'Engras"
             fill
-            className="object-cover transition-transform duration-700 hover:scale-102"
-            priority
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            unoptimized
+            className="object-cover object-[50%_30%]"
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-6 text-white">
-            <p className="text-xs italic text-stone-200">
-              La Tour de l&apos;Horloge (1893), s&apos;élevant à vingt mètres
-              devant la mairie.
-            </p>
-          </div>
         </div>
 
-        <div className="flex flex-col justify-center">
-          <div>
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-px w-8 bg-[#9e5218]/40" />
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#9e5218]">
-                Histoire &amp; Patrimoine
-              </span>
-            </div>
-
+        {/* Le texte est centré verticalement dans sa moitié, avec des marges symétriques */}
+        <div className="flex items-center px-6 py-16 lg:px-16 lg:py-24 xl:px-24">
+          <div className="max-w-2xl">
             <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl lg:text-5xl">
-              Des origines médiévales{" "}
-              <span className="block italic text-[#9e5218] font-normal sm:inline">
-                au charme d&apos;aujourd&apos;hui
-              </span>
+              Un village médiéval au pied de sa barre rocheuse
             </h2>
 
-            <p className="mt-6 text-base leading-relaxed text-stone-700 md:text-lg font-normal">
+            <p className="mt-8 text-lg leading-relaxed text-stone-800">
               L&apos;histoire de La Bastide-d&apos;Engras commence entre le XIe
               et le XIIe siècle, à l&apos;époque où les comtes de Toulouse
               régnaient sur la Provence gardoise. Initialement établi autour du
@@ -56,45 +51,31 @@ export default function DiscoverVillageSection() {
               progressivement structuré au pied de sa barre rocheuse fortifiée.
             </p>
 
-            <p className="mt-4 text-sm leading-relaxed text-stone-600 md:text-base">
+            <p className="mt-5 text-base leading-relaxed text-stone-700">
               Ancienne place forte autrefois ceinte de hauts remparts, la
-              commune abrite un imposant château féodal bâti vers l&apos;an 1300
-              ayant appartenu à l&apos;évêque d&apos;Uzès, reconstruit au XVIe
-              siècle par la famille de la Fare, ainsi que sa remarquable église
-              romane.
+              commune abrite un imposant château féodal, ainsi que sa
+              remarquable église romane.
             </p>
-          </div>
 
-          <div className="mt-8 border-t border-stone-200 pt-8 grid gap-6 sm:grid-cols-2">
-            <div className="flex gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#9e5218]/10 text-[#9e5218]">
-                <Calendar className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider">
-                  XIe - XIIe Siècle
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-stone-600">
-                  Premières fondations du terroir et construction de la chapelle
-                  Saint-Jean d&apos;Orgerolles.
-                </p>
-              </div>
-            </div>
+            <h3 className="mt-14 font-serif text-2xl font-semibold text-stone-900">
+              Repères chronologiques
+            </h3>
 
-            <div className="flex gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#9e5218]/10 text-[#9e5218]">
-                <Landmark className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider">
-                  Année 1300
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-stone-600">
-                  Érection du château fort protecteur, témoin majeur de
-                  l&apos;architecture défensive locale.
-                </p>
-              </div>
-            </div>
+            <ol className="mt-4 border-b border-stone-200">
+              {timeline.map((item) => (
+                <li
+                  key={item.date}
+                  className="grid gap-1 border-t border-stone-200 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6"
+                >
+                  <span className="font-serif text-xl font-semibold text-[#9e5218]">
+                    {item.date}
+                  </span>
+                  <span className="text-base leading-relaxed text-stone-700">
+                    {item.text}
+                  </span>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </div>

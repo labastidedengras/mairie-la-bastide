@@ -1,124 +1,100 @@
-import { Landmark, User, Users } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Le Conseil Municipal & Les Élus",
-  description:
-    "Présentation de l'équipe municipale de La Bastide d'Engras : découvrez le mot du Maire, la liste des adjoints et les membres du conseil municipal.",
+  title: "Le conseil municipal et les élus",
+  description: "Le maire et les conseillers municipaux de La Bastide-d'Engras.",
 };
 
+const maire = {
+  prenom: "Laurent",
+  nom: "PARIS",
+  // Une vraie photo vaut mieux qu'une icône : renseigne le chemin ici (ex. "/images/maire.jpg")
+  photo: null as string | null,
+};
+
+// Le rôle est le titre du groupe : inutile de le répéter sur chaque nom.
+// Pour ajouter les adjoints, ajoute un groupe { titre: "Adjoints", membres: [...] } avant celui-ci.
+const groupes = [
+  {
+    titre: "Conseillères et conseillers municipaux",
+    membres: [
+      { prenom: "Nathalie", nom: "DUFAUD" },
+      { prenom: "Chantal", nom: "CARON" },
+      { prenom: "Jean-Pierre", nom: "CARON" },
+      { prenom: "Frédéric", nom: "MASSART" },
+      { prenom: "Chantal", nom: "CHABRIER" },
+      { prenom: "Thierry", nom: "COVELO" },
+      { prenom: "Séverine", nom: "DUFAUD" },
+      { prenom: "Romain", nom: "LANGLASSE" },
+      { prenom: "Marie", nom: "JOUVENEL" },
+      { prenom: "Valentin", nom: "FOUQUET" },
+    ],
+  },
+];
+
 export default function ElusPage() {
-  const conseillers = [
-    { nom: "DUFAUD Nathalie", role: "Conseillère Municipale" },
-    { nom: "CARON Chantal", role: "Conseillère Municipale" },
-    { nom: "CARON Jean-Pierre", role: "Conseiller Municipal" },
-    { nom: "MASSART Frédéric", role: "Conseiller Municipal" },
-    { nom: "CHABRIER Chantal", role: "Conseillère Municipale" },
-    { nom: "COVELO Thierry", role: "Conseiller Municipal" },
-    { nom: "DUFAUD Séverine", role: "Conseillère Municipale" },
-    { nom: "LANGLASSE Romain", role: "Conseiller Municipal" },
-    { nom: "JOUVENEL Marie", role: "Conseillère Municipale" },
-    { nom: "FOUQUET Valentin", role: "Conseiller Municipal" },
-  ];
-
   return (
-    <>
-      {/* Hero Section - Même style fixe que les autres pages */}
-      <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{
-          backgroundImage: "url(/images/hero-1.jpg)",
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40" />
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-7xl px-6">
+        <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
+          Vos élus
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
+          Les décisions du conseil municipal sont publiées dans les{" "}
+          <Link
+            href="/mairie/comptes-rendus"
+            className="font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]"
+          >
+            comptes rendus
+          </Link>
+          .
+        </p>
 
-        {/* Content */}
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-white/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
-              Vie municipale
-            </span>
-            <span className="h-px w-8 bg-white/40" />
+        <div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-20">
+          {/* Le maire : un seul nom, donc un seul grand titre */}
+          <div className="lg:col-span-5">
+            {maire.photo && (
+              <Image
+                src={maire.photo}
+                alt={`${maire.prenom} ${maire.nom}, maire de La Bastide-d'Engras`}
+                width={600}
+                height={750}
+                className="mb-8 h-auto w-full max-w-sm"
+              />
+            )}
+            <h2 className="font-serif text-2xl font-semibold text-stone-900">
+              Le maire
+            </h2>
+            <p className="mt-4 font-serif text-4xl font-semibold leading-tight text-stone-900 lg:text-5xl">
+              {maire.prenom} {maire.nom}
+            </p>
           </div>
 
-          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
-            Vos Élus
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90 font-light">
-            L&apos;équipe municipale au service des habitants de La Bastide
-            d&apos;Engras.
-          </p>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="bg-stone-50 py-24">
-        <div className="mx-auto max-w-5xl px-6">
-          {/* 1. SECTION : LE MAIRE */}
-          <div className="mb-16 text-center">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 mb-6">
-              <Landmark className="w-4 h-4 text-[#b5651d]" />
-              Le Maire
-            </div>
-
-            <div
-              className="mx-auto max-w-sm rounded-2xl border-t-4 border-stone-200 bg-white p-8 shadow-sm transition hover:shadow-md"
-              style={{ borderTopColor: "#b5651d" }}
-            >
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#b5651d]/10 text-[#b5651d]">
-                <User className="h-8 w-8" />
+          {/* Les autres élus : une liste, pas dix cartes identiques */}
+          <div className="space-y-14 lg:col-span-7">
+            {groupes.map((groupe) => (
+              <div key={groupe.titre}>
+                <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                  {groupe.titre}
+                </h2>
+                <ul className="mt-5 grid border-b border-stone-200 sm:grid-cols-2 sm:gap-x-10">
+                  {groupe.membres.map((membre) => (
+                    <li
+                      key={`${membre.prenom}-${membre.nom}`}
+                      className="border-t border-stone-200 py-4 font-serif text-xl text-stone-900"
+                    >
+                      {membre.prenom} {membre.nom}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <h2 className="font-serif text-2xl font-medium text-stone-900">
-                M. PARIS Laurent
-              </h2>
-              <p className="mt-2 text-sm font-medium uppercase tracking-wider text-[#b5651d]">
-                Maire de la commune
-              </p>
-            </div>
-          </div>
-
-          <hr className="border-stone-200 my-12 max-w-md mx-auto" />
-
-          {/* 2. SECTION : LES CONSEILLERS MUNICIPAUX */}
-          <div>
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 mb-2">
-                <Users className="w-4 h-4 text-stone-400" />
-                Le Conseil Municipal
-              </div>
-              <h3 className="font-serif text-3xl font-medium text-stone-900 tracking-tight">
-                Les Conseillers Municipaux
-              </h3>
-            </div>
-
-            {/* Grille des conseillers */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {conseillers.map((conseiller, index) => (
-                <div
-                  key={index}
-                  className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm transition hover:shadow-md flex flex-col items-center text-center"
-                >
-                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-stone-100 text-stone-400">
-                    <User className="h-6 w-6" />
-                  </div>
-
-                  <h4 className="font-serif text-base font-medium text-stone-900">
-                    {conseiller.nom}
-                  </h4>
-
-                  <p className="mt-1 text-xs text-stone-500 font-light">
-                    {conseiller.role}
-                  </p>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

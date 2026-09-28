@@ -1,347 +1,370 @@
 "use client";
 
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import {
   Sheet,
   SheetContent,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, UserRound } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ChevronDown, Menu, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+const PHONE_LABEL = "04 66 72 81 45";
+const PHONE_HREF = "tel:0466728145";
+
+// Seules ces pages ont une photo derrière la barre : ailleurs, elle est pleine dès le départ.
+const TRANSPARENT_ROUTES = ["/"];
+
+// Une seule source pour le menu desktop ET mobile.
+const menu = [
+  {
+    label: "La mairie",
+    items: [
+      { label: "Vos élus", href: "/mairie/elus" },
+      { label: "Comptes rendus du conseil", href: "/mairie/comptes-rendus" },
+    ],
+  },
+  {
+    label: "Vie pratique",
+    items: [
+      { label: "CNI & passeport", href: "/vie-pratique/cni-passeport" },
+      { label: "Urbanisme & PLU", href: "/vie-pratique/plu" },
+      { label: "Déchets & tri", href: "/vie-pratique/dechets-tri" },
+      { label: "Salle polyvalente", href: "/vie-pratique/salle-polyvalente" },
+    ],
+  },
+  {
+    label: "Vie locale",
+    items: [
+      { label: "Actualités du village", href: "/actualites" },
+      { label: "Vie associative", href: "/associations" },
+      { label: "Bulletin municipal", href: "/mairie/bulletin-municipal" },
+    ],
+  },
+];
+
+// Les couleurs viennent de variables définies sur le <header> (voir plus bas).
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nav-ring)]";
+
+const topItem = `inline-flex h-11 items-center gap-1 rounded-sm px-3 text-base font-medium text-[var(--nav-fg)] underline-offset-8 transition-colors hover:underline aria-[current=page]:underline data-[open=true]:underline data-[current=true]:underline ${focusRing}`;
+
+function MobileLink({
+  href,
+  label,
+  pathname,
+  className,
+  onClick,
+}: {
+  href: string;
+  label: string;
+  pathname: string;
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={pathname === href ? "page" : undefined}
+      onClick={onClick}
+      className={cn(
+        "block py-2.5 text-base text-stone-700 transition-colors hover:text-[#9e5218] aria-[current=page]:font-semibold aria-[current=page]:text-[#9e5218]",
+        className,
+      )}
+    >
+      {label}
+    </Link>
+  );
+}
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+  const navRef = useRef<HTMLElement | null>(null);
+  // Vrai si le sous-menu a été ouvert par un simple survol à la souris
+  const openedByHover = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    onScroll(); // état correct dès le montage (rechargement en milieu de page)
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleLinkClick = () => {
-    setIsSheetOpen(false);
+  // Clic ou toucher en dehors du menu : on ferme
+  useEffect(() => {
+    if (!openMenu) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!navRef.current?.contains(e.target as Node)) setOpenMenu(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [openMenu]);
+
+  // Clic / Entrée / Espace sur un titre de sous-menu
+  const toggle = (label: string) => {
+    if (openMenu === label) {
+      if (openedByHover.current) {
+        // Ouvert au survol puis cliqué : on "épingle" le menu au lieu de le fermer
+        openedByHover.current = false;
+        return;
+      }
+      setOpenMenu(null);
+    } else {
+      openedByHover.current = false;
+      setOpenMenu(label);
+    }
   };
 
-  const desktopNavItemClass = isScrolled
-    ? "!bg-transparent !text-slate-900 hover:!bg-transparent hover:!text-slate-900 focus-visible:!bg-transparent focus-visible:!text-slate-900"
-    : "!bg-transparent !text-white hover:!bg-transparent hover:!text-white focus-visible:!bg-transparent focus-visible:!text-white";
+  const solid = isScrolled || !TRANSPARENT_ROUTES.includes(pathname);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-white/95 text-slate-900 shadow-md backdrop-blur-md py-4"
-          : "bg-transparent text-white py-6"
-      }`}
-    >
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
+    <>
+      <a
+        href="#contenu"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-sm focus:bg-white focus:px-4 focus:py-3 focus:text-base focus:font-semibold focus:text-stone-900 focus:outline focus:outline-2 focus:outline-[#9e5218]"
+      >
+        Aller au contenu
+      </a>
+
+      <header
+        data-solid={solid}
+        className="fixed inset-x-0 top-0 z-50 border-b border-transparent py-4 transition-colors duration-200 [--nav-fg:#ffffff] [--nav-ring:#ffffff] data-[solid=true]:border-stone-200 data-[solid=true]:bg-white data-[solid=true]:[--nav-fg:#1c1917] data-[solid=true]:[--nav-ring:#9e5218]"
+      >
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="group flex items-center gap-3 transition-all duration-200"
-            aria-label="Retour à l'accueil — Mairie de La Bastide d'Engras"
+            className={`group/logo flex items-center gap-3 ${focusRing}`}
           >
-            <div className="relative h-9 w-9 shrink-0 sm:h-10 sm:w-10 transition-transform duration-300 group-hover:scale-102">
-              <Image
-                src="/favicon.ico"
-                alt="Blason officiel de la commune de La Bastide d'Engras"
-                fill
-                priority
-                className="object-contain"
-              />
-            </div>
-
-            <div className="flex flex-col justify-center leading-tight">
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400 sm:text-[10px]">
-                République Française
+            <Image
+              // À remplacer par le vrai fichier du blason (SVG ou PNG)
+              src="/favicon.ico"
+              alt=""
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+            <span className="leading-tight text-[var(--nav-fg)]">
+              <span className="hidden text-base opacity-80 sm:block">
+                République française
               </span>
-
-              <span
-                className={`font-serif text-base font-bold transition-colors group-hover:text-[#d98a4e] sm:text-lg ${
-                  isScrolled ? "text-black" : "text-white"
-                }`}
-              >
+              <span className="block font-serif text-lg font-semibold underline-offset-4 group-hover/logo:underline sm:text-xl">
                 Mairie de La Bastide d&apos;Engras
               </span>
-            </div>
+            </span>
           </Link>
 
-          <NavigationMenu className="hidden justify-self-center lg:flex">
-            <NavigationMenuList className="gap-1">
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/"
-                  className={`${navigationMenuTriggerStyle()} ${desktopNavItemClass}`}
-                >
-                  Accueil
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+          <div className="flex items-center gap-6">
+            {/* Navigation desktop : boutons "disclosure" + panneaux, sans bibliothèque */}
+            <nav
+              ref={navRef}
+              aria-label="Navigation principale"
+              className="hidden xl:block"
+            >
+              <ul className="flex items-center gap-1">
+                <li>
+                  <Link
+                    href="/"
+                    aria-current={pathname === "/" ? "page" : undefined}
+                    onClick={() => setOpenMenu(null)}
+                    className={topItem}
+                  >
+                    Accueil
+                  </Link>
+                </li>
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className={desktopNavItemClass}>
-                  La Mairie
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[280px] gap-1 rounded-sm border-t-[3px] border border-stone-200 bg-white p-3 text-stone-900 shadow-sm">
-                    <li>
-                      <NavigationMenuLink
-                        href="/mairie/elus"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Vos Élus
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/mairie/comptes-rendus"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Comptes-rendus du Conseil
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+                {menu.map((group, index) => {
+                  const isOpen = openMenu === group.label;
+                  const isCurrent = group.items.some(
+                    (item) => item.href === pathname,
+                  );
+                  const panelId = `submenu-${index}`;
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className={desktopNavItemClass}>
-                  Vie Pratique
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[280px] gap-1 rounded-sm border-t-[3px] border border-stone-200 bg-white p-3 text-stone-900 shadow-sm">
-                    <li>
-                      <NavigationMenuLink
-                        href="/vie-pratique/cni-passeport"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        CNI &amp; Passeport
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/vie-pratique/plu"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Urbanisme &amp; PLU
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/vie-pratique/dechets-tri"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Déchets &amp; Tri
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/vie-pratique/salle-polyvalente"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Salle Polyvalente
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className={desktopNavItemClass}>
-                  Vie Locale
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[280px] gap-1 rounded-sm border-t-[3px] border border-stone-200 bg-white p-3 text-stone-900 shadow-sm">
-                    <li>
-                      <NavigationMenuLink
-                        href="/actualites"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Actualités du village
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/associations"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Vie associative
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink
-                        href="/mairie/bulletin-municipal"
-                        className="block rounded-sm p-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:bg-stone-50 focus-visible:text-[#9e5218]"
-                      >
-                        Bulletin Municipal
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-
-          <Link
-            href="/contact"
-            className="hidden items-center gap-2 rounded-sm bg-[#d98a4e] px-4 py-2 text-sm font-semibold text-stone-950 transition-colors hover:bg-[#e5a16e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b5651d] lg:flex lg:justify-self-end"
-          >
-            <UserRound aria-hidden="true" className="h-4 w-4" />
-            Contacter la mairie
-          </Link>
-
-          <div className="lg:hidden">
-            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-              <SheetTrigger
-                aria-label="Ouvrir le menu mobile"
-                className={`rounded-sm p-2 transition-colors ${
-                  isScrolled
-                    ? "text-stone-900 hover:bg-stone-100"
-                    : "text-white hover:bg-white/10"
-                }`}
-              >
-                <Menu className="h-6 w-6" />
-              </SheetTrigger>
-
-              <SheetContent
-                side="right"
-                className="w-[300px] border-l border-stone-200 bg-white px-6 py-6 flex flex-col justify-between"
-              >
-                <div>
-                  <SheetTitle className="sr-only">
-                    Menu de navigation mobile
-                  </SheetTitle>
-
-                  <nav className="mt-2 flex flex-col gap-6 text-stone-900">
-                    <Link
-                      href="/"
-                      className="text-lg font-medium pt-1 hover:text-[#9e5218] transition-colors"
-                      onClick={handleLinkClick}
+                  return (
+                    <li
+                      key={group.label}
+                      className="relative"
+                      onPointerEnter={(e) => {
+                        if (e.pointerType !== "mouse") return;
+                        openedByHover.current = true;
+                        setOpenMenu(group.label);
+                      }}
+                      onPointerLeave={(e) => {
+                        if (e.pointerType !== "mouse") return;
+                        // On ne ferme au départ de la souris que si le menu n'a pas été épinglé
+                        if (openedByHover.current) {
+                          setOpenMenu((current) =>
+                            current === group.label ? null : current,
+                          );
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape" && isOpen) {
+                          setOpenMenu(null);
+                          e.currentTarget.querySelector("button")?.focus();
+                        }
+                      }}
+                      onBlur={(e) => {
+                        // Le focus part vers un autre élément hors de ce sous-menu
+                        if (
+                          e.relatedTarget &&
+                          !e.currentTarget.contains(e.relatedTarget as Node)
+                        ) {
+                          setOpenMenu((current) =>
+                            current === group.label ? null : current,
+                          );
+                        }
+                      }}
                     >
-                      Accueil
-                    </Link>
-
-                    <div className="space-y-3 flex flex-col mt-2 text-sm font-medium">
-                      <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                        La mairie
-                      </p>
-
-                      <Link
-                        href="/mairie/elus"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
+                      <button
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        data-open={isOpen}
+                        data-current={isCurrent}
+                        onClick={() => toggle(group.label)}
+                        className={topItem}
                       >
-                        Vos Élus
-                      </Link>
+                        {group.label}
+                        <ChevronDown
+                          aria-hidden="true"
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
 
-                      <Link
-                        href="/mairie/comptes-rendus"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
+                      {/* Le pt-2 comble l'espace entre le bouton et la boîte : le survol ne se perd pas */}
+                      <div
+                        id={panelId}
+                        className={`absolute left-0 top-full z-50 w-72 pt-2 ${
+                          isOpen ? "block" : "hidden"
+                        }`}
                       >
-                        Comptes-rendus du Conseil
-                      </Link>
-                    </div>
+                        <ul className="rounded-sm border border-stone-200 bg-white p-2 shadow-sm">
+                          {group.items.map((item) => (
+                            <li key={item.href}>
+                              <Link
+                                href={item.href}
+                                aria-current={
+                                  pathname === item.href ? "page" : undefined
+                                }
+                                onClick={() => setOpenMenu(null)}
+                                className="block rounded-sm px-3 py-2.5 text-base text-stone-700 transition-colors hover:bg-stone-50 hover:text-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#9e5218] aria-[current=page]:font-semibold aria-[current=page]:text-[#9e5218]"
+                              >
+                                {item.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  );
+                })}
 
-                    <div className="space-y-3 flex flex-col mt-3 text-sm font-medium">
-                      <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                        Vie pratique
-                      </p>
-
-                      <Link
-                        href="/vie-pratique/cni-passeport"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        CNI &amp; Passeport
-                      </Link>
-
-                      <Link
-                        href="/vie-pratique/plu"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Urbanisme &amp; PLU
-                      </Link>
-
-                      <Link
-                        href="/vie-pratique/dechets-tri"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Déchets &amp; Tri
-                      </Link>
-
-                      <Link
-                        href="/vie-pratique/salle-polyvalente"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Salle Polyvalente
-                      </Link>
-                    </div>
-
-                    <div className="space-y-3 flex flex-col mt-3 text-sm font-medium">
-                      <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                        Vie locale
-                      </p>
-
-                      <Link
-                        href="/actualites"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Actualités du village
-                      </Link>
-
-                      <Link
-                        href="/associations"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Vie associative
-                      </Link>
-
-                      <Link
-                        href="/mairie/bulletin-municipal"
-                        onClick={handleLinkClick}
-                        className="hover:text-[#9e5218] transition-colors"
-                      >
-                        Bulletin Municipal
-                      </Link>
-                    </div>
-                  </nav>
-                </div>
-
-                <div className="mt-auto pt-6 border-t border-stone-100">
+                <li>
                   <Link
                     href="/contact"
-                    className="flex w-full items-center justify-center gap-2 rounded-sm bg-[#9e5218] py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-[#854311]"
-                    onClick={handleLinkClick}
+                    aria-current={pathname === "/contact" ? "page" : undefined}
+                    onClick={() => setOpenMenu(null)}
+                    className={topItem}
                   >
-                    Contacter la mairie
+                    Contact
                   </Link>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </li>
+              </ul>
+            </nav>
+
+            <a
+              href={PHONE_HREF}
+              className="hidden items-center gap-2 rounded-sm bg-[#9e5218] px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-[#854311] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nav-ring)] xl:flex"
+            >
+              <Phone aria-hidden="true" className="h-4 w-4" />
+              {PHONE_LABEL}
+            </a>
+
+            {/* Menu mobile */}
+            <div className="xl:hidden">
+              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetTrigger
+                  aria-label="Ouvrir le menu"
+                  className={`flex h-11 w-11 items-center justify-center rounded-sm text-[var(--nav-fg)] transition-colors hover:bg-black/10 ${focusRing}`}
+                >
+                  <Menu aria-hidden="true" className="h-6 w-6" />
+                </SheetTrigger>
+
+                <SheetContent
+                  side="right"
+                  className="flex w-[320px] flex-col overflow-y-auto border-l border-stone-200 bg-white px-6 pb-6 pt-14"
+                >
+                  <SheetTitle className="sr-only">
+                    Menu de navigation
+                  </SheetTitle>
+
+                  <nav aria-label="Navigation principale" className="flex-1">
+                    <ul className="flex flex-col gap-6">
+                      <li>
+                        <MobileLink
+                          href="/"
+                          label="Accueil"
+                          pathname={pathname}
+                          onClick={() => setIsSheetOpen(false)}
+                          className="py-1 font-serif text-xl font-semibold text-stone-900"
+                        />
+                      </li>
+
+                      {menu.map((group) => (
+                        <li key={group.label}>
+                          <p className="font-serif text-xl font-semibold text-stone-900">
+                            {group.label}
+                          </p>
+                          <ul className="mt-1">
+                            {group.items.map((item) => (
+                              <li key={item.href}>
+                                <MobileLink
+                                  href={item.href}
+                                  label={item.label}
+                                  pathname={pathname}
+                                  onClick={() => setIsSheetOpen(false)}
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+
+                      <li>
+                        <MobileLink
+                          href="/contact"
+                          label="Contact"
+                          pathname={pathname}
+                          onClick={() => setIsSheetOpen(false)}
+                          className="py-1 font-serif text-xl font-semibold text-stone-900"
+                        />
+                      </li>
+                    </ul>
+                  </nav>
+
+                  <a
+                    href={PHONE_HREF}
+                    className="mt-8 flex items-center justify-center gap-2 rounded-sm bg-[#9e5218] py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#854311]"
+                  >
+                    <Phone aria-hidden="true" className="h-4 w-4" />
+                    Appeler le {PHONE_LABEL}
+                  </a>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }

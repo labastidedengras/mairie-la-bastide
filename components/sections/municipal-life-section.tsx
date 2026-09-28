@@ -1,119 +1,90 @@
-"use client";
-
-import { ArrowRight, Download, FileText, Layers } from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+
+const documents = [
+  {
+    title: "Dernier conseil municipal",
+    description:
+      "Le compte rendu de la dernière séance, au format réglementaire.",
+    href: "/mairie/comptes-rendus",
+  },
+  {
+    title: "Actes et arrêtés",
+    description:
+      "Les arrêtés municipaux et préfectoraux en vigueur sur la commune.",
+    href: "/mairie/bulletin-municipal",
+  },
+];
 
 export default function MunicipalLifeSection() {
   return (
-    <section className="relative bg-white py-24 text-stone-900 border-t border-stone-100">
+    <section className="border-t border-stone-100 bg-stone-50 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-16 text-center">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-[#9e5218]/40" />
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#9e5218]">
-              Vie Municipale
-            </span>
-            <span className="h-px w-8 bg-[#9e5218]/40" />
-          </div>
-          <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
-            Publications &amp; Décisions Officielles
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm text-stone-500 md:text-base">
-            Restez informé des dernières décisions du conseil municipal et
-            consultez les publications officielles de la commune.
-          </p>
-        </div>
-
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-          <div className="flex flex-col sm:flex-row gap-6 items-center rounded-lg border border-stone-200 bg-stone-50 p-6 shadow-sm">
-            <div className="relative aspect-[3/4] w-40 shrink-0 overflow-hidden rounded border border-stone-300 shadow-md bg-[#9e5218]/5 flex flex-col justify-between p-4 text-center">
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[#9e5218]">
-                Mairie
-              </div>
-              <div className="my-auto">
-                <FileText className="mx-auto h-12 w-12 text-[#9e5218]/40 stroke-[1.2]" />
-                <p className="mt-2 font-serif text-xs font-semibold text-stone-800">
-                  Bulletin Municipal
-                </p>
-              </div>
-              <div className="text-[10px] font-medium text-stone-500 bg-stone-200/60 py-1 rounded">
-                Année 2026
-              </div>
+        <div className="grid gap-16 lg:grid-cols-12 lg:gap-20">
+          {/* Gauche : le titre en haut, les documents calés en bas,
+              pour s'aligner sur le bas de la couverture */}
+          <div className="flex flex-col justify-between gap-12 lg:col-span-7">
+            <div>
+              <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
+                Publications et décisions officielles
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-stone-600">
+                Comptes rendus, arrêtés et bulletin : les documents officiels de
+                la commune.
+              </p>
             </div>
 
-            <div className="flex flex-col justify-between h-full text-center sm:text-left">
-              <div>
-                <span className="inline-block rounded bg-[#9e5218]/10 px-2.5 py-1 text-xs font-semibold text-[#9e5218]">
-                  Dernière publication
-                </span>
-                <h3 className="mt-3 font-serif text-xl font-bold text-stone-900">
-                  La Bastide d&apos;Engras — Édition Été 2026
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-stone-600">
-                  Retrouvez le point sur les travaux en cours, le budget
-                  communal, les projets d&apos;urbanisme et l&apos;agenda des
-                  animations estivales du village.
-                </p>
-              </div>
-
-              <div className="mt-6">
-                <a
-                  href="/documents/bulletin-municipal-latest.pdf"
-                  download
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-sm bg-[#9e5218] px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition-all duration-200 hover:bg-[#854311]"
-                >
-                  <Download className="h-4 w-4" />
-                  Télécharger le PDF
-                </a>
-              </div>
-            </div>
+            <ul className="border-b border-stone-300/70">
+              {documents.map((doc) => (
+                <li key={doc.title} className="border-t border-stone-300/70">
+                  <Link
+                    href={doc.href}
+                    className="group flex items-start justify-between gap-6 py-7"
+                  >
+                    <div>
+                      <h3 className="font-serif text-xl font-semibold text-stone-900 transition-colors group-hover:text-[#9e5218]">
+                        {doc.title}
+                      </h3>
+                      <p className="mt-2 max-w-md text-base leading-relaxed text-stone-600">
+                        {doc.description}
+                      </p>
+                    </div>
+                    <ArrowUpRight className="mt-1.5 h-5 w-5 shrink-0 text-stone-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#9e5218]" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="flex flex-col justify-between p-2">
-            <div className="space-y-6">
-              <div className="flex gap-4 items-start">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-stone-100 text-stone-700">
-                  <Layers className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-stone-900">
-                    Dernier Conseil Municipal
-                  </h4>
-                  <p className="mt-1 text-sm text-stone-600">
-                    Le compte-rendu de la séance du conseil municipal du mois
-                    dernier est disponible au format réglementaire.
-                  </p>
-                  <Link
-                    href="/mairie/comptes-rendus"
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#9e5218] hover:underline"
-                  >
-                    Voir le dernier compte-rendu{" "}
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
+          {/* Droite : le bulletin, avec sa vraie couverture */}
+          <div className="lg:col-span-5">
+            <Image
+              // À exporter depuis la première page du PDF
+              src="/images/apercu-bulletin.jpg"
+              alt="Couverture du bulletin municipal, édition été 2026"
+              width={600}
+              height={800}
+              sizes="(min-width: 1024px) 24rem, 20rem"
+              className="h-auto w-full max-w-xs border border-stone-200 sm:max-w-sm"
+            />
 
-              <div className="border-t border-stone-100 pt-6 flex gap-4 items-start">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-stone-100 text-stone-700">
-                  <FileText className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-stone-900">
-                    Recueil des Actes &amp; Arrêtés
-                  </h4>
-                  <p className="mt-1 text-sm text-stone-600">
-                    Consultez les arrêtés municipaux et préfectoraux en vigueur
-                    concernant la vie de la commune.
-                  </p>
-                  <Link
-                    href="/mairie/bulletin-municipal"
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#9e5218] hover:underline"
-                  >
-                    Accéder aux publications <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <h3 className="mt-8 font-serif text-2xl font-semibold text-stone-900">
+              Bulletin municipal
+            </h3>
+            <p className="mt-3 max-w-md text-base leading-relaxed text-stone-600">
+              Les travaux en cours, le budget communal, les projets
+              d&apos;urbanisme et l&apos;agenda des animations de l&apos;été.
+            </p>
+
+            <a
+              href="/documents/bulletin-municipal-latest.pdf"
+              download
+              className="mt-6 inline-flex items-center gap-2 rounded-sm bg-[#9e5218] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#854311]"
+            >
+              <Download className="h-4 w-4" />
+              Télécharger le PDF
+            </a>
           </div>
         </div>
       </div>

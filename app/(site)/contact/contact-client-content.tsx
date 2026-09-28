@@ -1,7 +1,44 @@
 "use client";
 
-import { Clock, Loader2, Mail, MapPin, Phone } from "lucide-react";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
+
+const inputClass =
+  "mt-2 block w-full rounded-sm border border-stone-300 bg-white px-4 py-3 text-base text-stone-900 focus:border-[#9e5218] focus:outline focus:outline-2 focus:outline-[#9e5218] disabled:bg-stone-100 disabled:text-stone-500";
+
+const subscribeToDay = () => () => {};
+const getClientDay = () => new Date().getDay();
+const getServerDay = () => null;
+
+// 0 = dimanche … 6 = samedi
+const hours = [
+  { label: "Lundi", time: "14h00 – 16h00", days: [1] },
+  { label: "Mercredi", time: "09h00 – 11h00", days: [3] },
+  { label: "Vendredi", time: "09h00 – 11h00", days: [5] },
+  { label: "Mardi, jeudi et week-end", time: "Fermé", days: [0, 2, 4, 6] },
+];
+
+const fields = [
+  { name: "name", label: "Nom complet", type: "text", autoComplete: "name" },
+  {
+    name: "email",
+    label: "Adresse e-mail",
+    type: "email",
+    autoComplete: "email",
+  },
+  { name: "subject", label: "Sujet", type: "text", autoComplete: "off" },
+] as const;
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,15 +50,23 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const today = useSyncExternalStore(
+    subscribeToDay,
+    getClientDay,
+    getServerDay,
+  );
+  const successRef = useRef<HTMLHeadingElement>(null);
+
+  // Après l'envoi, on place le focus sur la confirmation (le formulaire a disparu)
+  useEffect(() => {
+    if (submitted) successRef.current?.focus();
+  }, [submitted]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -32,9 +77,7 @@ export default function ContactPage() {
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
@@ -46,11 +89,11 @@ export default function ContactPage() {
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
-      const errorMessage =
+      setError(
         err instanceof Error
           ? err.message
-          : "Impossible d'envoyer le message pour le moment.";
-      setError(errorMessage);
+          : "Impossible d'envoyer le message pour le moment.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -58,284 +101,226 @@ export default function ContactPage() {
 
   return (
     <>
-      <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{
-          backgroundImage: "url(/images/hero-1.jpg)",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-white/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
-              Nous contacter
-            </span>
-            <span className="h-px w-8 bg-white/40" />
-          </div>
-
-          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
-            Une question ?
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
-            L&apos;équipe de la mairie est à votre écoute pour répondre à vos
-            demandes et questions.
-          </p>
-        </div>
-      </section>
-
-      <section className="bg-stone-50 py-24">
+      {/* pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre */}
+      <section className="bg-white pb-24 pt-32 lg:pt-40">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div>
-              <h2 className="font-serif text-3xl font-medium text-stone-900 mb-8">
-                Envoyez-nous un message
+          <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
+            Contacter la mairie
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
+            Le plus simple est d&apos;appeler pendant les heures
+            d&apos;ouverture. Vous pouvez aussi nous écrire avec le formulaire,
+            ou passer à la mairie.
+          </p>
+
+          <div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-20">
+            {/* Coordonnées et horaires : du texte, sans cartes ni icônes */}
+            <div className="lg:col-span-5">
+              <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                Nous joindre
               </h2>
 
-              {submitted ? (
-                <div className="rounded-2xl border border-[#5c6b47]/20 bg-[#5c6b47]/5 p-12 text-center">
-                  <div className="mb-4 text-4xl text-[#5c6b47]">✓</div>
-                  <p className="text-lg font-semibold text-stone-900 mb-2">
-                    Merci ! Votre message a bien été reçu.
-                  </p>
-                  <p className="text-stone-600 text-sm">
-                    Nous vous recontacterons dans les meilleurs délais.
-                  </p>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="mt-6 text-xs text-stone-500 underline hover:text-stone-800"
-                  >
-                    Envoyer un autre message
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {error && (
-                    <div className="p-4 text-sm text-red-800 rounded-xl bg-red-50 border border-red-100">
-                      {error}
-                    </div>
-                  )}
+              <a
+                href="tel:0466728145"
+                className={`mt-4 inline-block font-serif text-4xl font-semibold text-stone-900 underline decoration-stone-300 underline-offset-8 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+              >
+                04 66 72 81 45
+              </a>
 
-                  <div>
-                    <label className="block text-sm font-medium text-stone-900 mb-2">
-                      Nom complet
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      disabled={isSubmitting}
-                      placeholder="Votre nom"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
-                    />
-                  </div>
+              <p className="mt-4">
+                <a
+                  href="mailto:la-bastide-dengras@wanadoo.fr"
+                  className={`break-words text-lg text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+                >
+                  la-bastide-dengras@wanadoo.fr
+                </a>
+              </p>
 
-                  <div>
-                    <label className="block text-sm font-medium text-stone-900 mb-2">
-                      Adresse email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      disabled={isSubmitting}
-                      placeholder="votre@email.com"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
-                    />
-                  </div>
+              <address className="mt-8 text-base not-italic leading-relaxed text-stone-700">
+                9 rue des Mouchards
+                <br />
+                30330 La Bastide-d&apos;Engras
+                <br />
+                France
+              </address>
 
-                  <div>
-                    <label className="block text-sm font-medium text-stone-900 mb-2">
-                      Sujet
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      disabled={isSubmitting}
-                      placeholder="Sujet de votre message"
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all disabled:opacity-50"
-                    />
-                  </div>
+              <h2 className="mt-14 font-serif text-2xl font-semibold text-stone-900">
+                Horaires d&apos;ouverture
+              </h2>
 
-                  <div>
-                    <label className="block text-sm font-medium text-stone-900 mb-2">
-                      Message
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      disabled={isSubmitting}
-                      placeholder="Votre message..."
-                      rows={6}
-                      className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-[#b5651d] focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all resize-none disabled:opacity-50"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 rounded-md bg-[#b5651d] px-7 py-4 font-semibold text-white shadow-md transition-all duration-200 hover:bg-[#964f17] disabled:opacity-70"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                        Envoi en cours...
-                      </>
-                    ) : (
-                      "Envoyer le message"
-                    )}
-                  </button>
-                </form>
-              )}
+              <ul className="mt-5 border-b border-stone-200 text-base">
+                {hours.map((row) => {
+                  const isToday = today !== null && row.days.includes(today);
+                  return (
+                    <li
+                      key={row.label}
+                      className={`flex justify-between gap-6 border-t border-stone-200 py-3 ${
+                        isToday
+                          ? "font-semibold text-stone-900"
+                          : "text-stone-700"
+                      }`}
+                    >
+                      <span>
+                        {row.label}
+                        {isToday && (
+                          <span className="ml-2 font-normal text-[#9e5218]">
+                            (aujourd&apos;hui)
+                          </span>
+                        )}
+                      </span>
+                      <span>{row.time}</span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
-            <div className="space-y-6">
-              <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
-                <h3 className="font-serif text-2xl font-medium text-stone-900 mb-8">
-                  Coordonnées
-                </h3>
-
-                <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
-                      <MapPin className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-stone-900">
-                        Adresse
-                      </p>
-                      <p className="mt-1 text-sm text-stone-600 leading-relaxed">
-                        9 rue des Mouchards
-                        <br />
-                        30330 La Bastide d&apos;Engras
-                        <br />
-                        France
-                      </p>
-                    </div>
+            {/* Formulaire */}
+            <div className="lg:col-span-7">
+              <div aria-live="polite">
+                {submitted ? (
+                  <div className="border-l-4 border-[#5c6b47] py-2 pl-6">
+                    <h2
+                      ref={successRef}
+                      tabIndex={-1}
+                      className="font-serif text-2xl font-semibold text-stone-900 focus:outline-none"
+                    >
+                      Message envoyé
+                    </h2>
+                    <p className="mt-3 max-w-md text-base leading-relaxed text-stone-700">
+                      Le secrétariat lira votre message à sa prochaine
+                      ouverture.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setSubmitted(false)}
+                      className={`mt-6 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+                    >
+                      Envoyer un autre message
+                    </button>
                   </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
-                      <Phone className="h-6 w-6" />
-                    </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                      <p className="text-sm font-semibold text-stone-900">
-                        Téléphone
+                      <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                        Écrire à la mairie
+                      </h2>
+                      <p className="mt-2 text-base text-stone-600">
+                        Tous les champs sont obligatoires.
                       </p>
-                      <a
-                        href="tel:0466728145"
-                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#b5651d] transition"
+                    </div>
+
+                    {error && (
+                      <div
+                        role="alert"
+                        className="border-l-4 border-red-700 bg-red-50 px-4 py-3 text-base text-red-900"
                       >
-                        04 66 72 81 45
-                      </a>
-                    </div>
-                  </div>
+                        {error}
+                      </div>
+                    )}
 
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
-                      <Mail className="h-6 w-6" />
-                    </div>
+                    {fields.map((field) => (
+                      <div key={field.name}>
+                        <label
+                          htmlFor={field.name}
+                          className="block text-base font-semibold text-stone-900"
+                        >
+                          {field.label}
+                        </label>
+                        <input
+                          id={field.name}
+                          type={field.type}
+                          name={field.name}
+                          autoComplete={field.autoComplete}
+                          value={formData[field.name]}
+                          onChange={handleChange}
+                          required
+                          disabled={isSubmitting}
+                          className={inputClass}
+                        />
+                      </div>
+                    ))}
+
                     <div>
-                      <p className="text-sm font-semibold text-stone-900">
-                        Adresse électronique
-                      </p>
-                      <a
-                        href="mailto:la-bastide-dengras@wanadoo.fr"
-                        className="mt-1 inline-block text-sm text-stone-600 hover:text-[#b5651d] transition break-all"
+                      <label
+                        htmlFor="message"
+                        className="block text-base font-semibold text-stone-900"
                       >
-                        la-bastide-dengras@wanadoo.fr
-                      </a>
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        disabled={isSubmitting}
+                        rows={7}
+                        className={`${inputClass} resize-y`}
+                      />
                     </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Horaires réels */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
-                    <Clock className="h-6 w-6" />
-                  </div>
-                  <h3 className="font-serif text-2xl font-medium text-stone-900">
-                    Horaires d&apos;ouverture
-                  </h3>
-                </div>
+                    <p className="text-base text-stone-600">
+                      Ces informations servent uniquement à répondre à votre
+                      demande.{" "}
+                      <Link
+                        href="/politique-de-confidentialite"
+                        className={`underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                      >
+                        Politique de confidentialité
+                      </Link>
+                    </p>
 
-                <div className="space-y-4 text-sm">
-                  <div className="flex justify-between border-b border-stone-100 pb-3">
-                    <span className="font-medium text-stone-900">Lundi</span>
-                    <span className="text-stone-600">14h00 - 16h00</span>
-                  </div>
-                  <div className="flex justify-between border-b border-stone-100 pb-3">
-                    <span className="font-medium text-stone-900">Mercredi</span>
-                    <span className="text-stone-600">09h00 - 11h00</span>
-                  </div>
-                  <div className="flex justify-between border-b border-stone-100 pb-3">
-                    <span className="font-medium text-stone-900">Vendredi</span>
-                    <span className="text-stone-600">09h00 - 11h00</span>
-                  </div>
-                  <div className="flex justify-between pt-1">
-                    <span className="font-medium text-stone-400">
-                      Mardi / Jeudi / Week-end
-                    </span>
-                    <span className="text-stone-400 italic">Fermé</span>
-                  </div>
-                </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      aria-busy={isSubmitting}
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#9e5218] px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#854311] disabled:opacity-70 sm:w-auto ${focusRing}`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2
+                            aria-hidden="true"
+                            className="h-5 w-5 animate-spin"
+                          />
+                          Envoi en cours…
+                        </>
+                      ) : (
+                        "Envoyer le message"
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Localisation Réelle */}
-      <section className="bg-white py-24 border-t border-stone-100">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-12 text-center">
-            <h2 className="font-serif text-4xl font-medium tracking-tight text-stone-900">
-              Nous localiser
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-stone-600">
-              Retrouvez la mairie au cœur du village
-            </p>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl shadow-sm border border-stone-200">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
-              width="100%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full"
-              aria-label="Carte Google Maps de la Mairie de La Bastide d'Engras"
-            />
-          </div>
-
-          <div className="mt-8 text-center">
-            <a
-              href="https://maps.google.com/?q=Mairie+9+Rue+des+Mouchards+30330+La+Bastide-d'Engras"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md bg-[#b5651d] px-7 py-4 font-semibold text-white shadow-md transition hover:bg-[#964f17]"
-            >
-              Ouvrir dans Google Maps
-              <span>→</span>
-            </a>
-          </div>
+      {/* La carte va d'un bord à l'autre de l'écran */}
+      <section className="border-t border-stone-200 bg-stone-50">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-baseline justify-between gap-x-8 gap-y-3 px-6 py-10">
+          <h2 className="font-serif text-3xl font-semibold text-stone-900">
+            Nous localiser
+          </h2>
+          <a
+            href="https://maps.google.com/?q=Mairie+9+Rue+des+Mouchards+30330+La+Bastide-d'Engras"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+          >
+            Ouvrir dans Google Maps
+            <span className="sr-only"> (nouvelle fenêtre)</span>
+          </a>
         </div>
+
+        <iframe
+          title="Carte : emplacement de la mairie de La Bastide-d'Engras"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="block h-[26rem] w-full border-0"
+        />
       </section>
     </>
   );

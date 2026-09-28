@@ -2,6 +2,7 @@
 
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
+import { Pause, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -21,11 +22,24 @@ const slides = [
   },
 ];
 
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
+
 export default function Hero() {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [playing, setPlaying] = useState(true);
 
   const autoplay = useMemo(
-    () => Autoplay({ delay: 5000, stopOnInteraction: false }),
+    () =>
+      Autoplay({
+        delay: 6000,
+        stopOnInteraction: false,
+        // Pas de défilement automatique si l'utilisateur a demandé moins d'animations
+        playOnInit: !(
+          typeof window !== "undefined" &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ),
+      }),
     [],
   );
 
@@ -33,93 +47,121 @@ export default function Hero() {
 
   useEffect(() => {
     if (!emblaApi) return;
+
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    const onPlayState = () => setPlaying(autoplay.isPlaying());
+
     emblaApi.on("select", onSelect);
+    emblaApi.on("autoplay:play", onPlayState);
+    emblaApi.on("autoplay:stop", onPlayState);
     onSelect();
+    onPlayState();
+
     return () => {
       emblaApi.off("select", onSelect);
+      emblaApi.off("autoplay:play", onPlayState);
+      emblaApi.off("autoplay:stop", onPlayState);
     };
-  }, [emblaApi]);
+  }, [emblaApi, autoplay]);
 
-  const scrollToContent = () => {
-    window.scrollTo({
-      top: window.innerHeight * 0.8,
-      behavior: "smooth",
-    });
+  const togglePlay = () => {
+    if (autoplay.isPlaying()) autoplay.stop();
+    else autoplay.play();
   };
 
   return (
-    <section className="relative h-[80vh] min-h-[560px] w-full overflow-hidden bg-stone-950">
-      <div className="absolute inset-0 h-full overflow-hidden" ref={emblaRef}>
-        <div className="flex h-full">
-          {slides.map((slide, index) => (
-            <div key={index} className="relative min-w-0 flex-[0_0_100%]">
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                priority={index === 0}
-                className="object-cover"
-              />
-            </div>
-          ))}
+    <section className="relative bg-white">
+      {/* La photo, sans voile : les pierres dorées font le travail */}
+      <div className="relative h-[55svh] min-h-[340px] overflow-hidden bg-stone-900 lg:h-[82svh] lg:min-h-[560px]">
+        <div className="absolute inset-0 h-full overflow-hidden" ref={emblaRef}>
+          <div className="flex h-full">
+            {slides.map((slide, index) => (
+              <div key={slide.src} className="relative min-w-0 flex-[0_0_100%]">
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  sizes="100vw"
+                  priority={index === 0}
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Léger dégradé en haut uniquement, pour garder le menu lisible */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/50 to-transparent" />
+
+        {/* Contrôles du diaporama : pause + pastilles */}
+        <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3 bg-white px-3 py-1.5 lg:bottom-6 lg:right-6">
+          <button
+            type="button"
+            onClick={togglePlay}
+            aria-label={
+              playing ? "Mettre le diaporama en pause" : "Relancer le diaporama"
+            }
+            className={`flex h-8 w-8 items-center justify-center text-stone-800 transition-colors hover:text-[#9e5218] ${focusRing}`}
+          >
+            {playing ? (
+              <Pause className="h-4 w-4" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+          </button>
+
+          <div className="flex items-center">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.src}
+                type="button"
+                aria-label={`Aller à la photo ${index + 1}`}
+                aria-current={selectedIndex === index}
+                onClick={() => emblaApi?.scrollTo(index)}
+                className={`flex h-8 items-center px-1 ${focusRing}`}
+              >
+                <span
+                  className={`block h-2.5 rounded-full transition-all duration-300 ${
+                    selectedIndex === index
+                      ? "w-7 bg-[#9e5218]"
+                      : "w-2.5 bg-stone-300"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-[#1c0f08]/40 mix-blend-multiply" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0d0704]/90 via-[#0d0704]/40 to-[#0d0704]/40" />
+      {/* Le panneau : posé en bas à gauche, il se prolonge dans la section blanche suivante */}
+      <div className="lg:absolute lg:inset-x-0 lg:bottom-0">
+        <div className="mx-auto max-w-7xl lg:px-6">
+          <div className="bg-white px-6 py-10 lg:max-w-xl lg:p-12 lg:pb-14">
+            <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-stone-900 lg:text-6xl">
+              La Bastide d&apos;Engras
+            </h1>
 
-      <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center text-white">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="h-px w-8 bg-white/50" />
-          <span className="text-xs uppercase tracking-[0.3em] text-white/80">
-            Village de La Bastide d&apos;Engras
-          </span>
-          <span className="h-px w-8 bg-white/50" />
-        </div>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-stone-700">
+              Secrétariat ouvert le lundi de 14h à 16h, le mercredi et le
+              vendredi de 9h à 11h.
+            </p>
 
-        <h1 className="flex flex-col gap-1">
-          <span className="text-[clamp(1.6rem,4vw,3rem)] font-light tracking-wide text-white/90">
-            Bienvenue à
-          </span>
-          <span className="text-[clamp(2.8rem,7vw,6rem)] font-serif font-semibold leading-none tracking-tight text-white drop-shadow-lg">
-            La Bastide d&apos;Engras
-          </span>
-        </h1>
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <a
+                href="#demarches"
+                className={`rounded-sm bg-[#9e5218] px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#854311] ${focusRing}`}
+              >
+                Vos démarches
+              </a>
 
-        <p className="mt-6 max-w-xl text-base font-medium text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] tracking-wide leading-relaxed">
-          Actualités, événements, informations municipales et vie du village.
-        </p>
-
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md sm:max-w-none">
-          <button
-            onClick={scrollToContent}
-            className="w-full sm:w-auto rounded-sm bg-[#9e5218] px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white shadow-lg transition-all duration-200 hover:bg-[#854311] active:scale-[0.98]"
-          >
-            Vos Démarches
-          </button>
-
-          <Link
-            href="/contact"
-            className="w-full sm:w-auto rounded-sm border border-white/30 bg-white/10 px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white backdrop-blur-sm shadow-lg transition-all duration-200 hover:bg-white/20 hover:border-white/60 active:scale-[0.98]"
-          >
-            Nous contacter
-          </Link>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.src}
-              aria-label={`Aller à la photo ${index + 1}`}
-              onClick={() => emblaApi?.scrollTo(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                selectedIndex === index
-                  ? "w-6 bg-[#d98a4e]"
-                  : "w-1.5 bg-white/40 hover:bg-white/60"
-              }`}
-            />
-          ))}
+              <Link
+                href="/contact"
+                className={`text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+              >
+                Nous contacter
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
