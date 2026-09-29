@@ -1,160 +1,114 @@
-import {
-  ExternalLink,
-  FileText,
-  Info,
-  MapPin,
-  ShieldAlert,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cartes d'Identité & Passeports",
+  title: "CNI & passeport",
   description:
-    "Toutes les informations pratiques pour vos demandes et renouvellements de carte nationale d'identité (CNI) et passeport à La Bastide d'Engras.",
+    "La mairie de La Bastide-d'Engras ne délivre pas les cartes d'identité et passeports : où faire sa demande et comment préparer son dossier.",
 };
+
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
+
+const nearbyOffices = [
+  {
+    label: "Mairie d'Uzès",
+    href: "https://www.uzes.fr/demarches/formalites-administratives/carte-nationale-didentite-passeport/carte-didentite",
+  },
+  {
+    label: "Trouver une autre mairie équipée dans le Gard",
+    href: "https://passeport.ants.gouv.fr/services/geolocaliser-une-mairie-habilitee",
+  },
+];
+
+const prepareLinks = [
+  {
+    label: "Faire sa pré-demande en ligne (service-public.fr)",
+    href: "https://www.service-public.fr/particuliers/vosdroits/N360",
+  },
+  {
+    label: "Toutes les informations officielles (préfecture du Gard)",
+    href: "http://www.gard.gouv.fr/Demarches-administratives/Carte-Nationale-d-Identite/Carte-Nationale-d-Identite",
+  },
+];
+
+function LinkList({ items }: { items: { label: string; href: string }[] }) {
+  return (
+    <ul className="mt-4 border-b border-stone-200">
+      {items.map((item) => (
+        <li key={item.href} className="border-t border-stone-200">
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`group flex items-center justify-between gap-6 py-4 text-base font-semibold text-stone-900 transition-colors hover:text-[#9e5218] ${focusRing}`}
+          >
+            {item.label}
+            <ArrowUpRight
+              aria-hidden="true"
+              className="h-5 w-5 shrink-0 text-stone-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#9e5218]"
+            />
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function CniPasseportPage() {
   return (
-    <>
-      <section
-        className="relative min-h-[500px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{
-          backgroundImage: "url(/images/hero-1.jpg)",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/40" />
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-3xl px-6">
+        <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
+          Carte d&apos;identité et passeport
+        </h1>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-white/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
-              Démarches administratives
-            </span>
-            <span className="h-px w-8 bg-white/40" />
-          </div>
+        <p className="mt-5 text-lg leading-relaxed text-stone-700">
+          Les démarches pour créer ou renouveler une carte nationale
+          d&apos;identité (CNI) ou un passeport.
+        </p>
 
-          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
-            Carte d&apos;Identité & Passeport
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90 font-light">
-            Les modalités et démarches pour créer ou renouveler vos titres
-            d&apos;identité à La Bastide d&apos;Engras.
+        <div className="mt-10 border-l-4 border-amber-600 pl-5">
+          <p className="text-lg leading-relaxed text-stone-800">
+            La mairie de La Bastide-d&apos;Engras{" "}
+            <strong className="font-semibold">n&apos;est pas équipée</strong>
+            &nbsp;du dispositif de recueil d&apos;empreintes. Le dossier doit
+            être déposé dans une mairie équipée,{" "}
+            <strong className="font-semibold">
+              même si ce n&apos;est pas celle de votre domicile
+            </strong>
+            .
           </p>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section className="bg-stone-50 py-24">
-        <div className="mx-auto max-w-4xl px-6">
-          {/* Avertissement important - Dispositif de recueil */}
-          <div className="mb-12 rounded-2xl border-2 border-amber-500/30 bg-amber-50/50 p-8 shadow-sm">
-            <div className="flex gap-4 items-start">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-700">
-                <ShieldAlert className="h-6 w-6" />
-              </div>
-              <div>
-                <h2 className="font-serif text-xl font-medium text-stone-900 mb-2">
-                  Information importante aux administrés
-                </h2>
-                <p className="text-stone-700 font-light leading-relaxed text-sm">
-                  La mairie de La Bastide d&apos;Engras{" "}
-                  <strong className="font-bold">n&apos;est pas équipée</strong>{" "}
-                  du dispositif de recueil d&apos;empreintes digitales. Vous
-                  devez impérativement déposer votre dossier dans une mairie
-                  équipée,{" "}
-                  <strong className="font-bold">
-                    même si elle n&apos;est pas celle de votre domicile
-                  </strong>
-                  .
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2">
-            {/* Colonne Gauche : Où se rendre à proximité */}
-            <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm flex flex-col justify-between">
-              <div>
-                <h3 className="font-serif text-xl font-medium text-stone-900 mb-6 flex items-center gap-2.5">
-                  <MapPin className="h-5 w-5 text-[#b5651d]" />
-                  Mairies à proximité
-                </h3>
-
-                <p className="text-stone-600 font-light text-sm mb-6 leading-relaxed">
-                  Pour réaliser votre démarche au plus près, vous pouvez prendre
-                  rendez-vous auprès de la ville d&apos;Uzès ou consulter la
-                  carte officielle du département.
-                </p>
-
-                <div className="space-y-4">
-                  {/* Lien Uzès */}
-                  <a
-                    href="https://www.uzes.fr/demarches/formalites-administratives/carte-nationale-didentite-passeport/carte-didentite"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
-                  >
-                    <span>Mairie d&apos;Uzès</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
-                  </a>
-
-                  {/* Lien Cartographie du Gard */}
-                  <a
-                    href="https://passeport.ants.gouv.fr/services/geolocaliser-une-mairie-habilitee"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
-                  >
-                    <span>Autres communes équipées (Gard)</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Colonne Droite : Pré-demande et informations nationales */}
-            <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm flex flex-col justify-between">
-              <div>
-                <h3 className="font-serif text-xl font-medium text-stone-900 mb-6 flex items-center gap-2.5">
-                  <FileText className="h-5 w-5 text-[#b5651d]" />
-                  Préparer son dossier
-                </h3>
-
-                <p className="text-stone-600 font-light text-sm mb-6 leading-relaxed">
-                  Pour gagner du temps, il est fortement conseillé
-                  d&apos;effectuer une pré-demande en ligne et de vérifier la
-                  liste des pièces justificatives nécessaires (photos,
-                  justificatif de domicile...).
-                </p>
-
-                <div className="space-y-4">
-                  {/* Lien Services Préfecture / État */}
-                  <a
-                    href="http://www.gard.gouv.fr/Demarches-administratives/Carte-Nationale-d-Identite/Carte-Nationale-d-Identite#!/Particuliers/page/N358"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-4 rounded-xl bg-stone-50 border border-stone-100 hover:border-[#b5651d]/40 transition group text-sm font-medium text-stone-900"
-                  >
-                    <span>Toutes les informations officielles</span>
-                    <ExternalLink className="h-4 w-4 text-stone-400 group-hover:text-[#b5651d] transition" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Petit rappel utile de fin */}
-              <div className="mt-6 pt-6 border-t border-stone-100 flex gap-3 items-start text-xs text-stone-500 font-light">
-                <Info className="h-4 w-4 text-stone-400 shrink-0 mt-0.5" />
-                <span>
-                  Pensez à anticiper vos démarches, les délais de rendez-vous et
-                  de fabrication peuvent s&apos;allonger à l&apos;approche de la
-                  période estivale.
-                </span>
-              </div>
-            </div>
-          </div>
+        <div className="mt-14">
+          <h2 className="font-serif text-2xl font-semibold text-stone-900">
+            Mairies équipées à proximité
+          </h2>
+          <p className="mt-2 max-w-xl text-base leading-relaxed text-stone-600">
+            La mairie d&apos;Uzès est la plus proche. Vous pouvez aussi chercher
+            une autre commune équipée dans le Gard.
+          </p>
+          <LinkList items={nearbyOffices} />
         </div>
-      </section>
-    </>
+
+        <div className="mt-14">
+          <h2 className="font-serif text-2xl font-semibold text-stone-900">
+            Préparer son dossier
+          </h2>
+          <p className="mt-2 max-w-xl text-base leading-relaxed text-stone-600">
+            Une pré-demande en ligne, faite avant le rendez-vous, accélère
+            nettement le passage en mairie.
+          </p>
+          <LinkList items={prepareLinks} />
+        </div>
+
+        <p className="mt-14 max-w-xl border-l-4 border-stone-200 pl-5 text-base leading-relaxed text-stone-600">
+          Les délais de rendez-vous et de fabrication s&apos;allongent souvent à
+          l&apos;approche de l&apos;été : mieux vaut anticiper.
+        </p>
+      </div>
+    </section>
   );
 }

@@ -13,145 +13,225 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+interface Association {
+  nom: string;
+  categorie: string | null;
+  description: string | null;
+  contenuDetaille: PortableTextBlock[] | null;
+  contactNom: string | null;
+  telephone: string | null;
+  telephoneFixe: string | null;
+  email: string | null;
+  photos: string[] | null;
+}
+
 const portableTextComponents = {
   block: {
     normal: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-      <p className="whitespace-pre-line mb-4 text-stone-600 leading-relaxed font-light">
+      <p className="mb-5 whitespace-pre-line text-lg leading-relaxed text-stone-800">
         {children}
       </p>
     ),
   },
   list: {
     bullet: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-      <ul className="list-disc list-inside mb-4 text-stone-600 font-light space-y-1">
+      <ul className="mb-5 list-disc space-y-1.5 pl-5 text-lg leading-relaxed text-stone-800">
         {children}
       </ul>
     ),
     number: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-      <ol className="list-decimal list-inside mb-4 text-stone-600 font-light space-y-1">
+      <ol className="mb-5 list-decimal space-y-1.5 pl-5 text-lg leading-relaxed text-stone-800">
         {children}
       </ol>
     ),
   },
   listItem: {
     bullet: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-      <li className="leading-relaxed">{children}</li>
+      <li>{children}</li>
     ),
     number: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-      <li className="leading-relaxed">{children}</li>
+      <li>{children}</li>
     ),
   },
 };
 
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
+
+function NotFound({ reason }: { reason: string }) {
+  return (
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-3xl px-6">
+        <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl">
+          Association introuvable
+        </h1>
+        <p className="mt-5 text-lg leading-relaxed text-stone-700">{reason}</p>
+
+        <Link
+          href="/associations"
+          className={`group mt-8 inline-flex items-center gap-2 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Retour aux associations
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+async function getAssociation(slug: string): Promise<{
+  asso: Association | null;
+  hasError: boolean;
+}> {
+  try {
+    const asso = await client.fetch<Association | null>(
+      `*[_type == "association" && slug.current == $slug][0] {
+        nom,
+        categorie,
+        description,
+        contenuDetaille,
+        contactNom,
+        telephone,
+        telephoneFixe,
+        email,
+        "photos": galeriePhotos[].asset->url
+      }`,
+      { slug },
+    );
+    return { asso, hasError: false };
+  } catch (error) {
+    console.error("Erreur lors du chargement de l'association :", error);
+    return { asso: null, hasError: true };
+  }
+}
+
 export default async function AssociationUniquePage({ params }: PageProps) {
   const { slug } = await params;
+  const { asso, hasError } = await getAssociation(slug);
 
-  const query = `*[_type == "association" && slug.current == $slug][0] {
-    nom,
-    categorie,
-    description,
-    contenuDetaille,
-    contactNom,
-    telephone,
-    telephoneFixe,
-    email,
-    "photos": galeriePhotos[].asset->url
-  }`;
+  if (hasError) {
+    return (
+      <NotFound reason="Cette page n'est pas disponible pour le moment. Réessayez dans quelques instants." />
+    );
+  }
 
-  const asso = await client.fetch(query, { slug });
+  if (!asso) {
+    return (
+      <NotFound reason="Cette association n'existe pas, ou a été retirée." />
+    );
+  }
 
-  if (!asso)
-    return <div className="text-center py-20">Association introuvable</div>;
+  const hasContact = Boolean(
+    asso.contactNom || asso.telephone || asso.telephoneFixe || asso.email,
+  );
+  const hasPhotos = Boolean(asso.photos && asso.photos.length > 0);
 
   return (
-    <>
-      <div className="w-full h-20 md:h-[84px] bg-stone-900 shrink-0" />
-      <div className="min-h-screen bg-stone-50 py-12 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/associations"
-            className="inline-flex items-center gap-2 text-sm text-[#b5651d] mb-6 hover:underline"
-          >
-            <ArrowLeft className="h-4 w-4" /> Retour aux associations
-          </Link>
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-7xl px-6">
+        <Link
+          href="/associations"
+          className={`group inline-flex items-center gap-2 text-base font-semibold text-stone-600 transition-colors hover:text-[#9e5218] ${focusRing}`}
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Toutes les associations
+        </Link>
 
-          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium text-stone-900 mb-4 md:mb-6">
+        <header className="mt-8">
+          {asso.categorie && (
+            <p className="text-base font-semibold text-[#9e5218]">
+              {asso.categorie}
+            </p>
+          )}
+          <h1 className="mt-2 font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl">
             {asso.nom}
           </h1>
+        </header>
 
-          <div className="grid gap-8 md:grid-cols-3 items-start">
-            <main className="md:col-span-2">
-              <div className="prose prose-stone max-w-none mb-8">
-                {asso.contenuDetaille ? (
-                  <PortableText
-                    value={asso.contenuDetaille}
-                    components={portableTextComponents}
-                  />
-                ) : (
-                  <p className="text-stone-600 whitespace-pre-line">
-                    {asso.description}
+        <div className="mt-12 grid gap-16 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-7">
+            {asso.contenuDetaille ? (
+              <PortableText
+                value={asso.contenuDetaille}
+                components={portableTextComponents}
+              />
+            ) : asso.description ? (
+              <p className="whitespace-pre-line text-lg leading-relaxed text-stone-800">
+                {asso.description}
+              </p>
+            ) : null}
+
+            {hasContact && (
+              <div className="mt-12 border-t border-stone-200 pt-8">
+                <h2 className="font-serif text-xl font-semibold text-stone-900">
+                  Contact
+                </h2>
+                {asso.contactNom && (
+                  <p className="mt-2 text-base text-stone-700">
+                    {asso.contactNom}
                   </p>
                 )}
-              </div>
-
-              <div className="rounded-2xl bg-white p-6 border border-stone-200 shadow-sm mb-8">
-                <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
-                  Contact : {asso.contactNom}
-                </p>
-                <div className="flex flex-wrap gap-4 text-sm text-stone-600">
+                <ul className="mt-3 flex flex-wrap gap-x-8 gap-y-2">
                   {asso.telephone && (
-                    <a
-                      href={`tel:${asso.telephone.replace(/\s/g, "")}`}
-                      className="hover:text-[#b5651d] transition-colors"
-                    >
-                      {asso.telephone}
-                    </a>
+                    <li>
+                      <a
+                        href={`tel:${asso.telephone.replace(/\s/g, "")}`}
+                        className={`text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                      >
+                        {asso.telephone}
+                      </a>
+                    </li>
                   )}
                   {asso.telephoneFixe && (
-                    <a
-                      href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
-                      className="hover:text-[#b5651d] transition-colors"
-                    >
-                      {asso.telephoneFixe}
-                    </a>
+                    <li>
+                      <a
+                        href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
+                        className={`text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                      >
+                        {asso.telephoneFixe}
+                      </a>
+                    </li>
                   )}
                   {asso.email && (
-                    <a
-                      href={`mailto:${asso.email}`}
-                      className="hover:text-[#b5651d] break-all transition-colors"
-                    >
-                      {asso.email}
-                    </a>
+                    <li>
+                      <a
+                        href={`mailto:${asso.email}`}
+                        className={`break-all text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                      >
+                        {asso.email}
+                      </a>
+                    </li>
                   )}
-                </div>
+                </ul>
               </div>
-            </main>
-
-            {asso.photos && asso.photos.length > 0 && (
-  <aside className="md:col-span-1 space-y-6">
-
-    <div className="flex flex-col gap-6">
-      {asso.photos.map((photoUrl: string, index: number) => (
-        <div
-          key={index}
-          className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm transition-all duration-300 hover:shadow-md"
-        >
-          <Image
-            src={photoUrl}
-            alt={`${asso.nom} - Photo ${index + 1}`}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
-          />
-        </div>
-      ))}
-    </div>
-  </aside>
-)}
+            )}
           </div>
+
+          {hasPhotos && asso.photos && (
+            <aside className="lg:col-span-5">
+              <div className="flex flex-col gap-6">
+                {asso.photos.map((photoUrl, index) => (
+                  <div
+                    key={photoUrl}
+                    className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100"
+                  >
+                    <Image
+                      src={photoUrl}
+                      alt={`${asso.nom} — photo ${index + 1}`}
+                      fill
+                      sizes="(min-width: 1024px) 35vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </aside>
+          )}
         </div>
       </div>
-    </>
+    </section>
   );
 }
 
@@ -160,30 +240,39 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  const query = `*[_type == "association" && slug.current == $slug][0] { nom, description }`;
-  const asso = await client.fetch(query, { slug });
+  try {
+    const asso = await client.fetch<{
+      nom: string;
+      description: string | null;
+    } | null>(
+      `*[_type == "association" && slug.current == $slug][0] { nom, description }`,
+      { slug },
+    );
 
-  if (!asso) {
+    if (!asso) return { title: "Association introuvable" };
+
+    const description =
+      asso.description || `L'association ${asso.nom}, à La Bastide-d'Engras.`;
+
     return {
-      title: "Association introuvable - Mairie de La Bastide d'Engras",
+      title: asso.nom,
+      description,
+      openGraph: { title: asso.nom, description, type: "article" },
     };
+  } catch (error) {
+    console.error("Erreur generateMetadata (association) :", error);
+    return { title: "Association" };
   }
-
-  return {
-    title: `${asso.nom} - Association à La Bastide d'Engras`,
-    description:
-      asso.description ||
-      `Découvrez l'association ${asso.nom} de la commune de La Bastide d'Engras.`,
-    openGraph: {
-      title: `${asso.nom} - La Bastide d'Engras`,
-      description: asso.description,
-      type: "article",
-    },
-  };
 }
 
 export async function generateStaticParams() {
-  const query = `*[_type == "association"] { "slug": slug.current }`;
-  const assos = await client.fetch(query);
-  return assos.map((asso: { slug: string }) => ({ slug: asso.slug }));
+  try {
+    const slugs = await client.fetch<{ slug: string }[]>(
+      `*[_type == "association"] { "slug": slug.current }`,
+    );
+    return slugs.map(({ slug }) => ({ slug }));
+  } catch (error) {
+    console.error("Erreur generateStaticParams (association) :", error);
+    return [];
+  }
 }

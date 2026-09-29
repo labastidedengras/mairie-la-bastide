@@ -66,7 +66,7 @@ export default function RootLayout({
         "font-serif",
       )}
     >
-      <body className="min-h-full bg-stone-50 text-stone-900">
+      <body className="min-h-full">
         <AlertPopupLoader />
         {children}
       </body>

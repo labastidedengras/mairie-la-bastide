@@ -1,34 +1,28 @@
-"use client";
-
-import { ArrowLeft, Calendar, Download, FileText } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const CATEGORIES_LABELS: Record<
-  string,
-  { label: string; color: string; accent: string }
-> = {
-  "vie-municipale": {
-    label: "Vie Municipale",
-    color: "bg-[#6b5b4d]/10 text-[#6b5b4d] border-[#6b5b4d]/20",
-    accent: "#6b5b4d",
-  },
-  evenement: {
-    label: "Événement & Festivités",
-    color: "bg-[#b5651d]/10 text-[#b5651d] border-[#b5651d]/20",
-    accent: "#b5651d",
-  },
-  travaux: {
-    label: "Travaux & Routes",
-    color: "bg-[#5c6b47]/10 text-[#5c6b47] border-[#5c6b47]/20",
-    accent: "#5c6b47",
-  },
-  alerte: {
-    label: "Alerte Info",
-    color: "bg-red-50 text-red-700 border-red-100 animate-pulse",
-    accent: "#b91c1c",
-  },
+const CATEGORIES_LABELS: Record<string, { label: string; accent: string }> = {
+  "vie-municipale": { label: "Vie municipale", accent: "#6b5b4d" },
+  evenement: { label: "Événement & festivités", accent: "#9e5218" },
+  travaux: { label: "Travaux & routes", accent: "#5c6b47" },
+  alerte: { label: "Alerte info", accent: "#b91c1c" },
 };
+
+const MOIS = [
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "septembre",
+  "octobre",
+  "novembre",
+  "décembre",
+];
 
 interface Article {
   titre: string;
@@ -39,137 +33,112 @@ interface Article {
   pdfUrl: string | null;
 }
 
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${parseInt(day, 10)} ${MOIS[parseInt(month, 10) - 1]} ${year}`;
+};
+
 export default function ArticleClientContent({
   article,
 }: {
   article: Article;
 }) {
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
-  };
-
-  const catInfo = CATEGORIES_LABELS[article.categorie] || {
+  const cat = CATEGORIES_LABELS[article.categorie] ?? {
     label: article.categorie,
-    color: "bg-stone-100 text-stone-600 border-stone-200",
     accent: "#6b5b4d",
   };
-
+  const isAlerte = article.categorie === "alerte";
   const hasImage = Boolean(article.imageUrl);
 
   return (
-    <div className="bg-stone-50 min-h-screen flex flex-col">
-      <div className="w-full h-[84px] bg-stone-900 shrink-0" />
-
-      <article className="py-12 pb-20 flex-1">
-        <div
-          className={`mx-auto px-6 transition-all duration-300 ${
-            hasImage ? "max-w-6xl" : "max-w-3xl"
-          }`}
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <article className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className={`mx-auto px-6 ${hasImage ? "max-w-7xl" : "max-w-3xl"}`}>
+        <Link
+          href="/actualites"
+          className="group inline-flex items-center gap-2 text-base font-semibold text-stone-600 transition-colors hover:text-[#9e5218]"
         >
-          <Link
-            href="/actualites"
-            className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-[#b5651d] transition-colors mb-8 group"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Retour aux actualités
-          </Link>
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Toutes les actualités
+        </Link>
 
-          <header className="mb-8">
-            <span
-              className={`inline-block rounded-md border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider mb-4 ${catInfo.color}`}
-            >
-              {catInfo.label}
-            </span>
-            <h1 className="font-serif text-3xl font-medium tracking-tight text-stone-900 md:text-4xl lg:text-5xl leading-tight max-w-4xl">
-              {article.titre}
-            </h1>
-            <div className="mt-4 flex items-center gap-1.5 text-sm text-stone-400 font-light">
-              <Calendar className="h-4 w-4" />
-              <span>Publié le {formatDate(article.date)}</span>
+        <header
+          className={`mt-8 ${isAlerte ? "border-l-4 border-red-700 pl-5" : ""}`}
+        >
+          <p className="text-base font-semibold" style={{ color: cat.accent }}>
+            {cat.label}
+          </p>
+
+          <h1 className="mt-3 max-w-4xl font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 md:text-4xl lg:text-5xl">
+            {article.titre}
+          </h1>
+
+          <p className="mt-4 text-base text-stone-500">
+            Publié le {formatDate(article.date)}
+          </p>
+        </header>
+
+        <div
+          className={
+            hasImage
+              ? "mt-12 grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-16"
+              : "mt-12"
+          }
+        >
+          {hasImage && article.imageUrl && (
+            <div className="lg:col-span-5 lg:sticky lg:top-28">
+              <Image
+                src={article.imageUrl}
+                alt={article.titre}
+                width={900}
+                height={1200}
+                sizes="(min-width: 1024px) 35vw, 100vw"
+                className="h-auto w-full"
+              />
             </div>
-          </header>
+          )}
 
-          <div
-            className={
-              hasImage
-                ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
-                : "block"
-            }
-          >
-            <div className={hasImage ? "lg:col-span-7 space-y-6" : "space-y-6"}>
-              <div className="prose prose-stone max-w-none bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
-                {article.contenu ? (
-                  <p className="text-stone-700 font-light leading-relaxed whitespace-pre-line text-base">
-                    {article.contenu}
-                  </p>
-                ) : (
-                  <p className="text-stone-400 font-light italic text-sm">
-                    Consultez les détails de cette information sur l&apos;affiche
-                    {hasImage ? " ci-contre" : ""} ou via le document PDF joint.
-                  </p>
-                )}
+          <div className={hasImage ? "lg:col-span-7" : ""}>
+            {article.contenu ? (
+              <p className="whitespace-pre-line text-lg leading-relaxed text-stone-800">
+                {article.contenu}
+              </p>
+            ) : (
+              <p className="text-lg italic text-stone-600">
+                Consultez les détails de cette information
+                {hasImage ? " sur l'affiche ci-contre" : ""}
+                {article.pdfUrl ? " ou dans le document joint" : "."}
+              </p>
+            )}
 
-                {article.pdfUrl && (
-                  <div className="mt-8 pt-6 border-t border-stone-100">
-                    <h3 className="text-xs font-bold text-stone-900 mb-4 uppercase tracking-wider">
-                      Document utile lié
-                    </h3>
-                    <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-4 shadow-inner">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
-                          <FileText className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <span className="block text-sm font-semibold text-stone-900 line-clamp-1">
-                            Document complémentaire (PDF)
-                          </span>
-                          <span className="block text-xs text-stone-400 font-light">
-                            Cliquez pour ouvrir ou télécharger
-                          </span>
-                        </div>
-                      </div>
-                      <Link
-                        href={`${article.pdfUrl}?dl=`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-[#b5651d] hover:text-white transition shadow-sm"
-                      >
-                        <Download className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {hasImage && article.imageUrl && (
-              <div className="lg:col-span-5 order-first lg:order-last lg:sticky lg:top-28">
-                <div className="relative w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-950 shadow-sm flex items-center justify-center min-h-[380px] h-[520px]">
-                  <Image
-                    src={article.imageUrl}
-                    alt=""
-                    fill
-                    sizes="100w"
-                    priority
-                    className="object-cover blur-xl opacity-25 pointer-events-none"
-                  />
-                  <div className="relative z-10 w-full h-full p-4 flex items-center justify-center">
-                    <Image
-                      src={article.imageUrl}
-                      alt={article.titre}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      className="object-contain p-2"
+            {article.pdfUrl && (
+              <div className="mt-10 border-t border-stone-200 pt-8">
+                <a
+                  href={article.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between gap-6 py-2 text-stone-900 transition-colors hover:text-[#9e5218]"
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText
+                      aria-hidden="true"
+                      className="h-5 w-5 shrink-0 text-stone-400 transition-colors group-hover:text-[#9e5218]"
                     />
-                  </div>
-                </div>
+                    <span className="text-base font-semibold underline decoration-stone-300 underline-offset-4 group-hover:decoration-[#9e5218]">
+                      Document complémentaire (PDF)
+                    </span>
+                  </span>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="h-5 w-5 shrink-0 text-stone-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#9e5218]"
+                  />
+                </a>
               </div>
             )}
           </div>
         </div>
-      </article>
-    </div>
+      </div>
+    </article>
   );
 }

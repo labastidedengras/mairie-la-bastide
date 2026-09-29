@@ -1,122 +1,118 @@
 "use client";
 
-import {
-  ArrowRight,
-  Crosshair,
-  Dumbbell,
-  HelpCircle,
-  LucideIcon,
-  Mail,
-  Paintbrush,
-  Phone,
-  Search,
-  Sparkles,
-  Trophy,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import type { Association } from "./page";
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  sparkles: Sparkles,
-  trophy: Trophy,
-  crosshair: Crosshair,
-  dumbbell: Dumbbell,
-  paintbrush: Paintbrush,
-};
-
-interface Association {
-  nom: string;
-  slug: string;
-  categorie: string;
-  description: string;
-  contactNom: string;
-  telephone?: string | null;
-  telephoneFixe?: string | null;
-  email?: string | null;
-  iconKey: string;
-}
-
+// L'identifiant (id) est la valeur stockée dans Sanity et utilisée dans l'URL.
+// Le label est ce qui s'affiche. Garde ces id synchronisés avec les liens
+// "?categorie=…" utilisés ailleurs sur le site (ex. la page d'accueil).
 const categories = [
-  { id: "all", label: "Toutes" },
-  { id: "sport", label: "Sport & Santé" },
-  { id: "culture", label: "Arts & Culture" },
-  { id: "loisirs", label: "Animations & Loisirs" },
-  { id: "environnement", label: "Nature & Chasse" },
+  { id: "sport", label: "Sport & santé" },
+  { id: "culture", label: "Arts & culture" },
+  { id: "loisirs", label: "Animations & loisirs" },
+  { id: "environnement", label: "Nature & chasse" },
 ];
+
+const categoryLabel = (id: string) =>
+  categories.find((c) => c.id === id)?.label ?? id;
 
 export default function AssociationsClientContent({
   initialAssociations,
 }: {
   initialAssociations: Association[];
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // La catégorie vit dans l'URL, pour rester partageable ; la recherche reste locale.
+  const activeCategory = searchParams.get("categorie") ?? "toutes";
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+
+  const setCategory = (id: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (id === "toutes") params.delete("categorie");
+    else params.set("categorie", id);
+
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
 
   const filteredAssociations = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     return initialAssociations.filter((asso) => {
       const matchesSearch =
-        asso.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        asso.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        asso.contactNom.toLowerCase().includes(searchQuery.toLowerCase());
+        !q ||
+        asso.nom.toLowerCase().includes(q) ||
+        asso.description.toLowerCase().includes(q) ||
+        asso.contactNom.toLowerCase().includes(q);
       const matchesCategory =
-        activeCategory === "all" || asso.categorie === activeCategory;
+        activeCategory === "toutes" || asso.categorie === activeCategory;
       return matchesSearch && matchesCategory;
     });
   }, [searchQuery, activeCategory, initialAssociations]);
 
+  const resetFilters = () => {
+    setSearchQuery("");
+    setCategory("toutes");
+  };
+
   return (
-    <div className="min-h-screen bg-stone-50 pb-24">
-      <section
-        className="relative min-h-[450px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{
-          backgroundImage: "url(/images/hero-1.jpg)",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-7xl px-6">
+        <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
+          Vie associative
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
+          Les clubs, ateliers et comités qui font vivre La Bastide-d&apos;Engras
+          au quotidien.
+        </p>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-white/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
-              Vie associative
-            </span>
-            <span className="h-px w-8 bg-white/40" />
-          </div>
-
-          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
-            Les Associations
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-white/90 leading-relaxed">
-            Découvrez les clubs, ateliers et comités de La Bastide-d&apos;Engras
-            qui font vivre et rayonner notre commune au quotidien.
-          </p>
-        </div>
-      </section>
-
-      <div className="mx-auto max-w-7xl px-6 -mt-10 relative z-20">
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between bg-white p-6 rounded-2xl border border-stone-200/80 shadow-lg">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
+        <div className="mt-12 flex flex-col gap-6 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="relative max-w-sm">
+            <Search
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400"
+            />
+            <label htmlFor="asso-search" className="sr-only">
+              Rechercher une association
+            </label>
             <input
+              id="asso-search"
               type="text"
-              placeholder="Rechercher une activité, un président..."
+              placeholder="Une activité, un nom, un président…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-stone-200 bg-stone-50 py-3 pl-12 pr-4 text-sm text-stone-900 placeholder-stone-400 focus:border-[#b5651d] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#b5651d] transition-all"
+              className="w-full border-b border-stone-300 bg-transparent py-2 pl-8 text-base text-stone-900 placeholder:text-stone-400 focus:border-[#9e5218] focus:outline-none"
             />
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div
+            role="tablist"
+            aria-label="Filtrer par catégorie"
+            className="flex flex-wrap gap-x-6 gap-y-2"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeCategory === "toutes"}
+              onClick={() => setCategory("toutes")}
+              className="text-base font-semibold text-stone-600 underline decoration-2 underline-offset-8 decoration-transparent transition-colors hover:text-stone-900 hover:decoration-stone-300 aria-selected:text-stone-900 aria-selected:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9e5218]"
+            >
+              Toutes
+            </button>
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`rounded-md px-4 py-2 text-xs font-semibold transition-all ${
-                  activeCategory === cat.id
-                    ? "bg-[#b5651d] text-white shadow-md shadow-[#b5651d]/20"
-                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
-                }`}
+                type="button"
+                role="tab"
+                aria-selected={activeCategory === cat.id}
+                onClick={() => setCategory(cat.id)}
+                className="text-base font-semibold text-stone-600 underline decoration-2 underline-offset-8 decoration-transparent transition-colors hover:text-stone-900 hover:decoration-stone-300 aria-selected:text-stone-900 aria-selected:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9e5218]"
               >
                 {cat.label}
               </button>
@@ -124,108 +120,91 @@ export default function AssociationsClientContent({
           </div>
         </div>
 
+        <p aria-live="polite" className="sr-only">
+          {filteredAssociations.length} association
+          {filteredAssociations.length > 1 ? "s" : ""} affichée
+          {filteredAssociations.length > 1 ? "s" : ""}
+        </p>
+
         {filteredAssociations.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {filteredAssociations.map((asso) => {
-              const IconComponent = ICON_MAP[asso.iconKey] || HelpCircle;
-              return (
-                <article
-                  key={asso.nom}
-                  className="relative group flex flex-col justify-between rounded-2xl border border-stone-200/80 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-[#b5651d]/30"
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-4 mb-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d]">
-                        <IconComponent className="h-6 w-6" />
-                      </div>
-                      <span className="rounded-md bg-stone-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">
-                        {categories.find((c) => c.id === asso.categorie)
-                          ?.label || asso.categorie}
-                      </span>
-                    </div>
+          <ul className="mt-4 grid border-b border-stone-200 lg:grid-cols-2 lg:gap-x-14">
+            {filteredAssociations.map((asso) => (
+              <li key={asso.slug} className="border-t border-stone-200 py-8">
+                <p className="text-base font-semibold text-[#9e5218]">
+                  {categoryLabel(asso.categorie)}
+                </p>
 
-                    <h2 className="font-serif text-2xl font-medium text-stone-900 group-hover:text-[#b5651d] transition-colors">
-                      <Link
-                        href={`/associations/${asso.slug}`}
-                        className="focus:outline-none after:absolute after:inset-0 after:rounded-2xl"
-                      >
-                        {asso.nom}
-                      </Link>
-                    </h2>
+                <h2 className="mt-2 font-serif text-2xl font-semibold text-stone-900">
+                  <Link
+                    href={`/associations/${asso.slug}`}
+                    className="hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]"
+                  >
+                    {asso.nom}
+                  </Link>
+                </h2>
 
-                    <p className="mt-3 text-stone-600 text-sm leading-relaxed font-light line-clamp-3">
-                      {asso.description}
-                    </p>
+                <p className="mt-2 max-w-md text-base leading-relaxed text-stone-600 line-clamp-3">
+                  {asso.description}
+                </p>
 
-                    <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#b5651d] group-hover:text-[#964f17] transition-colors">
-                      <span>Voir la fiche complète</span>
-                      <ArrowRight className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-
-                  <div className="relative z-10 mt-8 pt-6 border-t border-stone-100">
-                    <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-3">
-                      Contact : {asso.contactNom}
-                    </p>
-                    <div className="flex flex-wrap gap-y-2 gap-x-4 text-xs font-medium text-stone-500">
-                      {asso.telephone && (
-                        <a
-                          href={`tel:${asso.telephone.replace(/\s/g, "")}`}
-                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors"
-                        >
-                          <Phone className="h-3.5 w-3.5 text-stone-400" />
-                          {asso.telephone}
-                        </a>
-                      )}
-                      {asso.telephoneFixe && (
-                        <a
-                          href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
-                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors"
-                        >
-                          <Phone className="h-3.5 w-3.5 text-stone-400" />
-                          {asso.telephoneFixe} (Fixe)
-                        </a>
-                      )}
-                      {asso.email && (
-                        <a
-                          href={`mailto:${asso.email}`}
-                          className="flex items-center gap-1.5 hover:text-[#b5651d] transition-colors break-all"
-                        >
-                          <Mail className="h-3.5 w-3.5 text-stone-400" />
-                          {asso.email}
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-1 text-base text-stone-500">
+                  <span>{asso.contactNom}</span>
+                  {asso.telephone && (
+                    <a
+                      href={`tel:${asso.telephone.replace(/\s/g, "")}`}
+                      className="font-semibold text-stone-700 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
+                    >
+                      {asso.telephone}
+                    </a>
+                  )}
+                  {asso.telephoneFixe && (
+                    <a
+                      href={`tel:${asso.telephoneFixe.replace(/\s/g, "")}`}
+                      className="font-semibold text-stone-700 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
+                    >
+                      {asso.telephoneFixe}
+                    </a>
+                  )}
+                  {asso.email && (
+                    <a
+                      href={`mailto:${asso.email}`}
+                      className="break-all font-semibold text-stone-700 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
+                    >
+                      {asso.email}
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
         ) : (
-          <div className="text-center py-20 bg-white border border-stone-200 rounded-2xl">
-            <p className="text-stone-500 font-medium">
-              Aucune activité ni association ne correspond à vos critères.
+          <div className="mt-14 border-t border-stone-200 py-16">
+            <p className="text-lg text-stone-600">
+              Aucune association ne correspond à ces critères.
             </p>
             <button
-              onClick={() => {
-                setSearchQuery("");
-                setActiveCategory("all");
-              }}
-              className="mt-4 text-sm font-semibold text-[#b5651d] underline hover:text-[#964f17]"
+              type="button"
+              onClick={resetFilters}
+              className="mt-4 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
             >
               Réinitialiser les filtres
             </button>
           </div>
         )}
 
-        <div className="mt-16 text-center bg-stone-200/40 rounded-xl p-6 border border-stone-200/60 max-w-2xl mx-auto">
-          <p className="text-sm text-stone-600">
-            Vous faites partie du bureau d&apos;une de ces associations et vous
-            souhaitez modifier une information ou ajouter un événement à
-            l&apos;agenda ? Contactez directement le secrétariat de la mairie.
-          </p>
-        </div>
+        <p className="mt-16 max-w-2xl border-l-4 border-stone-200 pl-5 text-base leading-relaxed text-stone-600">
+          Vous faites partie du bureau d&apos;une de ces associations et
+          souhaitez modifier une information ou ajouter un événement à
+          l&apos;agenda ?{" "}
+          <Link
+            href="/contact"
+            className="font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
+          >
+            Contactez le secrétariat de la mairie
+          </Link>
+          .
+        </p>
       </div>
-    </div>
+    </section>
   );
 }

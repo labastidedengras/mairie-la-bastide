@@ -2,8 +2,21 @@
 
 import { Calendar } from "@/components/ui/calendar";
 import { fr } from "date-fns/locale";
-import { CalendarDays, Info, Loader2, Send } from "lucide-react";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
+
+const inputClass =
+  "mt-2 block w-full rounded-sm border border-stone-300 bg-white px-4 py-3 text-base text-stone-900 focus:border-[#9e5218] focus:outline focus:outline-2 focus:outline-[#9e5218] disabled:bg-stone-100 disabled:text-stone-500";
+
+const pricing = [
+  { label: "Habitants du village (week-end)", value: "150 €" },
+  { label: "Extérieurs (week-end)", value: "350 €" },
+  { label: "Caution ménage", value: "80 €" },
+  { label: "Caution dégradations", value: "500 €" },
+];
 
 interface SallePolyvalenteClientProps {
   datesOccupees: string[];
@@ -12,20 +25,7 @@ interface SallePolyvalenteClientProps {
 export default function SallePolyvalenteClient({
   datesOccupees,
 }: SallePolyvalenteClientProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-
-  const isDayDisabled = (date: Date) => {
-    const aujourdhui = new Date();
-    aujourdhui.setHours(0, 0, 0, 0);
-
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const dateLocale = `${yyyy}-${mm}-${dd}`;
-
-    return date < aujourdhui || datesOccupees.includes(dateLocale);
-  };
-
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [formData, setFormData] = useState({
     nom: "",
     telephone: "",
@@ -35,6 +35,22 @@ export default function SallePolyvalenteClient({
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const successRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (submitted) successRef.current?.focus();
+  }, [submitted]);
+
+  const isDayDisabled = (date: Date) => {
+    const aujourdhui = new Date();
+    aujourdhui.setHours(0, 0, 0, 0);
+
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+
+    return date < aujourdhui || datesOccupees.includes(`${yyyy}-${mm}-${dd}`);
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -81,259 +97,263 @@ export default function SallePolyvalenteClient({
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 pb-24">
-      {/* 🖼️ Hero Banner */}
-      <section
-        className="relative min-h-[400px] flex items-center justify-center bg-cover bg-center md:bg-fixed"
-        style={{ backgroundImage: "url(/images/hero-1.jpg)" }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 mx-auto max-w-7xl px-6 text-center mt-12">
-          <div className="mb-4 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-white/40" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/90">
-              Services Municipaux
-            </span>
-            <span className="h-px w-8 bg-white/40" />
-          </div>
-          <h1 className="font-serif text-5xl font-medium tracking-tight text-white md:text-6xl">
-            Salle Polyvalente
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base md:text-lg text-white/90 leading-relaxed">
-            Consultez le calendrier des disponibilités en temps réel et
-            planifiez vos événements familiaux ou associatifs.
-          </p>
-        </div>
-      </section>
+    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
+    <section className="bg-white pb-24 pt-32 lg:pt-40">
+      <div className="mx-auto max-w-7xl px-6">
+        <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
+          Salle polyvalente
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
+          Disponible à la location pour les habitants de la commune comme pour
+          les personnes extérieures.
+        </p>
 
-      {/* 🗓️ Section Calendrier + Infos */}
-      <div className="mx-auto max-w-7xl px-6 -mt-10 relative z-20 grid gap-8 lg:grid-cols-3">
-        {/* Colonne de Gauche : Tarifs et Infos */}
-        <div className="bg-white p-8 rounded-2xl border border-stone-200/80 shadow-lg flex flex-col justify-between h-full">
-          <div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#b5651d]/10 text-[#b5651d] mb-6">
-              <Info className="h-6 w-6" />
-            </div>
-            <h2 className="font-serif text-2xl font-medium text-stone-900 mb-4">
-              Modalités de location
-            </h2>
-            <p className="text-stone-600 text-sm leading-relaxed mb-6 font-light">
-              La salle polyvalente est disponible à la location pour les
-              habitants de la commune ainsi que pour les personnes extérieures.
-            </p>
+        <div className="mt-14 grid gap-16 lg:grid-cols-12 lg:gap-16">
+          {/* Tarifs et pièces à fournir */}
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                Tarifs
+              </h2>
+              <ul className="mt-4 border-b border-stone-200">
+                {pricing.map((row) => (
+                  <li
+                    key={row.label}
+                    className="flex justify-between gap-6 border-t border-stone-200 py-3 text-base"
+                  >
+                    <span className="text-stone-700">{row.label}</span>
+                    <span className="font-semibold text-stone-900">
+                      {row.value}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            <div className="space-y-4 border-t border-stone-100 pt-6">
-              <div className="flex justify-between text-sm">
-                <span className="text-stone-500">
-                  Habitants du village (Week-end)
-                </span>
-                <span className="font-semibold text-stone-900">150 €</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-stone-500">Extérieurs (Week-end)</span>
-                <span className="font-semibold text-stone-900">350 €</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-stone-500">Caution ménage</span>
-                <span className="font-semibold text-stone-900">80 €</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-stone-500">Caution dégradations</span>
-                <span className="font-semibold text-stone-900">500 €</span>
-              </div>
+              <h2 className="mt-10 font-serif text-xl font-semibold text-stone-900">
+                Pièces à fournir à la signature
+              </h2>
+              <ul className="mt-3 space-y-1.5 text-base leading-relaxed text-stone-700">
+                <li>Attestation d&apos;assurance responsabilité civile</li>
+                <li>Chèques de caution à l&apos;ordre du Trésor public</li>
+              </ul>
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-stone-100 text-xs text-stone-400 space-y-1">
-            <p>Pièces à fournir lors de la signature :</p>
-            <p>• Attestation d&apos;assurance responsabilité civile</p>
-            <p>• Chèques de caution à l&apos;ordre du Trésor Public</p>
-          </div>
-        </div>
-
-        {/* Colonne du Milieu : Le Calendrier Visuel */}
-        <div className="bg-white p-8 rounded-2xl border border-stone-200/80 shadow-lg flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <CalendarDays className="h-5 w-5 text-[#b5651d]" />
-            <h2 className="font-serif text-xl font-medium text-stone-900">
-              Calendrier des disponibilités
-            </h2>
-          </div>
-
-          <div className="flex-1 flex items-center justify-center">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              locale={fr}
-              disabled={isDayDisabled}
-              className="rounded-md border border-stone-100 p-4 bg-stone-50/50 scale-105 md:scale-110"
-              modifiersStyles={{
-                disabled: {
-                  textDecoration: "line-through",
-                  color: "#d6d3d1",
-                  opacity: 0.5,
-                },
-              }}
-            />
-          </div>
-
-          <div className="flex gap-6 text-xs mt-4 border-t border-stone-100 pt-4 w-full">
-            <div className="flex items-center gap-1.5 text-stone-600">
-              <span className="h-3 w-3 rounded-full bg-[#b5651d]" /> Disponible
-              / Sélectionné
-            </div>
-            <div className="flex items-center gap-1.5 text-stone-400">
-              <span className="h-3 w-3 rounded-full bg-stone-200 line-through" />{" "}
-              Déjà réservé ou passé
-            </div>
-          </div>
-        </div>
-
-        {/* Colonne de Droite : Formulaire d'option */}
-        <div className="bg-white p-8 rounded-2xl border border-stone-200/80 shadow-lg">
-          <h2 className="font-serif text-2xl font-medium text-stone-900 mb-2">
-            Faire une demande
-          </h2>
-          <p className="text-stone-500 text-xs mb-6">
-            Sélectionnez une date sur le calendrier pour pré-remplir votre
-            demande.
-          </p>
-
-          {submitted ? (
-            <div className="rounded-2xl border border-[#5c6b47]/20 bg-[#5c6b47]/5 p-12 text-center">
-              <div className="mb-4 text-4xl text-[#5c6b47]">✓</div>
-              <p className="text-lg font-semibold text-stone-900 mb-2">
-                Demande envoyée !
-              </p>
-              <p className="text-stone-600 text-sm">
-                La mairie vous recontactera dans les meilleurs délais.
-              </p>
-              <button
-                onClick={() => setSubmitted(false)}
-                className="mt-6 text-xs text-stone-500 underline hover:text-stone-800"
-              >
-                Nouvelle demande
-              </button>
-            </div>
-          ) : (
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              {error && (
-                <div className="p-4 text-sm text-red-800 rounded-xl bg-red-50 border border-red-100">
-                  {error}
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-stone-700 uppercase mb-1.5">
-                  Nom complet
-                </label>
-                <input
-                  type="text"
-                  name="nom"
-                  value={formData.nom}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="M. ou Mme..."
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50 py-2.5 px-4 text-sm focus:border-[#b5651d] focus:bg-white focus:outline-none transition-all disabled:opacity-50"
-                />
+          {/* Réservation : calendrier et formulaire forment un seul parcours en deux étapes */}
+          <div className="lg:col-span-8">
+            {submitted ? (
+              <div className="border-l-4 border-[#5c6b47] py-2 pl-6">
+                <h2
+                  ref={successRef}
+                  tabIndex={-1}
+                  className="font-serif text-2xl font-semibold text-stone-900 focus:outline-none"
+                >
+                  Demande envoyée
+                </h2>
+                <p className="mt-3 max-w-md text-base leading-relaxed text-stone-700">
+                  La mairie vous recontactera pour confirmer la disponibilité et
+                  les modalités.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className={`mt-6 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                >
+                  Faire une nouvelle demande
+                </button>
               </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
+            ) : (
+              <div className="grid gap-12 md:grid-cols-2 md:gap-10">
+                {/* Étape 1 : la date */}
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 uppercase mb-1.5">
-                    Téléphone
-                  </label>
-                  <input
-                    type="tel"
-                    name="telephone"
-                    value={formData.telephone}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    placeholder="06..."
-                    className="w-full rounded-xl border border-stone-200 bg-stone-50 py-2.5 px-4 text-sm focus:border-[#b5651d] focus:bg-white focus:outline-none transition-all disabled:opacity-50"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-stone-700 uppercase mb-1.5">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    placeholder="adresse@mail.com"
-                    className="w-full rounded-xl border border-stone-200 bg-stone-50 py-2.5 px-4 text-sm focus:border-[#b5651d] focus:bg-white focus:outline-none transition-all disabled:opacity-50"
-                  />
-                </div>
-              </div>
+                  <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                    <span className="text-stone-400">1.</span> Choisir une date
+                  </h2>
 
-              <div>
-                <label className="block text-xs font-semibold text-stone-700 uppercase mb-1.5">
-                  Date souhaitée
-                </label>
-                <input
-                  type="text"
-                  readOnly
-                  value={
-                    selectedDate
+                  <div className="mt-6 flex justify-center md:justify-start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      locale={fr}
+                      disabled={isDayDisabled}
+                      className="p-0"
+                      modifiersStyles={{
+                        disabled: {
+                          textDecoration: "line-through",
+                          color: "#d6d3d1",
+                          opacity: 0.6,
+                        },
+                      }}
+                    />
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-base text-stone-600">
+                    <span className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="h-3 w-3 rounded-full bg-[#9e5218]"
+                      />
+                      Disponible
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="h-3 w-3 rounded-full bg-stone-300"
+                      />
+                      Déjà réservé ou passé
+                    </span>
+                  </div>
+
+                  <p
+                    aria-live="polite"
+                    className="mt-4 text-base font-semibold text-stone-900"
+                  >
+                    {selectedDate
                       ? selectedDate.toLocaleDateString("fr-FR", {
                           weekday: "long",
                           year: "numeric",
                           month: "long",
                           day: "numeric",
                         })
-                      : "Veuillez cliquer sur une date"
-                  }
-                  className="w-full rounded-xl border border-stone-200 bg-stone-100 py-2.5 px-4 text-sm text-stone-600 font-medium focus:outline-none cursor-not-allowed"
-                />
-              </div>
+                      : "Aucune date sélectionnée"}
+                  </p>
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-stone-700 uppercase mb-1.5">
-                  Nature de l&apos;événement
-                </label>
-                <textarea
-                  name="evenement"
-                  value={formData.evenement}
-                  onChange={handleChange}
-                  rows={3}
-                  disabled={isSubmitting}
-                  placeholder="Ex : Repas d'anniversaire en famille (environ 40 personnes)..."
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50 py-2.5 px-4 text-sm focus:border-[#b5651d] focus:bg-white focus:outline-none transition-all resize-none disabled:opacity-50"
-                />
-              </div>
+                {/* Étape 2 : le formulaire, avant la date choisie sinon désactivé */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <h2 className="font-serif text-2xl font-semibold text-stone-900">
+                    <span className="text-stone-400">2.</span> Vos coordonnées
+                  </h2>
 
-              <button
-                type="submit"
-                disabled={!selectedDate || isSubmitting}
-                className={`w-full flex items-center justify-center gap-2 rounded-md py-3 text-sm font-semibold text-white shadow-md transition-all ${
-                  selectedDate && !isSubmitting
-                    ? "bg-[#b5651d] hover:bg-[#964f17] cursor-pointer"
-                    : "bg-stone-300 cursor-not-allowed shadow-none"
-                }`}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" /> Envoi en
-                    cours...
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" /> Envoyer la demande
-                    d&apos;option
-                  </>
-                )}
-              </button>
-            </form>
-          )}
+                  {!selectedDate && (
+                    <p className="text-base text-stone-500">
+                      Choisissez une date à gauche pour activer le formulaire.
+                    </p>
+                  )}
+
+                  {error && (
+                    <div
+                      role="alert"
+                      className="border-l-4 border-red-700 bg-red-50 px-4 py-3 text-base text-red-900"
+                    >
+                      {error}
+                    </div>
+                  )}
+
+                  <fieldset
+                    disabled={!selectedDate || isSubmitting}
+                    className="space-y-6 disabled:opacity-40"
+                  >
+                    <legend className="sr-only">
+                      Coordonnées et description de l&apos;événement
+                    </legend>
+
+                    <div>
+                      <label
+                        htmlFor="nom"
+                        className="block text-base font-semibold text-stone-900"
+                      >
+                        Nom complet
+                      </label>
+                      <input
+                        id="nom"
+                        type="text"
+                        name="nom"
+                        autoComplete="name"
+                        value={formData.nom}
+                        onChange={handleChange}
+                        required
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      <div>
+                        <label
+                          htmlFor="telephone"
+                          className="block text-base font-semibold text-stone-900"
+                        >
+                          Téléphone
+                        </label>
+                        <input
+                          id="telephone"
+                          type="tel"
+                          name="telephone"
+                          autoComplete="tel"
+                          value={formData.telephone}
+                          onChange={handleChange}
+                          required
+                          className={inputClass}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-base font-semibold text-stone-900"
+                        >
+                          E-mail
+                        </label>
+                        <input
+                          id="email"
+                          type="email"
+                          name="email"
+                          autoComplete="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className={inputClass}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="evenement"
+                        className="block text-base font-semibold text-stone-900"
+                      >
+                        Nature de l&apos;événement
+                      </label>
+                      <textarea
+                        id="evenement"
+                        name="evenement"
+                        value={formData.evenement}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder="Ex. repas d'anniversaire en famille, environ 40 personnes"
+                        className={`${inputClass} resize-y`}
+                      />
+                    </div>
+                  </fieldset>
+
+                  <button
+                    type="submit"
+                    disabled={!selectedDate || isSubmitting}
+                    aria-busy={isSubmitting}
+                    className={`inline-flex w-full items-center justify-center gap-2 rounded-sm px-7 py-3.5 text-base font-semibold text-white transition-colors ${
+                      selectedDate && !isSubmitting
+                        ? `bg-[#9e5218] hover:bg-[#854311] ${focusRing}`
+                        : "cursor-not-allowed bg-stone-300"
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2
+                          aria-hidden="true"
+                          className="h-5 w-5 animate-spin"
+                        />
+                        Envoi en cours…
+                      </>
+                    ) : (
+                      "Envoyer la demande"
+                    )}
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
