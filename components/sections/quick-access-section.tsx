@@ -56,8 +56,7 @@ export default function QuickAccessSection() {
               </h2>
 
               <p className="mt-4 max-w-sm text-base leading-relaxed text-stone-600">
-                Les informations utiles au quotidien, et où s&apos;adresser
-                quand la mairie n&apos;est pas compétente.
+                Les démarches et services les plus demandés en mairie.
               </p>
 
               <a

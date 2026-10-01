@@ -1,4 +1,13 @@
-import { AlertTriangle } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Leaf,
+  Package,
+  Phone,
+  Sofa,
+  Trash2,
+  WashingMachine,
+} from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,16 +16,34 @@ export const metadata: Metadata = {
     "Sacs jaunes, compostage, tri des biodéchets et collecte des encombrants à La Bastide-d'Engras.",
 };
 
+const sommaire = [
+  { id: "sacs-jaunes", label: "Sacs jaunes", dot: "bg-yellow-400" },
+  { id: "composteur", label: "Composteur", dot: "bg-emerald-500" },
+  { id: "biodechets", label: "Biodéchets", dot: "bg-emerald-500" },
+  { id: "encombrants", label: "Encombrants", dot: "bg-stone-400" },
+  { id: "sictomu", label: "Contact", dot: "bg-[#9e5218]" },
+];
+
 const compostBins = [
-  { label: "Bac 1", text: "Stockage de la matière sèche (broyat)." },
   {
-    label: "Bac 2 — Apports",
-    text: "C'est ici que l'on déverse les biodéchets alimentaires.",
+    step: "1",
+    title: "Matière sèche",
+    text: "Stockage du broyat.",
   },
-  { label: "Bac 3", text: "Phase de maturation du compost." },
   {
-    label: "Bacs 4 et 5 — Partage",
-    text: "Compost mûr, en libre disposition pour tous les habitants.",
+    step: "2",
+    title: "Apports",
+    text: "On y déverse les biodéchets alimentaires.",
+  },
+  {
+    step: "3",
+    title: "Maturation",
+    text: "Le compost mûrit.",
+  },
+  {
+    step: "4-5",
+    title: "Partage",
+    text: "Compost mûr, en libre disposition.",
   },
 ];
 
@@ -50,93 +77,139 @@ const focusRing =
 
 export default function DechetsTriPage() {
   return (
-    // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
     <section className="bg-white pb-24 pt-32 lg:pt-40">
-      <div className="mx-auto max-w-3xl px-6">
+      <div className="mx-auto max-w-5xl px-6">
         <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
           Déchets et tri sélectif
         </h1>
-        <p className="mt-5 text-lg leading-relaxed text-stone-700">
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
           Sacs jaunes, compostage, tri des biodéchets et collecte des
           encombrants.
         </p>
 
-        {/* Sacs jaunes et composteur : deux informations pratiques, côte à côte */}
-        <div className="mt-14 grid gap-10 sm:grid-cols-2 sm:gap-12">
-          <div>
-            <h2 className="font-serif text-xl font-semibold text-stone-900">
+        <nav
+          aria-label="Sections de la page"
+          className="mt-8 flex flex-wrap gap-x-6 gap-y-2"
+        >
+          {sommaire.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`inline-flex items-center gap-2 text-base font-semibold text-stone-700 transition-colors hover:text-stone-900 ${focusRing}`}
+            >
+              <span
+                aria-hidden="true"
+                className={`h-2.5 w-2.5 rounded-full ${item.dot}`}
+              />
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          <div
+            id="sacs-jaunes"
+            className="scroll-mt-28 rounded-sm border border-yellow-300 bg-yellow-50 p-6"
+          >
+            <Package aria-hidden="true" className="h-8 w-8 text-yellow-700" />
+            <h2 className="mt-4 font-serif text-xl font-semibold text-stone-900">
               Sacs jaunes d&apos;emballages
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-stone-700">
-              Les sacs de tri se retirent à l&apos;Agence postale communale. La
-              dotation annuelle est d&apos;
+            <p className="mt-3 text-base leading-relaxed text-stone-800">
+              Les sacs se retirent à l&apos;Agence postale communale.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-stone-800">
+              Dotation annuelle :{" "}
               <strong className="font-semibold">
-                un rouleau de 25 sacs de 50 litres par personne
+                1 rouleau de 25 sacs (50 L) par personne du foyer
               </strong>{" "}
-              du foyer (un foyer de 4 personnes reçoit 4 rouleaux).
+              — un foyer de 4 personnes reçoit 4 rouleaux.
             </p>
           </div>
 
-          <div>
-            <h2 className="font-serif text-xl font-semibold text-stone-900">
+          <div
+            id="composteur"
+            className="scroll-mt-28 rounded-sm border border-emerald-300 bg-emerald-50 p-6"
+          >
+            <Leaf aria-hidden="true" className="h-8 w-8 text-emerald-700" />
+            <h2 className="mt-4 font-serif text-xl font-semibold text-stone-900">
               Composteur individuel offert
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-stone-700">
+            <p className="mt-3 text-base leading-relaxed text-stone-800">
               Un composteur de 400 litres est offert par le SICTOMU à chaque
-              foyer, sous condition de suivre une formation de 45 minutes,
-              animée par des maîtres-composteurs.
+              foyer, sous condition de suivre une formation de 45 minutes avec
+              un maître-composteur.
             </p>
           </div>
         </div>
 
-        {/* Biodéchets */}
-        <div className="mt-16 border-t border-stone-200 pt-14">
+        <div
+          id="biodechets"
+          className="mt-16 scroll-mt-28 border-t border-stone-200 pt-14"
+        >
           <h2 className="font-serif text-2xl font-semibold text-stone-900">
             Le tri des biodéchets
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone-700">
             Les biodéchets représentent environ un tiers des ordures ménagères
             non triées en France. Depuis le 1er janvier 2024, leur tri à la
-            source est obligatoire pour tous, particuliers comme professionnels.
+            source est obligatoire pour tous.
           </p>
 
-          <p className="mt-6 text-base font-semibold text-stone-900">
-            Ce qui en fait partie
-          </p>
-          <ul className="mt-2 max-w-2xl space-y-1.5 text-base leading-relaxed text-stone-700">
-            <li>
-              <strong className="font-semibold">Déchets de cuisine :</strong>{" "}
-              épluchures, coquilles d&apos;œufs, pain rassis, marc de café…
-            </li>
-            <li>
-              <strong className="font-semibold">Déchets de jardin :</strong>{" "}
-              tontes, feuilles mortes, petites branches.
-            </li>
-          </ul>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+            <div className="rounded-sm border border-emerald-200 bg-emerald-50/60 p-5">
+              <h3 className="font-serif text-lg font-semibold text-stone-900">
+                Déchets de cuisine
+              </h3>
+              <p className="mt-2 text-base leading-relaxed text-stone-700">
+                Épluchures, coquilles d&apos;œufs, pain rassis, marc de café…
+              </p>
+            </div>
+            <div className="rounded-sm border border-emerald-200 bg-emerald-50/60 p-5">
+              <h3 className="font-serif text-lg font-semibold text-stone-900">
+                Déchets de jardin
+              </h3>
+              <p className="mt-2 text-base leading-relaxed text-stone-700">
+                Tontes, feuilles mortes, petites branches.
+              </p>
+            </div>
+          </div>
 
-          <h3 className="mt-10 font-serif text-xl font-semibold text-stone-900">
-            Le site de compostage communal
+          <h3 className="mt-12 font-serif text-xl font-semibold text-stone-900">
+            Le circuit du compost communal
           </h3>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-stone-700">
             Le respect de la fonction de chaque bac est essentiel pour obtenir
             un bon compost.
           </p>
 
-          <dl className="mt-4 border-b border-stone-200">
-            {compostBins.map((bin) => (
-              <div
-                key={bin.label}
-                className="grid gap-1 border-t border-stone-200 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6"
-              >
-                <dt className="font-serif text-lg font-semibold text-[#5c6b47]">
-                  {bin.label}
-                </dt>
-                <dd className="text-base leading-relaxed text-stone-700">
-                  {bin.text}
-                </dd>
-              </div>
+          <ol className="mt-6 grid gap-3 sm:grid-cols-4 sm:items-stretch">
+            {compostBins.map((bin, index) => (
+              <li key={bin.step} className="flex items-stretch gap-3">
+                <div className="flex-1 rounded-sm border border-emerald-200 bg-emerald-50/60 p-4 text-center">
+                  <span
+                    aria-hidden="true"
+                    className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 font-serif text-base font-semibold text-white"
+                  >
+                    {bin.step}
+                  </span>
+                  <h4 className="mt-3 font-serif text-base font-semibold text-stone-900">
+                    {bin.title}
+                  </h4>
+                  <p className="mt-1 text-sm leading-relaxed text-stone-700">
+                    {bin.text}
+                  </p>
+                </div>
+
+                {index < compostBins.length - 1 && (
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="hidden shrink-0 self-center text-emerald-300 sm:block"
+                  />
+                )}
+              </li>
             ))}
-          </dl>
+          </ol>
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-stone-600">
             Trier réduit le bilan carbone, permet de produire du compost et du
@@ -145,8 +218,10 @@ export default function DechetsTriPage() {
           </p>
         </div>
 
-        {/* Encombrants */}
-        <div className="mt-16 border-t border-stone-200 pt-14">
+        <div
+          id="encombrants"
+          className="mt-16 scroll-mt-28 border-t border-stone-200 pt-14"
+        >
           <h2 className="font-serif text-2xl font-semibold text-stone-900">
             Collecte des encombrants sur rendez-vous
           </h2>
@@ -154,9 +229,13 @@ export default function DechetsTriPage() {
             Un service du SICTOMU, à réserver directement auprès du syndicat.
           </p>
 
-          <div className="mt-8 grid gap-10 sm:grid-cols-2">
-            <div>
-              <h3 className="text-base font-semibold text-stone-900">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+            <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
+              <WashingMachine
+                aria-hidden="true"
+                className="h-7 w-7 text-stone-500"
+              />
+              <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900">
                 Gros électroménager
               </h3>
               <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
@@ -166,8 +245,9 @@ export default function DechetsTriPage() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="text-base font-semibold text-stone-900">
+            <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
+              <Sofa aria-hidden="true" className="h-7 w-7 text-stone-500" />
+              <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900">
                 Mobilier de grand volume
               </h3>
               <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
@@ -178,7 +258,7 @@ export default function DechetsTriPage() {
             </div>
           </div>
 
-          <div className="mt-8 flex items-start gap-3 border-l-4 border-amber-600 pl-5">
+          <div className="mt-6 flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 p-5">
             <AlertTriangle
               aria-hidden="true"
               className="mt-0.5 h-5 w-5 shrink-0 text-amber-700"
@@ -189,19 +269,30 @@ export default function DechetsTriPage() {
             </p>
           </div>
 
-          <h3 className="mt-10 text-base font-semibold text-stone-900">
-            Conditions d&apos;acceptation
-          </h3>
-          <ol className="mt-3 max-w-xl list-decimal space-y-1.5 pl-5 text-base leading-relaxed text-stone-700">
-            {conditions.map((condition) => (
-              <li key={condition}>{condition}</li>
-            ))}
-          </ol>
+          <div className="mt-6 rounded-sm bg-stone-900 p-6 text-white">
+            <h3 className="font-serif text-lg font-semibold">
+              5 conditions d&apos;acceptation
+            </h3>
+            <ol className="mt-4 grid gap-3 sm:grid-cols-2">
+              {conditions.map((condition, index) => (
+                <li
+                  key={condition}
+                  className="flex gap-3 text-base leading-relaxed text-stone-200"
+                >
+                  <span className="font-serif text-stone-500">{index + 1}</span>
+                  {condition}
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
-        {/* Contact SICTOMU */}
-        <div className="mt-16 border-t border-stone-200 pt-14">
-          <h2 className="font-serif text-2xl font-semibold text-stone-900">
+        <div
+          id="sictomu"
+          className="mt-16 scroll-mt-28 rounded-sm border border-[#9e5218]/25 bg-[#9e5218]/5 p-8"
+        >
+          <Trash2 aria-hidden="true" className="h-7 w-7 text-[#9e5218]" />
+          <h2 className="mt-4 font-serif text-2xl font-semibold text-stone-900">
             Le SICTOMU
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone-700">
@@ -214,8 +305,9 @@ export default function DechetsTriPage() {
           <div className="mt-6 flex flex-wrap items-baseline gap-x-8 gap-y-3">
             <a
               href="tel:0466221370"
-              className={`text-lg font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+              className={`inline-flex items-center gap-2 text-lg font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
             >
+              <Phone aria-hidden="true" className="h-4 w-4" />
               04 66 22 13 70
             </a>
             <a
@@ -234,10 +326,8 @@ export default function DechetsTriPage() {
             </a>
           </div>
 
-          <p className="mt-8 max-w-xl text-base leading-relaxed text-stone-500">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-stone-600">
             Siège du SICTOMU : quartier Bord Nègre, D3 bis, 30210 Argilliers.
-            Demande de bac, réclamation ou inscription à une formation de
-            compostage : rendez-vous sur leur site.
           </p>
         </div>
       </div>

@@ -22,20 +22,16 @@ export default function MunicipalLifeSection() {
     <section className="border-t border-stone-100 bg-stone-50 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-16 lg:grid-cols-12 lg:gap-20">
-          {/* Gauche : le titre en haut, les documents calés en bas,
-              pour s'aligner sur le bas de la couverture */}
-          <div className="flex flex-col justify-between gap-12 lg:col-span-7">
-            <div>
-              <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
-                Publications et décisions officielles
-              </h2>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-stone-600">
-                Comptes rendus, arrêtés et bulletin : les documents officiels de
-                la commune.
-              </p>
-            </div>
+          <div className="lg:col-span-7">
+            <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
+              Publications et décisions officielles
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-stone-600">
+              Comptes rendus, arrêtés et bulletin : les documents officiels de
+              la commune.
+            </p>
 
-            <ul className="border-b border-stone-300/70">
+            <ul className="mt-12 border-b border-stone-300/70">
               {documents.map((doc) => (
                 <li key={doc.title} className="border-t border-stone-300/70">
                   <Link
@@ -60,9 +56,8 @@ export default function MunicipalLifeSection() {
           {/* Droite : le bulletin, avec sa vraie couverture */}
           <div className="lg:col-span-5">
             <Image
-              // À exporter depuis la première page du PDF
-              src="/images/apercu-bulletin.jpg"
-              alt="Couverture du bulletin municipal, édition été 2026"
+              src="/images/apercu-bulletin.jpeg"
+              alt="Couverture du bulletin municipal"
               width={600}
               height={800}
               sizes="(min-width: 1024px) 24rem, 20rem"
