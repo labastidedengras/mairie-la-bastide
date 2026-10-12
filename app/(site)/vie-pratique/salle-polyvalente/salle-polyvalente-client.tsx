@@ -170,39 +170,23 @@ export default function SallePolyvalenteClient({
                     <span className="text-stone-400">1.</span> Choisir une date
                   </h2>
 
-                  <div className="mt-6 flex justify-center md:justify-start">
+                  <div className="mt-6 w-full">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
                       onSelect={setSelectedDate}
                       locale={fr}
                       disabled={isDayDisabled}
-                      className="p-0"
+                      className="w-full p-0"
+                      classNames={{ root: "w-full" }}
                       modifiersStyles={{
                         disabled: {
                           textDecoration: "line-through",
-                          color: "#d6d3d1",
+                          color: "#928f8d",
                           opacity: 0.6,
                         },
                       }}
                     />
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-base text-stone-600">
-                    <span className="flex items-center gap-2">
-                      <span
-                        aria-hidden="true"
-                        className="h-3 w-3 rounded-full bg-[#9e5218]"
-                      />
-                      Disponible
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span
-                        aria-hidden="true"
-                        className="h-3 w-3 rounded-full bg-stone-300"
-                      />
-                      Déjà réservé ou passé
-                    </span>
                   </div>
 
                   <p
