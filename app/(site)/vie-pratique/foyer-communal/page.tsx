@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import SallePolyvalenteClient from "./salle-polyvalente-client";
 
 export const metadata: Metadata = {
-  title: "Réservation de la salle polyvalente",
+  title: "Foyer Communal",
   description:
-    "Tarifs, disponibilités et demande de réservation de la salle polyvalente de La Bastide-d'Engras.",
+    "Tarifs, disponibilités, règlement et pré-demande de réservation du Foyer Communal de La Bastide-d'Engras.",
 };
 
 interface Reservation {
@@ -54,7 +54,7 @@ export default async function SallePolyvalentePage() {
       <section className="bg-white pb-24 pt-32 lg:pt-40">
         <div className="mx-auto max-w-3xl px-6">
           <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
-            Salle polyvalente
+            Foyer Communal
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-stone-700">
             Le calendrier des disponibilités n&apos;est pas accessible pour le

@@ -66,7 +66,8 @@ export default function CniPasseportPage() {
 
         <p className="mt-5 text-lg leading-relaxed text-stone-700">
           Les démarches pour créer ou renouveler une carte nationale
-          d&apos;identité (CNI) ou un passeport.
+          d&apos;identité (CNI) ou un passeport. Pour toute demande vous pouvez
+          vous rensigner auprès de la mairie de La Bastide d&apos;Engras.
         </p>
 
         <div className="mt-10 border-l-4 border-amber-600 pl-5">

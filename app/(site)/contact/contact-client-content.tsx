@@ -129,10 +129,10 @@ export default function ContactPage() {
 
               <p className="mt-4">
                 <a
-                  href="mailto:la-bastide-dengras@wanadoo.fr"
+                  href="mailto:commune-de-la-bastide-dengras7@orange.fr"
                   className={`break-words text-lg text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
                 >
-                  la-bastide-dengras@wanadoo.fr
+                  commune-de-la-bastide-dengras7@orange.fr
                 </a>
               </p>
 

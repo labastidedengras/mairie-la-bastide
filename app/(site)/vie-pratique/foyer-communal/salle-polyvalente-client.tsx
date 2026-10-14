@@ -2,8 +2,9 @@
 
 import { Calendar } from "@/components/ui/calendar";
 import { fr } from "date-fns/locale";
-import { Loader2 } from "lucide-react";
+import { ExternalLink, FileText, Loader2 } from "lucide-react";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import type { DateRange } from "react-day-picker";
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]";
@@ -12,11 +13,13 @@ const inputClass =
   "mt-2 block w-full rounded-sm border border-stone-300 bg-white px-4 py-3 text-base text-stone-900 focus:border-[#9e5218] focus:outline focus:outline-2 focus:outline-[#9e5218] disabled:bg-stone-100 disabled:text-stone-500";
 
 const pricing = [
-  { label: "Habitants du village (week-end)", value: "150 €" },
-  { label: "Extérieurs (week-end)", value: "350 €" },
-  { label: "Caution ménage", value: "80 €" },
-  { label: "Caution dégradations", value: "500 €" },
+  { label: "Contribuables du village (demi-journée)", value: "100 €" },
+  { label: "Bastidains (week-end)", value: "120 €" },
+  { label: "Non-contribuables (week-end)", value: "200 €" },
+  { label: "Associations du village", value: "Gratuit" },
 ];
+
+const REGLEMENT_URL = "/reglement-foyer-communal.pdf";
 
 interface SallePolyvalenteClientProps {
   datesOccupees: string[];
@@ -25,7 +28,7 @@ interface SallePolyvalenteClientProps {
 export default function SallePolyvalenteClient({
   datesOccupees,
 }: SallePolyvalenteClientProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [formData, setFormData] = useState({
     nom: "",
     telephone: "",
@@ -34,6 +37,7 @@ export default function SallePolyvalenteClient({
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reglementAccepte, setReglementAccepte] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
@@ -61,22 +65,33 @@ export default function SallePolyvalenteClient({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!selectedDate) return;
+    if (!selectedRange?.from || !selectedRange.to || !reglementAccepte) return;
     setIsSubmitting(true);
     setError(null);
 
-    const date = selectedDate.toLocaleDateString("fr-FR", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    const formatDate = (date: Date) =>
+      date.toLocaleDateString("fr-FR", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    const toDateInput = (date: Date) =>
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+    const dateDebut = toDateInput(selectedRange.from);
+    const dateFin = toDateInput(selectedRange.to);
 
     try {
       const response = await fetch("/api/reservation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, date }),
+        body: JSON.stringify({
+          ...formData,
+          dateDebut,
+          dateFin,
+          reglementAccepte,
+        }),
       });
 
       if (!response.ok) {
@@ -86,7 +101,8 @@ export default function SallePolyvalenteClient({
 
       setSubmitted(true);
       setFormData({ nom: "", telephone: "", email: "", evenement: "" });
-      setSelectedDate(undefined);
+      setSelectedRange(undefined);
+      setReglementAccepte(false);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Impossible d'envoyer la demande.",
@@ -101,12 +117,43 @@ export default function SallePolyvalenteClient({
     <section className="bg-white pb-24 pt-32 lg:pt-40">
       <div className="mx-auto max-w-7xl px-6">
         <h1 className="font-serif text-4xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
-          Salle polyvalente
+          Foyer Communal
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-stone-700">
-          Disponible à la location pour les habitants de la commune comme pour
-          les personnes extérieures.
+          Le Foyer Communal est disponible pour les habitants, les personnes
+          extérieures et les associations du village. Le formulaire permet
+          d&apos;envoyer une pré-demande : la réservation ne sera définitive
+          qu&apos;après confirmation de la mairie.
         </p>
+
+        <div className="mt-10 rounded-sm border border-stone-200 bg-stone-50 p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <FileText
+              aria-hidden="true"
+              className="h-6 w-6 shrink-0 text-[#9e5218]"
+            />
+            <h2 className="font-serif text-2xl font-semibold text-stone-900">
+              Règlement du Foyer Communal
+            </h2>
+          </div>
+          <p className="mt-3 text-base leading-relaxed text-stone-700">
+            Consultez le règlement avant d&apos;envoyer votre pré-demande.
+          </p>
+          <iframe
+            src={`${REGLEMENT_URL}#view=FitH`}
+            title="Règlement du Foyer Communal"
+            className="mt-6 h-[32rem] w-full border border-stone-200 bg-white sm:h-[42rem]"
+          />
+          <a
+            href={REGLEMENT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`mt-4 inline-flex items-center gap-2 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
+          >
+            <ExternalLink aria-hidden="true" className="h-4 w-4" />
+            Ouvrir le règlement dans un nouvel onglet
+          </a>
+        </div>
 
         <div className="mt-14 grid gap-16 lg:grid-cols-12 lg:gap-16">
           {/* Tarifs et pièces à fournir */}
@@ -128,6 +175,11 @@ export default function SallePolyvalenteClient({
                   </li>
                 ))}
               </ul>
+
+              <p className="mt-5 text-sm leading-relaxed text-stone-600">
+                Le tarif de 100 € correspond à une demi-journée. Les tarifs de
+                week-end s&apos;appliquent selon le lieu de résidence.
+              </p>
 
               <h2 className="mt-10 font-serif text-xl font-semibold text-stone-900">
                 Pièces à fournir à la signature
@@ -151,8 +203,10 @@ export default function SallePolyvalenteClient({
                   Demande envoyée
                 </h2>
                 <p className="mt-3 max-w-md text-base leading-relaxed text-stone-700">
-                  La mairie vous recontactera pour confirmer la disponibilité et
-                  les modalités.
+                  Votre pré-demande a bien été envoyée. La mairie vous
+                  recontactera pour confirmer la disponibilité et les modalités
+                  ; la réservation n&apos;est définitive qu&apos;après cette
+                  confirmation.
                 </p>
                 <button
                   type="button"
@@ -164,19 +218,25 @@ export default function SallePolyvalenteClient({
               </div>
             ) : (
               <div className="grid gap-12 md:grid-cols-2 md:gap-10">
-                {/* Étape 1 : la date */}
+                {/* Étape 1 : la période */}
                 <div>
                   <h2 className="font-serif text-2xl font-semibold text-stone-900">
-                    <span className="text-stone-400">1.</span> Choisir une date
+                    <span className="text-stone-400">1.</span> Choisir une
+                    période
                   </h2>
+                  <p className="mt-3 text-base leading-relaxed text-stone-600">
+                    Sélectionnez la date de début, puis celle de fin. Une seule
+                    date suffit pour une demande sur une journée.
+                  </p>
 
                   <div className="mt-6 w-full">
                     <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
+                      mode="range"
+                      selected={selectedRange}
+                      onSelect={setSelectedRange}
                       locale={fr}
                       disabled={isDayDisabled}
+                      excludeDisabled
                       className="w-full p-0"
                       classNames={{ root: "w-full" }}
                       modifiersStyles={{
@@ -193,26 +253,54 @@ export default function SallePolyvalenteClient({
                     aria-live="polite"
                     className="mt-4 text-base font-semibold text-stone-900"
                   >
-                    {selectedDate
-                      ? selectedDate.toLocaleDateString("fr-FR", {
-                          weekday: "long",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "Aucune date sélectionnée"}
+                    {selectedRange?.from && selectedRange.to
+                      ? selectedRange.from.getTime() ===
+                        selectedRange.to.getTime()
+                        ? selectedRange.from.toLocaleDateString("fr-FR", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : `Du ${selectedRange.from.toLocaleDateString("fr-FR", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })} au ${selectedRange.to.toLocaleDateString(
+                            "fr-FR",
+                            {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            },
+                          )}`
+                      : selectedRange?.from
+                        ? `Début : ${selectedRange.from.toLocaleDateString(
+                            "fr-FR",
+                            {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            },
+                          )} — sélectionnez la date de fin`
+                        : "Aucune période sélectionnée"}
                   </p>
                 </div>
 
-                {/* Étape 2 : le formulaire, avant la date choisie sinon désactivé */}
+                {/* Étape 2 : le formulaire, activé après le choix de la période */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <h2 className="font-serif text-2xl font-semibold text-stone-900">
-                    <span className="text-stone-400">2.</span> Vos coordonnées
+                    <span className="text-stone-400">2.</span> Pré-demande et
+                    coordonnées
                   </h2>
 
-                  {!selectedDate && (
+                  {(!selectedRange?.from || !selectedRange.to) && (
                     <p className="text-base text-stone-500">
-                      Choisissez une date à gauche pour activer le formulaire.
+                      Choisissez une période à gauche pour activer le formulaire
+                      de pré-demande.
                     </p>
                   )}
 
@@ -226,7 +314,9 @@ export default function SallePolyvalenteClient({
                   )}
 
                   <fieldset
-                    disabled={!selectedDate || isSubmitting}
+                    disabled={
+                      !selectedRange?.from || !selectedRange.to || isSubmitting
+                    }
                     className="space-y-6 disabled:opacity-40"
                   >
                     <legend className="sr-only">
@@ -311,11 +401,39 @@ export default function SallePolyvalenteClient({
                   </fieldset>
 
                   <button
+                    type="button"
+                    aria-pressed={reglementAccepte}
+                    disabled={
+                      !selectedRange?.from || !selectedRange.to || isSubmitting
+                    }
+                    onClick={() => setReglementAccepte((accepted) => !accepted)}
+                    className={`inline-flex w-full items-center justify-center rounded-sm border px-7 py-3.5 text-base font-semibold transition-colors ${focusRing} ${
+                      !selectedRange?.from || !selectedRange.to || isSubmitting
+                        ? "cursor-not-allowed border-stone-300 bg-stone-100 text-stone-400"
+                        : reglementAccepte
+                          ? "border-[#5c6b47] bg-[#5c6b47]/10 text-stone-900"
+                          : "border-[#9e5218] text-stone-900 hover:bg-[#9e5218]/5"
+                    }`}
+                  >
+                    {reglementAccepte
+                      ? "Règlement accepté — cliquer pour annuler"
+                      : "Accepter le règlement"}
+                  </button>
+
+                  <button
                     type="submit"
-                    disabled={!selectedDate || isSubmitting}
+                    disabled={
+                      !selectedRange?.from ||
+                      !selectedRange.to ||
+                      !reglementAccepte ||
+                      isSubmitting
+                    }
                     aria-busy={isSubmitting}
                     className={`inline-flex w-full items-center justify-center gap-2 rounded-sm px-7 py-3.5 text-base font-semibold text-white transition-colors ${
-                      selectedDate && !isSubmitting
+                      selectedRange?.from &&
+                      selectedRange.to &&
+                      reglementAccepte &&
+                      !isSubmitting
                         ? `bg-[#9e5218] hover:bg-[#854311] ${focusRing}`
                         : "cursor-not-allowed bg-stone-300"
                     }`}

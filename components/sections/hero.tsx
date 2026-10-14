@@ -9,15 +9,23 @@ import { useEffect, useMemo, useState } from "react";
 
 const slides = [
   {
-    src: "/images/hero-1.jpg",
+    src: "/images/hero/hero-1.jpg",
     alt: "Vue panoramique des toits en tuiles et du paysage de La Bastide d'Engras",
   },
   {
-    src: "/images/hero-2.jpg",
+    src: "/images/hero/hero-2.jpeg",
     alt: "La Tour de l'Horloge et les ruelles en pierre du village sous le soleil",
   },
   {
-    src: "/images/hero-3.jpg",
+    src: "/images/hero/hero-3.jpeg",
+    alt: "Façade en pierres dorées et patrimoine préservé de la commune",
+  },
+  {
+    src: "/images/hero/hero-4.jpg",
+    alt: "Façade en pierres dorées et patrimoine préservé de la commune",
+  },
+  {
+    src: "/images/hero/hero-5.jpg",
     alt: "Façade en pierres dorées et patrimoine préservé de la commune",
   },
 ];

@@ -49,6 +49,36 @@ export default function PLUPage() {
           </a>
         </div>
 
+        <div className="mt-14 border-l-4 border-[#9e5218] bg-stone-50 p-6 sm:p-8">
+          <h2 className="font-serif text-2xl font-semibold text-stone-900">
+            Déposer une demande d&apos;urbanisme en ligne
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-stone-700">
+            Permis de construire, déclaration préalable, certificat
+            d&apos;urbanisme ou permis d&apos;aménager : préparez et déposez
+            votre dossier sur le guichet unique en ligne. Ce service est gratuit
+            et accessible à tout moment.
+          </p>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-stone-700">
+            Le dépôt en ligne est facultatif : vous pouvez toujours remettre
+            votre dossier papier en mairie. En cas de besoin, les services de la
+            commune peuvent vous accompagner pour préparer votre demande.
+          </p>
+
+          <p className="mt-4 break-all text-stone-600">
+            Lien direct :{" "}
+            <a
+              href="https://paysduzes.geosphere.fr/guichet-unique"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline decoration-stone-400 underline-offset-4 transition-colors hover:text-[#9e5218] ${focusRing}`}
+            >
+              https://paysduzes.geosphere.fr/guichet-unique
+              <span className="sr-only"> (nouvelle fenêtre)</span>
+            </a>
+          </p>
+        </div>
+
         {/* Avant vos travaux : l'information la plus utile de la page, donc en haut, avant le document */}
         <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="border-l-4 border-stone-200 pl-5">

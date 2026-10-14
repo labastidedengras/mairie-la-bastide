@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Phone } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 // La mairie ne délivre pas les CNI / passeports : on explique et on redirige.
@@ -29,9 +29,9 @@ const links = [
     href: "/vie-pratique/dechets-tri",
   },
   {
-    title: "Salle polyvalente",
-    description: "Tarifs, disponibilités et demande de réservation.",
-    href: "/vie-pratique/salle-polyvalente",
+    title: "Foyer Communal",
+    description: "Tarifs, disponibilités et pré-demande de réservation.",
+    href: "/vie-pratique/foyer-communal",
   },
   {
     title: "Contact & Horaires",
@@ -48,32 +48,19 @@ export default function QuickAccessSection() {
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Colonne gauche : titre aligné à gauche, collé en haut au scroll */}
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-28">
-              <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
-                Vos démarches
-              </h2>
+          {/* Colonne gauche : démarches et accès rapides */}
+          <div className="lg:col-span-7">
+            <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
+              Vos démarches
+            </h2>
 
-              <p className="mt-4 max-w-sm text-base leading-relaxed text-stone-600">
-                Les démarches et services les plus demandés en mairie.
-              </p>
+            <p className="mt-4 text-base leading-relaxed text-stone-600">
+              Les démarches et services les plus demandés en mairie.
+            </p>
 
-              <a
-                href="tel:0466728145"
-                className="mt-8 inline-flex items-center gap-2 text-base text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218]"
-              >
-                <Phone className="h-4 w-4 stroke-[1.5]" />
-                04 66 72 81 45
-              </a>
-            </div>
-          </div>
-
-          {/* Colonne droite : 1 grosse entrée + une liste */}
-          <div className="lg:col-span-8">
             <Link
               href={featured.href}
-              className="group flex  flex-col justify-between gap-12 rounded-sm bg-[#9e5218] p-8 text-white transition-colors hover:bg-[#8c4c13] lg:p-10"
+              className="group mt-10 flex flex-col justify-between gap-12 rounded-sm bg-[#9e5218] p-8 text-white transition-colors hover:bg-[#8c4c13] lg:p-10"
             >
               <div>
                 <h3 className="font-serif text-3xl font-semibold lg:text-4xl">
@@ -89,7 +76,7 @@ export default function QuickAccessSection() {
               </div>
             </Link>
 
-            <ul className="mt-14 grid border-b border-stone-200 sm:grid-cols-2 sm:gap-x-14">
+            <ul className="mt-10 grid border-b border-stone-200 sm:grid-cols-2 sm:gap-x-14">
               {links.map((link) => (
                 <li key={link.href} className="border-t border-stone-200">
                   <Link
@@ -109,6 +96,35 @@ export default function QuickAccessSection() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Colonne droite : carte Google Maps centrée sur la mairie du village */}
+          <div className="lg:col-span-5">
+            <div>
+              <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
+                Nous trouver
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-stone-600">
+                9 rue des Mouchards, 30330 La Bastide-d&apos;Engras
+              </p>
+              <iframe
+                title="Carte Google Maps : La Bastide-d'Engras"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+                className="mt-8 block h-[26rem] w-full rounded-sm border-0 sm:h-[32rem] lg:h-[42rem]"
+              />
+              <a
+                href="https://maps.google.com/?q=Mairie+9+Rue+des+Mouchards+30330+La+Bastide-d%27Engras"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]"
+              >
+                Ouvrir dans Google Maps
+                <span className="sr-only"> (nouvelle fenêtre)</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

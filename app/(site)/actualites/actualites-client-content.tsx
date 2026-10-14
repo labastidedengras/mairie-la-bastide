@@ -1,6 +1,8 @@
 "use client";
 
 import ActualiteCard from "@/components/features/actualites/actualite-card";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORIES_LABELS: Record<string, string> = {
@@ -56,6 +58,16 @@ export default function ActualitesClientContent({
           La vie du village, les décisions de la mairie, les chantiers en cours
           et les événements à venir.
         </p>
+        <a
+          href="https://www.uzes-pontdugard.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-[#9e5218] hover:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9e5218]"
+        >
+          Découvrir l&apos;Office de tourisme Uzès Pont du Gard
+          <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+          <span className="sr-only"> (nouvelle fenêtre)</span>
+        </a>
 
         {/* Filtres : des liens, pas des boutons pilule colorés */}
         <div
@@ -86,6 +98,44 @@ export default function ActualitesClientContent({
             </button>
           ))}
         </div>
+
+        {selectedCategory === "alerte" && (
+          <aside className="mt-10 grid overflow-hidden rounded-sm border border-stone-200 bg-stone-50 md:grid-cols-5">
+            <div className="relative aspect-[4/3] bg-white md:col-span-2 md:aspect-auto md:min-h-64">
+              <Image
+                src="/images/ILLIWAP.jpg"
+                alt="Présentation de l’application ILLIWAP"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-contain p-4"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-8 md:col-span-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#9e5218]">
+                Alertes et informations
+              </p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold text-stone-900">
+                Retrouvez votre commune sur ILLIWAP
+              </h2>
+              <p className="mt-3 text-base leading-relaxed text-stone-700">
+                Suivez les alertes et les informations de La
+                Bastide-d&apos;Engras sur ILLIWAP. Téléchargez
+                l&apos;application et abonnez-vous à la station de la commune
+                pour recevoir ses actualités.
+              </p>
+              <a
+                href="https://www.illiwap.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 self-start text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-[#9e5218] hover:decoration-[#9e5218] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9e5218]"
+              >
+                Découvrir ILLIWAP
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+                <span className="sr-only"> (nouvelle fenêtre)</span>
+              </a>
+            </div>
+          </aside>
+        )}
 
         <p aria-live="polite" className="sr-only">
           {filteredActualites.length} actualité

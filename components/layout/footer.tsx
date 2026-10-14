@@ -76,10 +76,10 @@ export default function Footer() {
 
               <p className="mt-3">
                 <a
-                  href="mailto:la-bastide-dengras@wanadoo.fr"
+                  href="mailto:commune-de-la-bastide-dengras7@orange.fr"
                   className={`break-words text-base underline decoration-stone-600 underline-offset-4 hover:decoration-[#d98a4e] ${focusRing}`}
                 >
-                  la-bastide-dengras@wanadoo.fr
+                  commune-de-la-bastide-dengras7@orange.fr
                 </a>
               </p>
             </address>

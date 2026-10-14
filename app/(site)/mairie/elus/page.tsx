@@ -1,3 +1,4 @@
+import { UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,29 +11,80 @@ export const metadata: Metadata = {
 const maire = {
   prenom: "Laurent",
   nom: "PARIS",
-  // Une vraie photo vaut mieux qu'une icône : renseigne le chemin ici (ex. "/images/maire.jpg")
   photo: null as string | null,
 };
 
-// Le rôle est le titre du groupe : inutile de le répéter sur chaque nom.
-// Pour ajouter les adjoints, ajoute un groupe { titre: "Adjoints", membres: [...] } avant celui-ci.
 const groupes = [
+  {
+    titre: "Les adjoints au maire",
+    membres: [
+      {
+        prenom: "Nathalie",
+        nom: "DUFAUD",
+        fonction: "1ère adjointe",
+        photo: null,
+      },
+      {
+        prenom: "Valentin",
+        nom: "FOUQUET",
+        fonction: "2ème adjoint",
+        photo: null,
+      },
+      {
+        prenom: "Chantal",
+        nom: "CARON",
+        fonction: "3ème adjointe",
+        photo: "/images/elus/chantal-caron.jpg",
+      },
+    ],
+  },
   {
     titre: "Conseillères et conseillers municipaux",
     membres: [
-      { prenom: "Nathalie", nom: "DUFAUD" },
-      { prenom: "Chantal", nom: "CARON" },
-      { prenom: "Jean-Pierre", nom: "CARON" },
-      { prenom: "Frédéric", nom: "MASSART" },
-      { prenom: "Chantal", nom: "CHABRIER" },
-      { prenom: "Thierry", nom: "COVELO" },
-      { prenom: "Séverine", nom: "DUFAUD" },
-      { prenom: "Romain", nom: "LANGLASSE" },
-      { prenom: "Marie", nom: "JOUVENEL" },
-      { prenom: "Valentin", nom: "FOUQUET" },
+      {
+        prenom: "Jean-Pierre",
+        nom: "CARON",
+        photo: "/images/elus/jean-pierre-caron.jpg",
+      },
+      { prenom: "Frédéric", nom: "MASSART", photo: null },
+      { prenom: "Chantal", nom: "CHABRIER", photo: null },
+      { prenom: "Thierry", nom: "COVELO", photo: null },
+      { prenom: "Séverine", nom: "DUFAUD", photo: null },
+      { prenom: "Romain", nom: "LANGLASSE", photo: null },
+      { prenom: "Marie", nom: "JOUVENEL", photo: null },
     ],
   },
 ];
+
+function Portrait({
+  photo,
+  alt,
+  className,
+  iconClassName,
+}: {
+  photo: string | null;
+  alt: string;
+  className: string;
+  iconClassName: string;
+}) {
+  return (
+    <div
+      className={`relative flex shrink-0 items-center justify-center overflow-hidden bg-stone-100 text-stone-500 ${className}`}
+    >
+      {photo ? (
+        <Image
+          src={photo}
+          alt={alt}
+          fill
+          sizes="(max-width: 640px) 64px, 96px"
+          className="object-cover"
+        />
+      ) : (
+        <UserRound aria-hidden="true" className={iconClassName} />
+      )}
+    </div>
+  );
+}
 
 export default function ElusPage() {
   return (
@@ -56,15 +108,12 @@ export default function ElusPage() {
         <div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-20">
           {/* Le maire : un seul nom, donc un seul grand titre */}
           <div className="lg:col-span-5">
-            {maire.photo && (
-              <Image
-                src={maire.photo}
-                alt={`${maire.prenom} ${maire.nom}, maire de La Bastide-d'Engras`}
-                width={600}
-                height={750}
-                className="mb-8 h-auto w-full max-w-sm"
-              />
-            )}
+            <Portrait
+              photo={maire.photo}
+              alt={`${maire.prenom} ${maire.nom}, maire de La Bastide-d'Engras`}
+              className="mb-8 aspect-[4/5] w-full max-w-sm"
+              iconClassName="size-20"
+            />
             <h2 className="font-serif text-2xl font-semibold text-stone-900">
               Le maire
             </h2>
@@ -84,9 +133,24 @@ export default function ElusPage() {
                   {groupe.membres.map((membre) => (
                     <li
                       key={`${membre.prenom}-${membre.nom}`}
-                      className="border-t border-stone-200 py-4 font-serif text-xl text-stone-900"
+                      className="flex items-center gap-4 border-t border-stone-200 py-4"
                     >
-                      {membre.prenom} {membre.nom}
+                      <Portrait
+                        photo={membre.photo}
+                        alt={`${membre.prenom} ${membre.nom}`}
+                        className="size-16 rounded-full"
+                        iconClassName="size-7"
+                      />
+                      <span>
+                        <span className="block font-serif text-xl text-stone-900">
+                          {membre.prenom} {membre.nom}
+                        </span>
+                        {"fonction" in membre && (
+                          <span className="mt-1 block text-sm text-stone-600">
+                            {membre.fonction}
+                          </span>
+                        )}
+                      </span>
                     </li>
                   ))}
                 </ul>

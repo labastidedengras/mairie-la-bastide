@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  Clock3,
   Leaf,
   Package,
   Phone,
@@ -9,6 +10,7 @@ import {
   WashingMachine,
 } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Déchets et tri sélectif",
@@ -18,8 +20,12 @@ export const metadata: Metadata = {
 
 const sommaire = [
   { id: "sacs-jaunes", label: "Sacs jaunes", dot: "bg-yellow-400" },
-  { id: "composteur", label: "Composteur", dot: "bg-emerald-500" },
-  { id: "biodechets", label: "Biodéchets", dot: "bg-emerald-500" },
+  { id: "composteur", label: "Composteur", dot: "bg-blue-500" },
+  {
+    id: "biodechets",
+    label: "Site de compostage partagé",
+    dot: "bg-emerald-500",
+  },
   { id: "encombrants", label: "Encombrants", dot: "bg-stone-400" },
   { id: "sictomu", label: "Contact", dot: "bg-[#9e5218]" },
 ];
@@ -116,27 +122,39 @@ export default function DechetsTriPage() {
               Sacs jaunes d&apos;emballages
             </h2>
             <p className="mt-3 text-base leading-relaxed text-stone-800">
-              Les sacs se retirent à l&apos;Agence postale communale.
+              Les habitants peuvent venir chercher des sacs jaunes à
+              l&apos;Agence postale communale selon leurs besoins, pendant les
+              horaires d&apos;ouverture :
             </p>
-            <p className="mt-3 text-base leading-relaxed text-stone-800">
-              Dotation annuelle :{" "}
-              <strong className="font-semibold">
-                1 rouleau de 25 sacs (50 L) par personne du foyer
-              </strong>{" "}
-              — un foyer de 4 personnes reçoit 4 rouleaux.
+            <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-stone-800">
+              <Clock3
+                aria-hidden="true"
+                className="mt-1 h-4 w-4 shrink-0 text-yellow-700"
+              />
+              <span>
+                Du lundi au samedi, de 9 h à 12 h.
+                <br />
+                En juillet et août, de 9 h à 11 h.
+              </span>
             </p>
+            <Link
+              href="/vie-pratique/la-poste"
+              className={`mt-4 inline-flex text-sm font-semibold text-stone-900 underline decoration-stone-400 underline-offset-4 transition-colors hover:text-[#9e5218] ${focusRing}`}
+            >
+              En savoir plus sur l&apos;Agence postale
+            </Link>
           </div>
 
           <div
             id="composteur"
-            className="scroll-mt-28 rounded-sm border border-emerald-300 bg-emerald-50 p-6"
+            className="scroll-mt-28 rounded-sm border border-blue-300 bg-blue-50 p-6"
           >
-            <Leaf aria-hidden="true" className="h-8 w-8 text-emerald-700" />
+            <Leaf aria-hidden="true" className="h-8 w-8 text-blue-700" />
             <h2 className="mt-4 font-serif text-xl font-semibold text-stone-900">
-              Composteur individuel offert
+              Composteur individuel
             </h2>
             <p className="mt-3 text-base leading-relaxed text-stone-800">
-              Un composteur de 400 litres est offert par le SICTOMU à chaque
+              Le SICTOMU peut vous fournir un composteur individuel pour votre
               foyer, sous condition de suivre une formation de 45 minutes avec
               un maître-composteur.
             </p>
@@ -145,10 +163,10 @@ export default function DechetsTriPage() {
 
         <div
           id="biodechets"
-          className="mt-16 scroll-mt-28 border-t border-stone-200 pt-14"
+          className="mt-16 scroll-mt-28 rounded-sm border border-emerald-300 bg-emerald-50/60 p-6 sm:p-8"
         >
           <h2 className="font-serif text-2xl font-semibold text-stone-900">
-            Le tri des biodéchets
+            Site de compostage partagé
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone-700">
             Les biodéchets représentent environ un tiers des ordures ménagères
@@ -156,26 +174,7 @@ export default function DechetsTriPage() {
             source est obligatoire pour tous.
           </p>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-sm border border-emerald-200 bg-emerald-50/60 p-5">
-              <h3 className="font-serif text-lg font-semibold text-stone-900">
-                Déchets de cuisine
-              </h3>
-              <p className="mt-2 text-base leading-relaxed text-stone-700">
-                Épluchures, coquilles d&apos;œufs, pain rassis, marc de café…
-              </p>
-            </div>
-            <div className="rounded-sm border border-emerald-200 bg-emerald-50/60 p-5">
-              <h3 className="font-serif text-lg font-semibold text-stone-900">
-                Déchets de jardin
-              </h3>
-              <p className="mt-2 text-base leading-relaxed text-stone-700">
-                Tontes, feuilles mortes, petites branches.
-              </p>
-            </div>
-          </div>
-
-          <h3 className="mt-12 font-serif text-xl font-semibold text-stone-900">
+          <h3 className="mt-6 font-serif text-xl font-semibold text-stone-900">
             Le circuit du compost communal
           </h3>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-stone-700">
@@ -226,7 +225,8 @@ export default function DechetsTriPage() {
             Collecte des encombrants sur rendez-vous
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone-700">
-            Un service du SICTOMU, à réserver directement auprès du syndicat.
+            La collecte se fait uniquement sur rendez-vous. Pour réserver
+            l&apos;enlèvement de vos encombrants, contactez la mairie.
           </p>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2">

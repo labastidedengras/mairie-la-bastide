@@ -34,7 +34,10 @@ const menu = [
       { label: "CNI & passeport", href: "/vie-pratique/cni-passeport" },
       { label: "Urbanisme & PLU", href: "/vie-pratique/plu" },
       { label: "Déchets & tri", href: "/vie-pratique/dechets-tri" },
-      { label: "Salle polyvalente", href: "/vie-pratique/salle-polyvalente" },
+      { label: "Agence postale", href: "/vie-pratique/la-poste" },
+      { label: "Bibliothèque", href: "/vie-pratique/bibliotheque" },
+      { label: "Foyer Communal", href: "/vie-pratique/foyer-communal" },
+      { label: "Santé", href: "/sante" },
     ],
   },
   {

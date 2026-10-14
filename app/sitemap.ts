@@ -57,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/vie-pratique/salle-polyvalente`,
+      url: `${baseUrl}/vie-pratique/foyer-communal`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.7,
@@ -82,6 +82,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/vie-pratique/dechets-tri`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/sante`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.6,
