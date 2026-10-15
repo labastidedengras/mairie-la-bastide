@@ -55,8 +55,9 @@ export async function POST(req: Request) {
         : `Du ${formatDate(dateDebut)} au ${formatDate(dateFin)}`;
 
     await resend.emails.send({
-      from: "Site Internet Mairie <onboarding@resend.dev>",
-      to: "site.labastide@proton.me",
+      from: "Site Internet Mairie <contact@labastide-dengras.fr>",
+      to: "commune-de-la-bastide-dengras7@orange.fr",
+      replyTo: email,
       subject: `Pré-demande - Foyer Communal - ${periode}`,
       html: `
         <h2>Nouvelle pré-demande de réservation du Foyer Communal</h2>

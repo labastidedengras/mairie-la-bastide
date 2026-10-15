@@ -20,10 +20,10 @@ export async function POST(request: Request) {
     const data = await resend.emails.send({
       // ⚠️ IMPORTANT : En développement, laisse "onboarding@resend.dev".
       // Dès que le domaine de la mairie est validé, tu pourras mettre "contact@labastidedengras.fr"
-      from: "Site Internet Mairie <onboarding@resend.dev>",
+      from: "Site Internet Mairie <contact@labastide-dengras.fr>",
       // ⚠️ IMPORTANT : En mode gratuit/test, remplace par TON adresse email de compte Resend.
       // C'est ici que la mairie recevra les messages des habitants.
-      to: ["site.labastide@proton.me"],
+      to: ["commune-de-la-bastide-dengras7@orange.fr"],
       subject: `[Formulaire Contact] ${subject}`,
       replyTo: email,
       html: `
