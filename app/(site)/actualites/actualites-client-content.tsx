@@ -10,6 +10,7 @@ const CATEGORIES_LABELS: Record<string, string> = {
   evenement: "Événements",
   travaux: "Travaux",
   alerte: "Alertes",
+  presse: "Articles de presse",
 };
 
 interface Actualite {

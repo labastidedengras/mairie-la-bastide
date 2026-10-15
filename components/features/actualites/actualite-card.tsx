@@ -7,6 +7,7 @@ const CATEGORIES_CONFIG: Record<string, { label: string; accent: string }> = {
   evenement: { label: "Événement & festivités", accent: "#9e5218" },
   travaux: { label: "Travaux & routes", accent: "#5c6b47" },
   alerte: { label: "Alerte info", accent: "#b91c1c" },
+  presse: { label: "Articles de presse", accent: "#38556b" },
 };
 
 const MOIS = [

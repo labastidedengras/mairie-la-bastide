@@ -26,6 +26,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   evenement: "Événement & festivités",
   travaux: "Travaux & routes",
   alerte: "Alerte info",
+  presse: "Articles de presse",
 };
 
 const MOIS_LONGS = [

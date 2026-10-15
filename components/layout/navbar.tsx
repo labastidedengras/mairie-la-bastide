@@ -32,6 +32,7 @@ const menu = [
     label: "Vie pratique",
     items: [
       { label: "CNI & passeport", href: "/vie-pratique/cni-passeport" },
+      { label: "France Services", href: "/vie-pratique/france-services" },
       { label: "Urbanisme & PLU", href: "/vie-pratique/plu" },
       { label: "Déchets & tri", href: "/vie-pratique/dechets-tri" },
       { label: "Agence postale", href: "/vie-pratique/la-poste" },
@@ -45,6 +46,9 @@ const menu = [
     items: [
       { label: "Actualités du village", href: "/actualites" },
       { label: "Vie associative", href: "/associations" },
+      { label: "Loisirs et Activités", href: "/loisirs-activites" },
+      { label: "Aire de jeux", href: "/loisirs-activites/aire-de-jeux" },
+      { label: "Commerces du village", href: "/commerces-du-village" },
       { label: "Bulletin municipal", href: "/mairie/bulletin-municipal" },
     ],
   },

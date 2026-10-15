@@ -41,6 +41,7 @@ export default defineType({
           { title: "Événement & Festivités", value: "evenement" },
           { title: "Travaux & Routes", value: "travaux" },
           { title: "Alerte Info", value: "alerte" },
+          { title: "Articles de presse", value: "presse" },
         ],
         layout: "radio",
       },
@@ -128,6 +129,7 @@ export default defineType({
         evenement: "🎉 Événement",
         travaux: "🚧 Travaux",
         alerte: "⚠️ Alerte",
+        presse: "Articles de presse",
       };
       return {
         title,
