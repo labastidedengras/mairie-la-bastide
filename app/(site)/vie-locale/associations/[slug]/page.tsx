@@ -1,4 +1,8 @@
-import { client } from "@/sanity/lib/client";
+import {
+  getAssociationBySlug,
+  getAssociationSlugs,
+  type AssociationDetail,
+} from "@/sanity/queries";
 import type {
   PortableTextBlock,
   PortableTextComponentProps,
@@ -11,18 +15,6 @@ import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-}
-
-interface Association {
-  nom: string;
-  categorie: string | null;
-  description: string | null;
-  contenuDetaille: PortableTextBlock[] | null;
-  contactNom: string | null;
-  telephone: string | null;
-  telephoneFixe: string | null;
-  email: string | null;
-  photos: string[] | null;
 }
 
 const portableTextComponents = {
@@ -80,37 +72,14 @@ function NotFound({ reason }: { reason: string }) {
   );
 }
 
-async function getAssociation(slug: string): Promise<{
-  asso: Association | null;
-  hasError: boolean;
-}> {
-  try {
-    const asso = await client.fetch<Association | null>(
-      `*[_type == "association" && slug.current == $slug][0] {
-        nom,
-        categorie,
-        description,
-        contenuDetaille,
-        contactNom,
-        telephone,
-        telephoneFixe,
-        email,
-        "photos": galeriePhotos[].asset->url
-      }`,
-      { slug },
-    );
-    return { asso, hasError: false };
-  } catch (error) {
-    console.error("Erreur lors du chargement de l'association :", error);
-    return { asso: null, hasError: true };
-  }
-}
-
 export default async function AssociationUniquePage({ params }: PageProps) {
   const { slug } = await params;
-  const { asso, hasError } = await getAssociation(slug);
 
-  if (hasError) {
+  let asso: AssociationDetail | null;
+  try {
+    asso = await getAssociationBySlug(slug);
+  } catch (error) {
+    console.error("Erreur lors du chargement de l'association :", error);
     return (
       <NotFound reason="Cette page n'est pas disponible pour le moment. Réessayez dans quelques instants." />
     );
@@ -122,10 +91,10 @@ export default async function AssociationUniquePage({ params }: PageProps) {
     );
   }
 
+  const photos = asso.photos ?? [];
   const hasContact = Boolean(
     asso.contactNom || asso.telephone || asso.telephoneFixe || asso.email,
   );
-  const hasPhotos = Boolean(asso.photos && asso.photos.length > 0);
 
   return (
     // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
@@ -209,10 +178,10 @@ export default async function AssociationUniquePage({ params }: PageProps) {
             )}
           </div>
 
-          {hasPhotos && asso.photos && (
+          {photos.length > 0 && (
             <aside className="lg:col-span-5">
               <div className="flex flex-col gap-6">
-                {asso.photos.map((photoUrl, index) => (
+                {photos.map((photoUrl, index) => (
                   <div
                     key={photoUrl}
                     className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100"
@@ -241,14 +210,7 @@ export async function generateMetadata({
   const { slug } = await params;
 
   try {
-    const asso = await client.fetch<{
-      nom: string;
-      description: string | null;
-    } | null>(
-      `*[_type == "association" && slug.current == $slug][0] { nom, description }`,
-      { slug },
-    );
-
+    const asso = await getAssociationBySlug(slug);
     if (!asso) return { title: "Association introuvable" };
 
     const description =
@@ -267,10 +229,8 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   try {
-    const slugs = await client.fetch<{ slug: string }[]>(
-      `*[_type == "association"] { "slug": slug.current }`,
-    );
-    return slugs.map(({ slug }) => ({ slug }));
+    const slugs = await getAssociationSlugs();
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     console.error("Erreur generateStaticParams (association) :", error);
     return [];

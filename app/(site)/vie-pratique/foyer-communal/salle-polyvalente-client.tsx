@@ -33,6 +33,7 @@ export default function SallePolyvalenteClient({
     nom: "",
     telephone: "",
     email: "",
+    website: "",
     evenement: "",
   });
   const [submitted, setSubmitted] = useState(false);
@@ -100,7 +101,13 @@ export default function SallePolyvalenteClient({
       }
 
       setSubmitted(true);
-      setFormData({ nom: "", telephone: "", email: "", evenement: "" });
+      setFormData({
+        nom: "",
+        telephone: "",
+        email: "",
+        website: "",
+        evenement: "",
+      });
       setSelectedRange(undefined);
       setReglementAccepte(false);
     } catch (err) {
@@ -339,6 +346,19 @@ export default function SallePolyvalenteClient({
                         onChange={handleChange}
                         required
                         className={inputClass}
+                      />
+                    </div>
+
+                    <div aria-hidden="true" className="absolute -left-[9999px]">
+                      <label htmlFor="website">Ne pas remplir ce champ</label>
+                      <input
+                        id="website"
+                        name="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={formData.website}
+                        onChange={handleChange}
                       />
                     </div>
 

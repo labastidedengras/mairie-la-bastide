@@ -1,6 +1,7 @@
 "use client";
 
 import ActualiteCard from "@/components/features/actualites/actualite-card";
+import type { Actualite } from "@/sanity/queries";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -13,15 +14,6 @@ const CATEGORIES_LABELS: Record<string, string> = {
   presse: "Articles de presse",
 };
 
-interface Actualite {
-  titre: string;
-  slug: string;
-  date: string;
-  categorie: string;
-  imageUrl: string | null;
-  contenu: string | null;
-}
-
 export default function ActualitesClientContent({
   initialActualites,
 }: {
@@ -31,7 +23,6 @@ export default function ActualitesClientContent({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // La catégorie vit dans l'URL : un lien vers "actualités > travaux" reste partageable.
   const selectedCategory = searchParams.get("categorie") ?? "toutes";
 
   const filteredActualites =

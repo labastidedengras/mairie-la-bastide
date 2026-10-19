@@ -38,18 +38,24 @@ const menu = [
       { label: "Agence postale", href: "/vie-pratique/la-poste" },
       { label: "Bibliothèque", href: "/vie-pratique/bibliotheque" },
       { label: "Foyer Communal", href: "/vie-pratique/foyer-communal" },
-      { label: "Santé", href: "/sante" },
+      { label: "Santé", href: "/vie-pratique/sante" },
     ],
   },
   {
     label: "Vie locale",
     items: [
-      { label: "Actualités du village", href: "/actualites" },
-      { label: "Vie associative", href: "/associations" },
-      { label: "Loisirs et Activités", href: "/loisirs-activites" },
-      { label: "Aire de jeux", href: "/loisirs-activites/aire-de-jeux" },
-      { label: "Commerces du village", href: "/commerces-du-village" },
-      { label: "Bulletin municipal", href: "/mairie/bulletin-municipal" },
+      { label: "Actualités du village", href: "/vie-locale/actualites" },
+      { label: "Vie associative", href: "/vie-locale/associations" },
+      { label: "Loisirs et Activités", href: "/vie-locale/loisirs-activites" },
+      {
+        label: "Aire de jeux",
+        href: "/vie-locale/loisirs-activites/aire-de-jeux",
+      },
+      {
+        label: "Commerces du village",
+        href: "/vie-locale/commerces-du-village",
+      },
+      { label: "Bulletin municipal", href: "/vie-locale/bulletin-municipal" },
     ],
   },
 ];

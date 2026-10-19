@@ -36,6 +36,7 @@ const fields = [
     label: "Adresse e-mail",
     type: "email",
     autoComplete: "email",
+    website: "",
   },
   { name: "subject", label: "Sujet", type: "text", autoComplete: "off" },
 ] as const;
@@ -46,6 +47,7 @@ export default function ContactPage() {
     email: "",
     subject: "",
     message: "",
+    website: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,7 +89,13 @@ export default function ContactPage() {
       }
 
       setSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: "",
+      });
     } catch (err) {
       setError(
         err instanceof Error
@@ -240,6 +248,19 @@ export default function ContactPage() {
                         />
                       </div>
                     ))}
+
+                    <div aria-hidden="true" className="absolute -left-[9999px]">
+                      <label htmlFor="website">Ne pas remplir ce champ</label>
+                      <input
+                        id="website"
+                        name="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={formData.website}
+                        onChange={handleChange}
+                      />
+                    </div>
 
                     <div>
                       <label

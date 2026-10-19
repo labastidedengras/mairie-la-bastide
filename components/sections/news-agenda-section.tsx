@@ -1,25 +1,11 @@
-import { client } from "@/sanity/lib/client";
+import {
+  getDernieresActualites,
+  getEvenementsAVenir,
+  type ActualiteAccueil,
+  type Evenement,
+} from "@/sanity/queries";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Actualite {
-  titre: string;
-  slug: string;
-  date: string;
-  categorie: string;
-  imageUrl: string | null;
-  imageWidth: number | null;
-  imageHeight: number | null;
-  contenu: string | null;
-}
-
-interface Evenement {
-  title: string;
-  slug: string;
-  dateDebut: string;
-  dateFin: string | null;
-  time?: string;
-}
 
 const CATEGORY_LABELS: Record<string, string> = {
   "vie-municipale": "Vie municipale",
@@ -94,7 +80,7 @@ function Meta({ categorie, date }: { categorie: string; date: string }) {
 
 // L'actualité principale : l'affiche est montrée en entier, sans cadre gris.
 // Sans image, le texte prend toute la largeur : pas de faux visuel.
-function FeaturedNews({ item }: { item: Actualite }) {
+function FeaturedNews({ item }: { item: ActualiteAccueil }) {
   return (
     <Link
       href={`/actualites/${item.slug}`}
@@ -135,7 +121,7 @@ function FeaturedNews({ item }: { item: Actualite }) {
 }
 
 // Les actualités suivantes : lignes compactes, miniature seulement si elle existe.
-function NewsRow({ item }: { item: Actualite }) {
+function NewsRow({ item }: { item: ActualiteAccueil }) {
   return (
     <li className="border-t border-stone-300/70">
       <Link
@@ -174,29 +160,38 @@ function NewsRow({ item }: { item: Actualite }) {
 export default async function NewsAndAgendaSection() {
   const today = new Date().toISOString().split("T")[0];
 
-  const [latestNews, upcomingEvents] = await Promise.all([
-    client.fetch<Actualite[]>(
-      `*[_type == "actualite" && categorie != "alerte"] | order(datePublication desc)[0...3] {
-        titre,
-        "slug": slug.current,
-        "date": datePublication,
-        categorie,
-        "imageUrl": imagePrincipale.asset->url,
-        "imageWidth": imagePrincipale.asset->metadata.dimensions.width,
-        "imageHeight": imagePrincipale.asset->metadata.dimensions.height,
-        contenu
-      }`,
-    ),
-    client.fetch<Evenement[]>(
-      `*[_type == "actualite" && categorie == "evenement" && coalesce(dateFinEvenement, dateDebutEvenement, datePublication) >= "${today}"] | order(coalesce(dateDebutEvenement, datePublication) asc)[0...3] {
-        "title": titre,
-        "slug": slug.current,
-        "dateDebut": coalesce(dateDebutEvenement, datePublication),
-        "dateFin": dateFinEvenement,
-        time
-      }`,
-    ),
-  ]);
+  let latestNews: ActualiteAccueil[];
+  let upcomingEvents: Evenement[];
+
+  try {
+    [latestNews, upcomingEvents] = await Promise.all([
+      getDernieresActualites(),
+      getEvenementsAVenir(today),
+    ]);
+  } catch (error) {
+    // Une panne de Sanity ne doit pas faire tomber toute la page d'accueil
+    console.error("Erreur lors du chargement des actualités :", error);
+
+    return (
+      <section className="border-t border-stone-200/50 bg-stone-50 py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-6">
+          <h2 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-stone-900 sm:text-4xl">
+            Actualités du village
+          </h2>
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-stone-700">
+            Les actualités ne sont pas disponibles pour le moment.{" "}
+            <Link
+              href="/actualites"
+              className="font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
+            >
+              Consulter la page des actualités
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const [featured, ...others] = latestNews;
   const hasEvents = upcomingEvents.length > 0;

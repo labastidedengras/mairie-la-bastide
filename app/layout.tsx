@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/hero-1.jpg",
+        url: "/images/opengraph.jpg",
         width: 1200,
         height: 630,
         alt: "La Bastide d'Engras",

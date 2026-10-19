@@ -1,3 +1,4 @@
+import type { ActualiteDetail } from "@/sanity/queries";
 import { ArrowLeft, ArrowUpRight, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,15 +26,6 @@ const MOIS = [
   "décembre",
 ];
 
-interface Article {
-  titre: string;
-  date: string;
-  categorie: string;
-  imageUrl: string | null;
-  contenu: string | null;
-  pdfUrl: string | null;
-}
-
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "";
   const [year, month, day] = dateStr.split("-");
@@ -43,7 +35,7 @@ const formatDate = (dateStr: string) => {
 export default function ArticleClientContent({
   article,
 }: {
-  article: Article;
+  article: ActualiteDetail;
 }) {
   const cat = CATEGORIES_LABELS[article.categorie] ?? {
     label: article.categorie,

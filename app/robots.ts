@@ -2,8 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://www.mairie-labastidedengras.fr";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://labastide-dengras.fr/";
 
   return {
     rules: {

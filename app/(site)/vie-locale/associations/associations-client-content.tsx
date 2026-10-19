@@ -1,10 +1,10 @@
 "use client";
 
+import type { Association } from "@/sanity/queries";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import type { Association } from "./page";
 
 // L'identifiant (id) est la valeur stockée dans Sanity et utilisée dans l'URL.
 // Le label est ce qui s'affiche. Garde ces id synchronisés avec les liens

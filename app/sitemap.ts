@@ -1,77 +1,95 @@
-import { client } from "@/sanity/lib/client";
-import { MetadataRoute } from "next";
-
-// Récupération des slugs pour les actualités
-async function getSanityArticles(): Promise<string[]> {
-  try {
-    const query = `*[_type == "actualite" && defined(slug.current)].slug.current`;
-    const slugs: string[] = await client.fetch(query);
-    return slugs;
-  } catch (error) {
-    console.error(
-      "Erreur lors de la récupération des articles Sanity pour le sitemap:",
-      error,
-    );
-    return [];
-  }
-}
-
-// 🛠️ Récupération dynamique des slugs pour les associations
-async function getSanityAssociations(): Promise<string[]> {
-  try {
-    const query = `*[_type == "association" && defined(slug.current)].slug.current`;
-    const slugs: string[] = await client.fetch(query);
-    return slugs;
-  } catch (error) {
-    console.error(
-      "Erreur lors de la récupération des associations Sanity pour le sitemap:",
-      error,
-    );
-    return [];
-  }
-}
+import { getActualiteSlugs, getAssociationSlugs } from "@/sanity/queries";
+import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://www.mairie-labastidedengras.fr";
+  const baseUrl = (
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.mairie-labastidedengras.fr"
+  ).replace(/\/+$/, "");
   const currentDate = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}`,
+      url: baseUrl,
       lastModified: currentDate,
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/actualites`,
+      url: `${baseUrl}/contact`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/legal/accessibilite`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/legal/mentions-legales`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/legal/politique-de-confidentialite`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/mairie/comptes-rendus`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/mairie/elus`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/vie-locale/actualites`,
       lastModified: currentDate,
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/associations`,
+      url: `${baseUrl}/vie-locale/associations`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/vie-pratique/foyer-communal`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/mairie/bulletin-municipal`,
+      url: `${baseUrl}/vie-locale/bulletin-municipal`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/vie-locale/commerces-du-village`,
       lastModified: currentDate,
-      changeFrequency: "yearly",
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/vie-locale/loisirs-activites`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/vie-locale/loisirs-activites/aire-de-jeux`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/vie-pratique/bibliotheque`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
       priority: 0.5,
     },
     {
@@ -87,61 +105,67 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/sante`,
+      url: `${baseUrl}/vie-pratique/foyer-communal`,
       lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/mairie/comptes-rendus`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
+      changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/mairie/elus`,
+      url: `${baseUrl}/vie-pratique/france-services`,
       lastModified: currentDate,
       changeFrequency: "monthly",
-      priority: 0.6,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/vie-pratique/la-poste`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     {
       url: `${baseUrl}/vie-pratique/plu`,
       lastModified: currentDate,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.6,
     },
     {
-      url: `${baseUrl}/mentions-legales`,
+      url: `${baseUrl}/vie-pratique/sante`,
       lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/politique-de-confidentialite`,
-      lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.3,
+      changeFrequency: "monthly",
+      priority: 0.6,
     },
   ];
 
-  // Génération des routes dynamiques pour les actualités
-  const articleSlugs = await getSanityArticles();
+  const [articleSlugs, associationSlugs] = await Promise.all([
+    getActualiteSlugs().catch((error) => {
+      console.error(
+        "Erreur lors de la récupération des articles Sanity pour le sitemap:",
+        error,
+      );
+      return [];
+    }),
+    getAssociationSlugs().catch((error) => {
+      console.error(
+        "Erreur lors de la récupération des associations Sanity pour le sitemap:",
+        error,
+      );
+      return [];
+    }),
+  ]);
+
   const articleRoutes = articleSlugs.map((slug) => ({
-    url: `${baseUrl}/actualites/${slug}`,
+    url: `${baseUrl}/vie-locale/actualites/${slug}`,
     lastModified: currentDate,
     changeFrequency: "weekly" as const,
     priority: 0.6,
   }));
 
-  // 🛠️ Génération des routes dynamiques pour les associations
-  const associationSlugs = await getSanityAssociations();
   const associationRoutes = associationSlugs.map((slug) => ({
-    url: `${baseUrl}/associations/${slug}`,
+    url: `${baseUrl}/vie-locale/associations/${slug}`,
     lastModified: currentDate,
-    changeFrequency: "monthly" as const, // Les fiches d'assos changent moins souvent que les actus
+    changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  // On fusionne tout proprement (Statiques + Actus + Assos)
   return [...staticRoutes, ...articleRoutes, ...associationRoutes];
 }

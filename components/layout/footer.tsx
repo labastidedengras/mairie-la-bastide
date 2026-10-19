@@ -170,19 +170,19 @@ export default function Footer() {
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <Link
-              href="/mentions-legales"
+              href="/legal/mentions-legales"
               className={`hover:text-white ${focusRing}`}
             >
               Mentions légales
             </Link>
             <Link
-              href="/politique-de-confidentialite"
+              href="/legal/politique-de-confidentialite"
               className={`hover:text-white ${focusRing}`}
             >
               Politique de confidentialité
             </Link>
             <Link
-              href="/accessibilite"
+              href="/legal/accessibilite"
               className={`hover:text-white ${focusRing}`}
             >
               Accessibilité : non conforme

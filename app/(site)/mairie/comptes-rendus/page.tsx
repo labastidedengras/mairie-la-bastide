@@ -1,4 +1,4 @@
-import { client } from "@/sanity/lib/client";
+import { getComptesRendus, type CompteRendu } from "@/sanity/queries";
 import type { Metadata } from "next";
 import ComptesRendusClientContent from "./comptes-rendus-client-content";
 
@@ -8,37 +8,14 @@ export const metadata: Metadata = {
     "Les procès-verbaux et comptes rendus officiels des séances du conseil municipal de La Bastide-d'Engras.",
 };
 
-export interface CompteRendu {
-  titre: string;
-  date: string;
-  annee: string;
-  url: string;
-}
+export default async function ComptesRendusPage() {
+  let documents: CompteRendu[];
 
-async function getComptesRendus(): Promise<{
-  documents: CompteRendu[];
-  hasError: boolean;
-}> {
   try {
-    const documents = await client.fetch<CompteRendu[]>(
-      `*[_type == "compteRendu"] | order(datePublication desc) {
-        titre,
-        "date": datePublication,
-        annee,
-        "url": fichierPdf.asset->url
-      }`,
-    );
-    return { documents, hasError: false };
+    documents = await getComptesRendus();
   } catch (error) {
     console.error("Erreur lors du chargement des comptes rendus :", error);
-    return { documents: [], hasError: true };
-  }
-}
 
-export default async function ComptesRendusPage() {
-  const { documents, hasError } = await getComptesRendus();
-
-  if (hasError) {
     return (
       // pt-32 : la barre de navigation est fixe, elle ne doit pas masquer le titre
       <section className="bg-white pb-24 pt-32 lg:pt-40">
