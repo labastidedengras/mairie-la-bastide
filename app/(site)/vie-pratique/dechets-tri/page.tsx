@@ -2,6 +2,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Clock3,
+  Download,
   Leaf,
   Package,
   Phone,
@@ -10,6 +11,7 @@ import {
   WashingMachine,
 } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -173,6 +175,41 @@ export default function DechetsTriPage() {
             non triées en France. Depuis le 1er janvier 2024, leur tri à la
             source est obligatoire pour tous.
           </p>
+
+          <div className="mt-8 grid items-center gap-6 lg:grid-cols-2">
+            <figure>
+              <div className="relative aspect-[16/9] overflow-hidden rounded-sm bg-stone-100">
+                <Image
+                  src="/images/composteurs.jpg"
+                  alt="Les bacs du site de compostage partagé de La Bastide-d'Engras."
+                  fill
+                  sizes="(min-width: 1024px) 440px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="mt-2 text-sm text-stone-600">
+                Le site de compostage partagé de La Bastide-d&apos;Engras.
+              </figcaption>
+            </figure>
+
+            <div>
+              <h3 className="font-serif text-xl font-semibold text-stone-900">
+                Le guide du compostage partagé
+              </h3>
+              <p className="mt-3 text-base leading-relaxed text-stone-700">
+                Retrouvez les conseils pratiques pour participer au
+                compostage partagé dans le guide du SICTOMU.
+              </p>
+              <a
+                href="/documents/guide-du-compostage-partage.pdf"
+                download
+                className={`mt-5 inline-flex items-center gap-2 rounded-sm bg-[#9e5218] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#854311] ${focusRing}`}
+              >
+                <Download aria-hidden="true" className="h-4 w-4" />
+                Télécharger le guide (PDF)
+              </a>
+            </div>
+          </div>
 
           <h3 className="mt-6 font-serif text-xl font-semibold text-stone-900">
             Le circuit du compost communal
