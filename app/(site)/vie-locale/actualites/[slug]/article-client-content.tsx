@@ -68,7 +68,11 @@ export default function ArticleClientContent({
           </h1>
 
           <p className="mt-4 text-base text-stone-500">
-            Publié le {formatDate(article.date)}
+            {article.categorie === "evenement"
+              ? article.dateFin
+                ? `Événement du ${formatDate(article.date)} au ${formatDate(article.dateFin)}`
+                : `Événement le ${formatDate(article.date)}`
+              : `Publié le ${formatDate(article.date)}`}
           </p>
         </header>
 

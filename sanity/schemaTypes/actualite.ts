@@ -53,7 +53,7 @@ export default defineType({
       name: "dateDebutEvenement",
       title: "Date de début de l'événement",
       description:
-        "À remplir pour les événements à venir. L'agenda utilisera cette date au lieu de la date de publication.",
+        "À remplir pour les événements : cette date sera affichée à la place de la date de publication.",
       type: "date",
       options: { dateFormat: "YYYY-MM-DD" },
       hidden: ({ document }) => document?.categorie !== "evenement",

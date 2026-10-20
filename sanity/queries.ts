@@ -93,6 +93,7 @@ export interface Actualite {
   titre: string;
   slug: string;
   date: string;
+  dateFin: string | null;
   categorie: string;
   imageUrl: string | null;
   contenu: string | null;
@@ -101,7 +102,8 @@ export interface Actualite {
 const ACTUALITES_QUERY = `*[_type == "actualite"] | order(datePublication desc) {
   titre,
   "slug": slug.current,
-  "date": datePublication,
+  "date": select(categorie == "evenement" => coalesce(dateDebutEvenement, datePublication), datePublication),
+  "dateFin": select(categorie == "evenement" && defined(dateDebutEvenement) => dateFinEvenement, null),
   categorie,
   "imageUrl": imagePrincipale.asset->url,
   contenu
@@ -117,7 +119,8 @@ export interface ActualiteDetail extends Omit<Actualite, "slug"> {
 
 const ACTUALITE_QUERY = `*[_type == "actualite" && slug.current == $slug][0] {
   titre,
-  "date": datePublication,
+  "date": select(categorie == "evenement" => coalesce(dateDebutEvenement, datePublication), datePublication),
+  "dateFin": select(categorie == "evenement" && defined(dateDebutEvenement) => dateFinEvenement, null),
   categorie,
   "imageUrl": imagePrincipale.asset->url,
   contenu,
@@ -154,7 +157,8 @@ export interface Evenement {
 const DERNIERES_ACTUALITES_QUERY = `*[_type == "actualite" && categorie != "alerte"] | order(datePublication desc)[0...3] {
   titre,
   "slug": slug.current,
-  "date": datePublication,
+  "date": select(categorie == "evenement" => coalesce(dateDebutEvenement, datePublication), datePublication),
+  "dateFin": select(categorie == "evenement" && defined(dateDebutEvenement) => dateFinEvenement, null),
   categorie,
   "imageUrl": imagePrincipale.asset->url,
   "imageWidth": imagePrincipale.asset->metadata.dimensions.width,

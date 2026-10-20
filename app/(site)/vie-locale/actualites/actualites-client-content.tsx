@@ -30,6 +30,16 @@ export default function ActualitesClientContent({
       ? initialActualites
       : initialActualites.filter((act) => act.categorie === selectedCategory);
 
+  const evenementsTries = filteredActualites
+    .filter((act) => act.categorie === "evenement")
+    .sort((a, b) => a.date.localeCompare(b.date));
+  let indexEvenement = 0;
+  const actualitesTriees = filteredActualites.map((act) =>
+    act.categorie === "evenement"
+      ? evenementsTries[indexEvenement++]
+      : act,
+  );
+
   const setCategory = (key: string) => {
     const params = new URLSearchParams(searchParams);
     if (key === "toutes") params.delete("categorie");
@@ -130,19 +140,20 @@ export default function ActualitesClientContent({
         )}
 
         <p aria-live="polite" className="sr-only">
-          {filteredActualites.length} actualité
-          {filteredActualites.length > 1 ? "s" : ""} affichée
-          {filteredActualites.length > 1 ? "s" : ""}
+          {actualitesTriees.length} actualité
+          {actualitesTriees.length > 1 ? "s" : ""} affichée
+          {actualitesTriees.length > 1 ? "s" : ""}
         </p>
 
-        {filteredActualites.length > 0 ? (
+        {actualitesTriees.length > 0 ? (
           <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filteredActualites.map((act) => (
+            {actualitesTriees.map((act) => (
               <ActualiteCard
                 key={act.slug}
                 titre={act.titre}
                 slug={act.slug}
                 date={act.date}
+                dateFin={act.dateFin}
                 categorie={act.categorie}
                 imageUrl={act.imageUrl}
                 contenu={act.contenu}

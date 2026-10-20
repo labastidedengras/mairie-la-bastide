@@ -29,6 +29,7 @@ interface ActualiteCardProps {
   titre: string;
   slug: string;
   date: string;
+  dateFin: string | null;
   categorie: string;
   imageUrl: string | null;
   contenu: string | null;
@@ -44,6 +45,7 @@ export default function ActualiteCard({
   titre,
   slug,
   date,
+  dateFin,
   categorie,
   imageUrl,
   contenu,
@@ -78,11 +80,15 @@ export default function ActualiteCard({
         {cat.label}
       </p>
 
-      <h3 className="mt-2 font-serif text-xl font-semibold leading-snug text-stone-900 transition-colors group-hover:text-[#9e5218]">
+      <h3 className="mt-2 font-serif text-xl font-semibold leading-snug text-stone-900 transition-colors group-hover:text-[#9e5218] line-clamp-1">
         {titre}
       </h3>
 
-      <p className="mt-1 text-base text-stone-500">{formatDate(date)}</p>
+      <p className="mt-1 text-base text-stone-500">
+        {categorie === "evenement" && dateFin
+          ? `Du ${formatDate(date)} au ${formatDate(dateFin)}`
+          : formatDate(date)}
+      </p>
 
       <p className="mt-3 text-base leading-relaxed text-stone-600 line-clamp-3">
         {contenu || "Consultez les détails de cette publication."}

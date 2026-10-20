@@ -67,13 +67,25 @@ const formatEventDate = (debut: string, fin: string | null) => {
   return mD === mF ? `${jD}–${jF} ${moisD}` : `${jD} ${moisD} – ${jF} ${moisF}`;
 };
 
-function Meta({ categorie, date }: { categorie: string; date: string }) {
+function Meta({
+  categorie,
+  date,
+  dateFin,
+}: {
+  categorie: string;
+  date: string;
+  dateFin: string | null;
+}) {
   return (
     <p className="flex flex-wrap items-baseline gap-x-4 text-base text-stone-600">
       <span className="font-semibold text-[#9e5218]">
         {CATEGORY_LABELS[categorie] ?? categorie}
       </span>
-      <span>{formatDate(date)}</span>
+      <span>
+        {categorie === "evenement" && dateFin
+          ? `Du ${formatDate(date)} au ${formatDate(dateFin)}`
+          : formatDate(date)}
+      </span>
     </p>
   );
 }
@@ -100,7 +112,11 @@ function FeaturedNews({ item }: { item: ActualiteAccueil }) {
       )}
 
       <div className={item.imageUrl ? "md:col-span-3" : "md:col-span-5"}>
-        <Meta categorie={item.categorie} date={item.date} />
+        <Meta
+          categorie={item.categorie}
+          date={item.date}
+          dateFin={item.dateFin}
+        />
 
         <h3 className="mt-4 font-serif text-3xl font-semibold leading-tight text-stone-900 lg:text-4xl">
           {item.titre}
@@ -129,7 +145,11 @@ function NewsRow({ item }: { item: ActualiteAccueil }) {
         className="group flex items-start justify-between gap-6 py-6"
       >
         <div>
-          <Meta categorie={item.categorie} date={item.date} />
+          <Meta
+            categorie={item.categorie}
+            date={item.date}
+            dateFin={item.dateFin}
+          />
 
           <h3 className="mt-2 font-serif text-xl font-semibold leading-snug text-stone-900 transition-colors group-hover:text-[#9e5218]">
             {item.titre}
@@ -193,7 +213,15 @@ export default async function NewsAndAgendaSection() {
     );
   }
 
-  const [featured, ...others] = latestNews;
+  const eventsByDate = latestNews
+    .filter((item) => item.categorie === "evenement")
+    .sort((a, b) => a.date.localeCompare(b.date));
+  let eventIndex = 0;
+  const orderedLatestNews = latestNews.map((item) =>
+    item.categorie === "evenement" ? eventsByDate[eventIndex++] : item,
+  );
+
+  const [featured, ...others] = orderedLatestNews;
   const hasEvents = upcomingEvents.length > 0;
 
   return (
