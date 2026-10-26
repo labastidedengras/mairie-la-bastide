@@ -95,7 +95,7 @@ function Meta({
 function FeaturedNews({ item }: { item: ActualiteAccueil }) {
   return (
     <Link
-      href={`/actualites/${item.slug}`}
+      href={`/vie-locale/actualites/${item.slug}`}
       className="group grid gap-8 md:grid-cols-5 md:items-start"
     >
       {item.imageUrl && (
@@ -141,7 +141,7 @@ function NewsRow({ item }: { item: ActualiteAccueil }) {
   return (
     <li className="border-t border-stone-300/70">
       <Link
-        href={`/actualites/${item.slug}`}
+        href={`/vie-locale/actualites/${item.slug}`}
         className="group flex items-start justify-between gap-6 py-6"
       >
         <div>
@@ -201,7 +201,7 @@ export default async function NewsAndAgendaSection() {
           <p className="mt-6 max-w-md text-lg leading-relaxed text-stone-700">
             Les actualités ne sont pas disponibles pour le moment.{" "}
             <Link
-              href="/actualites"
+              href="/vie-locale/actualites"
               className="font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218]"
             >
               Consulter la page des actualités
@@ -233,7 +233,7 @@ export default async function NewsAndAgendaSection() {
           </h2>
 
           <Link
-            href="/actualites"
+            href="/vie-locale/actualites"
             className="text-base font-semibold text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218]"
           >
             Toutes les publications
@@ -271,7 +271,7 @@ export default async function NewsAndAgendaSection() {
                 {upcomingEvents.map((event) => (
                   <li key={event.slug} className="border-t border-stone-300/70">
                     <Link
-                      href={`/actualites/${event.slug}`}
+                      href={`/vie-locale/actualites/${event.slug}`}
                       className="group block py-5"
                     >
                       <p className="font-serif text-xl font-semibold text-[#9e5218]">

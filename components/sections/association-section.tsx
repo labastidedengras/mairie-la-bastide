@@ -2,11 +2,10 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Damier : 7/5 puis 5/7. Le ratio de l'image compense la largeur
-// pour que les deux images d'une même rangée aient à peu près la même hauteur.
 const categories = [
   {
     title: "Animations et loisirs",
+    value: "loisirs",
     description:
       "Comité des fêtes, animations estivales, clubs de jeux et rencontres conviviales du village.",
     image: "/images/asso/animation.jpg",
@@ -15,6 +14,7 @@ const categories = [
   },
   {
     title: "Sport et santé",
+    value: "sport",
     description:
       "Activités physiques, clubs sportifs locaux, gym douce et actions de bien-être pour tous.",
     image: "/images/asso/sport.jpg",
@@ -23,6 +23,7 @@ const categories = [
   },
   {
     title: "Nature et chasse",
+    value: "environnement",
     description:
       "Préservation de l'environnement, société de chasse, randonnées et valorisation de la garrigue.",
     image: "/images/asso/nature.jpg",
@@ -31,6 +32,7 @@ const categories = [
   },
   {
     title: "Arts et culture",
+    value: "culture",
     description:
       "Ateliers créatifs, sauvegarde du patrimoine historique, musique et événements culturels.",
     image: "/images/asso/culture.jpg",
@@ -55,7 +57,7 @@ export default function AssociationsSection() {
           </div>
 
           <Link
-            href="/associations"
+            href="/vie-locale/associations"
             className="text-base font-semibold text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218]"
           >
             Toutes les associations
@@ -66,7 +68,7 @@ export default function AssociationsSection() {
           {categories.map((cat) => (
             <Link
               key={cat.title}
-              href={`/associations?categorie=${encodeURIComponent(cat.title)}`}
+              href={`/vie-locale/associations?categorie=${cat.value}`}
               className={`group block ${cat.col}`}
             >
               <div

@@ -1,4 +1,3 @@
-import AlertPopupLoader from "@/components/features/alertes/alert-popup-loader";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Albert_Sans, Cormorant_Garamond } from "next/font/google";
@@ -66,10 +65,7 @@ export default function RootLayout({
         "font-serif",
       )}
     >
-      <body className="min-h-full">
-        <AlertPopupLoader />
-        {children}
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

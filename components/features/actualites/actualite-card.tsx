@@ -58,7 +58,7 @@ export default function ActualiteCard({
 
   return (
     <Link
-      href={`/actualites/${slug}`}
+      href={`/vie-locale/actualites/${slug}`}
       className={`group flex flex-col ${
         isAlerte ? "border-l-4 border-red-700 pl-5" : ""
       }`}

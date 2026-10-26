@@ -61,7 +61,7 @@ function NotFound({ reason }: { reason: string }) {
         <p className="mt-5 text-lg leading-relaxed text-stone-700">{reason}</p>
 
         <Link
-          href="/associations"
+          href="/vie-locale/associations"
           className={`group mt-8 inline-flex items-center gap-2 text-base font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[#9e5218] ${focusRing}`}
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -101,7 +101,7 @@ export default async function AssociationUniquePage({ params }: PageProps) {
     <section className="bg-white pb-24 pt-32 lg:pt-40">
       <div className="mx-auto max-w-7xl px-6">
         <Link
-          href="/associations"
+          href="/vie-locale/associations"
           className={`group inline-flex items-center gap-2 text-base font-semibold text-stone-600 transition-colors hover:text-[#9e5218] ${focusRing}`}
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const maire = {
   prenom: "Laurent",
   nom: "PARIS",
-  photo: null as string | null,
+  photo: "/images/elus/laurent-paris.jpg",
 };
 
 const groupes = [
@@ -22,13 +22,13 @@ const groupes = [
         prenom: "Nathalie",
         nom: "DUFAUD",
         fonction: "1ère adjointe",
-        photo: null,
+        photo: "/images/elus/nathalie-dufaud.jpg",
       },
       {
         prenom: "Valentin",
         nom: "FOUQUET",
         fonction: "2ème adjoint",
-        photo: null,
+        photo: "/images/elus/valentin-fouquet.jpg",
       },
       {
         prenom: "Chantal",
@@ -61,11 +61,13 @@ function Portrait({
   alt,
   className,
   iconClassName,
+  sizes = "(max-width: 640px) 64px, 96px",
 }: {
   photo: string | null;
   alt: string;
   className: string;
   iconClassName: string;
+  sizes?: string;
 }) {
   return (
     <div
@@ -76,7 +78,7 @@ function Portrait({
           src={photo}
           alt={alt}
           fill
-          sizes="(max-width: 640px) 64px, 96px"
+          sizes={sizes}
           className="object-cover"
         />
       ) : (
@@ -113,6 +115,7 @@ export default function ElusPage() {
               alt={`${maire.prenom} ${maire.nom}, maire de La Bastide-d'Engras`}
               className="mb-8 aspect-[4/5] w-full max-w-sm"
               iconClassName="size-20"
+              sizes="(max-width: 640px) calc(100vw - 3rem), 24rem"
             />
             <h2 className="font-serif text-2xl font-semibold text-stone-900">
               Le maire

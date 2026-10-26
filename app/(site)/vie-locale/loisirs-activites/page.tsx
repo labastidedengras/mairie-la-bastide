@@ -6,6 +6,7 @@ import {
   Waves,
 } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Loisirs et activités",
@@ -75,12 +76,20 @@ export default function LoisirsActivitesPage() {
                 CCAS
               </h2>
               <p className="mt-3 text-base leading-relaxed text-stone-700">
-                Une affiche d&apos;information sur le Centre communal
-                d&apos;action sociale est en préparation. Elle sera publiée sur
-                cette page dès qu&apos;elle sera disponible.
+                La commission communale d&apos;action sociale est un relais de
+                proximité : elle écoute et informe les habitants, et les oriente
+                vers les aides et services adaptés à leur situation.
               </p>
             </div>
           </div>
+          <Image
+            src="/images/affiche-ccas.jpg"
+            alt="Affiche du CCAS : rencontre et activités conviviales au foyer communal le 29 octobre 2026, de 15 h à 17 h. Jeux, activités créatives, goûter et échanges ; possibilité de venir vous chercher si vous avez des difficultés à vous déplacer."
+            width={1024}
+            height={1536}
+            sizes="(max-width: 512px) calc(100vw - 3rem), 448px"
+            className="mt-6 h-auto w-full max-w-md border border-stone-200"
+          />
         </section>
 
         <section aria-labelledby="sorties-heading" className="mt-14">

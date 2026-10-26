@@ -136,7 +136,7 @@ export default function AssociationsClientContent({
 
                 <h2 className="mt-2 font-serif text-2xl font-semibold text-stone-900">
                   <Link
-                    href={`/associations/${asso.slug}`}
+                    href={`/vie-locale/associations/${asso.slug}`}
                     className="hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9e5218]"
                   >
                     {asso.nom}

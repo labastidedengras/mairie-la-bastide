@@ -49,7 +49,7 @@ export default function ArticleClientContent({
     <article className="bg-white pb-24 pt-32 lg:pt-40">
       <div className={`mx-auto px-6 ${hasImage ? "max-w-7xl" : "max-w-3xl"}`}>
         <Link
-          href="/actualites"
+          href="/vie-locale/actualites"
           className="group inline-flex items-center gap-2 text-base font-semibold text-stone-600 transition-colors hover:text-[#9e5218]"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
