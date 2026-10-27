@@ -13,7 +13,11 @@ const focusRing =
 const commerces = [
   {
     categorie: "Bistrot",
-    nom: "Bistrot",
+    nom: "Bistro le Garage",
+    telephone: "06 10 45 59 18",
+    telephoneHref: "tel:0610455918",
+    url: "https://bistrolegarage.fr/",
+    lienLabel: "Découvrir Le Bistro le Garage",
     Icon: Store,
   },
   {

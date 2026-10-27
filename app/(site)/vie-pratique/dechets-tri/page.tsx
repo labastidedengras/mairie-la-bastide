@@ -6,9 +6,7 @@ import {
   Leaf,
   Package,
   Phone,
-  Sofa,
   Trash2,
-  WashingMachine,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -197,8 +195,8 @@ export default function DechetsTriPage() {
                 Le guide du compostage partagé
               </h3>
               <p className="mt-3 text-base leading-relaxed text-stone-700">
-                Retrouvez les conseils pratiques pour participer au
-                compostage partagé dans le guide du SICTOMU.
+                Retrouvez les conseils pratiques pour participer au compostage
+                partagé dans le guide du SICTOMU.
               </p>
               <a
                 href="/documents/guide-du-compostage-partage.pdf"
@@ -266,61 +264,77 @@ export default function DechetsTriPage() {
             l&apos;enlèvement de vos encombrants, contactez la mairie.
           </p>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
-              <WashingMachine
-                aria-hidden="true"
-                className="h-7 w-7 text-stone-500"
+          <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
+            <div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
+                  <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4">
+                    Gros électroménager
+                  </h3>
+                  <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
+                    {acceptedLarge.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
+                  <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900 underline decoration-stone-300 underline-offset-4">
+                    Mobilier de grand volume
+                  </h3>
+                  <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
+                    {acceptedFurniture.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 p-5">
+                <AlertTriangle
+                  aria-hidden="true"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-amber-700"
+                />
+                <p className="text-base leading-relaxed text-stone-800">
+                  Tout objet ne figurant pas explicitement dans ces listes sera
+                  refusé lors de la collecte.
+                </p>
+              </div>
+
+              <div className="mt-6 rounded-sm bg-stone-900 p-6 text-white">
+                <h3 className="font-serif text-lg font-semibold">
+                  5 conditions d&apos;acceptation
+                </h3>
+                <ol className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {conditions.map((condition, index) => (
+                    <li
+                      key={condition}
+                      className="flex gap-3 text-base leading-relaxed text-stone-200"
+                    >
+                      <span className="font-serif text-stone-500">
+                        {index + 1}
+                      </span>
+                      {condition}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+
+            <figure className="mx-auto w-full max-w-[24rem]">
+              <Image
+                src="/images/affiche-encombrants.jpg"
+                alt="Affiche présentant les quatre solutions pour se débarrasser de ses encombrants."
+                width={596}
+                height={845}
+                unoptimized
+                sizes="384px"
+                className="h-auto w-full rounded-sm border border-stone-200"
               />
-              <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900">
-                Gros électroménager
-              </h3>
-              <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
-                {acceptedLarge.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-sm border border-stone-200 bg-stone-50 p-5">
-              <Sofa aria-hidden="true" className="h-7 w-7 text-stone-500" />
-              <h3 className="mt-3 font-serif text-lg font-semibold text-stone-900">
-                Mobilier de grand volume
-              </h3>
-              <ul className="mt-2 space-y-1 text-base leading-relaxed text-stone-700">
-                {acceptedFurniture.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-6 flex items-start gap-3 rounded-sm border border-amber-300 bg-amber-50 p-5">
-            <AlertTriangle
-              aria-hidden="true"
-              className="mt-0.5 h-5 w-5 shrink-0 text-amber-700"
-            />
-            <p className="text-base leading-relaxed text-stone-800">
-              Tout objet ne figurant pas explicitement dans ces listes sera
-              refusé lors de la collecte.
-            </p>
-          </div>
-
-          <div className="mt-6 rounded-sm bg-stone-900 p-6 text-white">
-            <h3 className="font-serif text-lg font-semibold">
-              5 conditions d&apos;acceptation
-            </h3>
-            <ol className="mt-4 grid gap-3 sm:grid-cols-2">
-              {conditions.map((condition, index) => (
-                <li
-                  key={condition}
-                  className="flex gap-3 text-base leading-relaxed text-stone-200"
-                >
-                  <span className="font-serif text-stone-500">{index + 1}</span>
-                  {condition}
-                </li>
-              ))}
-            </ol>
+              <figcaption className="mt-2 text-sm text-stone-600">
+                Les solutions pour se débarrasser de ses encombrants.
+              </figcaption>
+            </figure>
           </div>
         </div>
 

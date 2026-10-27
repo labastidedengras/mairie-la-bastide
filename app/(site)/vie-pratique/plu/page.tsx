@@ -77,6 +77,14 @@ export default function PLUPage() {
               <span className="sr-only"> (nouvelle fenêtre)</span>
             </a>
           </p>
+          <a
+            href="/documents/depots_dossiers_urbanismes_usagers_2022.pdf"
+            download
+            className={`mt-5 inline-flex items-center gap-2 rounded-sm bg-[#9e5218] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#854311] ${focusRing}`}
+          >
+            <Download aria-hidden="true" className="h-4 w-4" />
+            Télécharger le guide des dépôts de dossiers d&apos;urbanisme (PDF)
+          </a>
         </div>
 
         {/* Avant vos travaux : l'information la plus utile de la page, donc en haut, avant le document */}
