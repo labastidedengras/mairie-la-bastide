@@ -209,6 +209,40 @@ export default function DechetsTriPage() {
             </div>
           </div>
 
+          <h3 className="mt-8 font-serif text-xl font-semibold text-stone-900">
+            Les référents du site
+          </h3>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <figure className="flex items-center gap-4 rounded-sm border border-emerald-200 bg-white p-3">
+              <div className="relative h-28 w-24 shrink-0 overflow-hidden rounded-sm bg-stone-100">
+                <Image
+                  src="/images/site-compostage/Jean Léonetti référent COMPOST 2026.jpeg"
+                  alt="Jean Léonetti, référent du site de compostage partagé."
+                  fill
+                  sizes="96px"
+                  className="object-cover object-[center_25%]"
+                />
+              </div>
+              <figcaption className="font-semibold text-stone-900">
+                Jean Léonetti
+              </figcaption>
+            </figure>
+            <figure className="flex items-center gap-4 rounded-sm border border-emerald-200 bg-white p-3">
+              <div className="relative h-28 w-24 shrink-0 overflow-hidden rounded-sm bg-stone-100">
+                <Image
+                  src="/images/site-compostage/chantal CARON référente compost partagé.jpg"
+                  alt="Chantal Caron, référente du site de compostage partagé."
+                  fill
+                  sizes="96px"
+                  className="object-cover object-[center_25%]"
+                />
+              </div>
+              <figcaption className="font-semibold text-stone-900">
+                Chantal Caron
+              </figcaption>
+            </figure>
+          </div>
+
           <h3 className="mt-6 font-serif text-xl font-semibold text-stone-900">
             Le circuit du compost communal
           </h3>
