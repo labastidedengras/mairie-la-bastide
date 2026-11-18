@@ -1,5 +1,6 @@
 "use client";
 
+import ConsentedGoogleMap from "@/components/ui/consented-google-map";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -285,7 +286,7 @@ export default function ContactPage() {
                       Ces informations servent uniquement à répondre à votre
                       demande.{" "}
                       <Link
-                        href="/politique-de-confidentialite"
+                        href="/legal/politique-de-confidentialite"
                         className={`underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
                       >
                         Politique de confidentialité
@@ -335,11 +336,9 @@ export default function ContactPage() {
           </a>
         </div>
 
-        <iframe
+        <ConsentedGoogleMap
           title="Carte : emplacement de la mairie de La Bastide-d'Engras"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
           className="block h-[26rem] w-full border-0"
         />
       </section>

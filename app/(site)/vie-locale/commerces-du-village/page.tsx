@@ -1,5 +1,6 @@
 import { ArrowUpRight, Hammer, Store, Trees, Wrench } from "lucide-react";
 import type { Metadata } from "next";
+import ConsentedGoogleMap from "@/components/ui/consented-google-map";
 
 export const metadata: Metadata = {
   title: "Commerces du village",
@@ -149,12 +150,9 @@ export default function CommercesDuVillagePage() {
           <p className="mt-3 text-base leading-relaxed text-stone-700">
             Retrouvez La Bastide-d&apos;Engras sur la carte.
           </p>
-          <iframe
+          <ConsentedGoogleMap
             title="Carte Google Maps de La Bastide-d'Engras"
             src="https://www.google.com/maps?output=embed&q=La%20Bastide-d%27Engras%2C%20France&z=14&hl=fr"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
             className="mt-5 block h-[24rem] w-full rounded-sm border-0 sm:h-[32rem]"
           />
         </section>

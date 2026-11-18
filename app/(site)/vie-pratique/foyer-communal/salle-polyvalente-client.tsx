@@ -3,6 +3,7 @@
 import { Calendar } from "@/components/ui/calendar";
 import { fr } from "date-fns/locale";
 import { ExternalLink, FileText, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import type { DateRange } from "react-day-picker";
 
@@ -470,6 +471,16 @@ export default function SallePolyvalenteClient({
                       "Envoyer la demande"
                     )}
                   </button>
+                  <p className="text-sm leading-relaxed text-stone-600">
+                    Ces informations servent uniquement à répondre à votre
+                    demande.{" "}
+                    <Link
+                      href="/legal/politique-de-confidentialite"
+                      className={`underline decoration-stone-300 underline-offset-4 hover:decoration-[#9e5218] ${focusRing}`}
+                    >
+                      Politique de confidentialité
+                    </Link>
+                  </p>
                 </form>
               </div>
             )}

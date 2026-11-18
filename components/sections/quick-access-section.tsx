@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import ConsentedGoogleMap from "@/components/ui/consented-google-map";
 
 // La mairie ne délivre pas les CNI / passeports : on explique et on redirige.
 const featured = {
@@ -107,12 +108,9 @@ export default function QuickAccessSection() {
               <p className="mt-4 text-base leading-relaxed text-stone-600">
                 9 rue des Mouchards, 30330 La Bastide-d&apos;Engras
               </p>
-              <iframe
+              <ConsentedGoogleMap
                 title="Carte Google Maps : La Bastide-d'Engras"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5730.900773806127!2d4.472076798902452!3d44.09469791763819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b5b3e2db84e62d%3A0x400fec186664cf56!2sMAIRIE%20LA%20BASTIDE-D%27ENGRAS!5e0!3m2!1sfr!2sfr!4v1780992225597!5m2!1sfr!2sfr"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
                 className="mt-8 block h-[26rem] w-full rounded-sm border-0 sm:h-[32rem] lg:h-[42rem]"
               />
               <a

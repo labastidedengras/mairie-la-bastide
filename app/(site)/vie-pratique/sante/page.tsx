@@ -1,5 +1,6 @@
 import { Clock3, MapPin, Phone } from "lucide-react";
 import type { Metadata } from "next";
+import ConsentedGoogleMap from "@/components/ui/consented-google-map";
 
 export const metadata: Metadata = {
   title: "Santé",
@@ -73,12 +74,9 @@ export default function SantePage() {
           <h2 className="font-serif text-2xl font-semibold text-stone-900">
             Carte du centre de santé
           </h2>
-          <iframe
+          <ConsentedGoogleMap
             title="Carte Google Maps du 3680 route d'Audabiac, 30580 Lussan"
             src="https://www.google.com/maps?output=embed&q=3680%20Audabiac&z=16&hl=fr"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
             className="mt-5 block h-[24rem] w-full rounded-sm border-0 sm:h-[32rem]"
           />
         </div>
